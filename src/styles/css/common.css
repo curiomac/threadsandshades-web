@@ -1,0 +1,42 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins");
+
+input {
+  font-family: "Poppins";
+}
+button {
+  font-family: "Poppins";
+}
+
+.font-family-poppins {
+  font-family: "Poppins";
+}
+
+.primary-color {
+  color: var(--primary-color);
+}
+.secondary-color {
+  color: var(--secondary-color);
+}
+.ternary-color {
+  color: var(--ternary-color);
+}
+.default-color {
+  color: var(--default-color);
+}
+.primary-bg {
+  background-color: var(--primary-color);
+}
+.secondary-bg {
+  background-color: var(--secondary-color);
+}
+.ternary-bg {
+  background-color: var(--ternary-color);
+}
+
+/* custom hr */
+
+.custom-hr {
+  height: 1.5px;
+  width: 100%;
+  background-color: #9a9a9a;
+}

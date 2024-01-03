@@ -1,0 +1,199 @@
+/* Values */
+
+@import url("https://fonts.googleapis.com/css?family=Audiowide");
+
+$primary-default-bg: #151b27;
+$secondary-default-bg: #1f2741;
+
+$primary-color: #07338f;
+$secondary-color: #1c9bef;
+
+$Audiowide-font: "Audiowide";
+
+/* Footer */
+
+.footer {
+  height: 280px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  background-color: $secondary-default-bg;
+
+  .container {
+    height: 200px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    .brand {
+      height: 200px;
+      width: 30%;
+
+      .details {
+        width: 80%;
+        margin-top: 10px;
+        font-size: 16px;
+        color: #ffffff77;
+        text-align: justify;
+      }
+    }
+
+    .quick-links {
+      height: 200px;
+      width: 20%;
+      color: #ffffff;
+
+      .heading {
+        font-size: 20px;
+        font-weight: 600;
+      }
+
+      .links-container {
+        font-size: 16px;
+        color: #ffffff77;
+
+        .links {
+          margin-top: 10px;
+
+          span {
+            cursor: pointer;
+          }
+          :hover {
+            color: #ffffff;
+          }
+        }
+      }
+    }
+
+    .support {
+      height: 200px;
+      width: 20%;
+
+      color: #ffffff;
+
+      .heading {
+        font-size: 20px;
+        font-weight: 600;
+      }
+
+      .links-container {
+        font-size: 16px;
+        color: #ffffff77;
+
+        .links {
+          margin-top: 10px;
+
+          span {
+            cursor: pointer;
+          }
+          :hover {
+            color: #ffffff;
+          }
+        }
+      }
+    }
+
+    .mail {
+      height: 200px;
+      width: 30%;
+
+      color: #ffffff;
+
+      .heading {
+        font-size: 20px;
+        font-weight: 600;
+      }
+
+      .details {
+        margin-top: 10px;
+        font-size: 16px;
+        color: #ffffff77;
+      }
+
+      .mail-input {
+        margin-top: 10px;
+
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        input {
+          height: 35px;
+          width: 300px;
+          padding: 5px;
+          background-color: #ffffff;
+          font-size: 18px;
+          font-weight: 600;
+          border: none;
+          outline: none;
+        }
+
+        button {
+          height: 45px;
+          width: 45px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: $primary-color;
+          color: #ffffff;
+          font-size: 20px;
+          border: none;
+          outline: none;
+          cursor: pointer;
+        }
+      }
+      .external-links {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 20px;
+        .link {
+          height: 45px;
+          width: 45px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: $primary-default-bg;
+          border-radius: 100%;
+          float: left;
+          transition: 0.5s;
+        }
+        .ic-twitter {
+          color: #159af2;
+          transition: 0.5s;
+        }
+        .ic-twitter:hover {
+          box-shadow: 0 0 10px 0.5px #1c9ff7;
+          transition: 0.3s;
+        }
+
+        .ic-facebook {
+          color: #4057a7;
+          transition: 0.5s;
+        }
+        .ic-facebook:hover {
+          box-shadow: 0 0 10px 0.5px #4057a7;
+          transition: 0.5s;
+        }
+
+        .ic-instagram {
+          color: #e0093c;
+          transition: 0.5s;
+        }
+        .ic-instagram:hover {
+          box-shadow: 0 0 10px 0.5px #e0093c;
+          transition: 0.5s;
+        }
+        .ic-xbox {
+          color: #0f7d0d;
+          transition: 0.5s;
+        }
+        .ic-xbox:hover {
+          box-shadow: 0 0 10px 0.5px #0f7d0d;
+          transition: 0.5s;
+        }
+      }
+    }
+  }
+}

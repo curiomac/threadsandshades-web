@@ -1,0 +1,46 @@
+@import "_values";
+
+/*home*/
+
+.home {
+  background-color: $default-color;
+}
+
+/* fashion-banner */
+
+.fashion-banner {
+  height: calc(100vh);
+  width: 100%;
+  background-image: url(../../assets/imgs/home/fashion-bg.jpg);
+  background-position: center;
+  background-attachment: scroll;
+  background-size: cover;
+  background-repeat: no-repeat;
+  .banner-dark {
+    height: calc(100vh);
+    width: 100%;
+    background: linear-gradient(to top, #00000042, #000000b4);
+    .fashion-offer-contents {
+      text-transform: uppercase;
+      color: $default-color;
+      height: calc(100vh);
+      .grab-now-btn {
+        height: 45px;
+        width: 150px;
+        background-color: transparent;
+        color: $ternary-color;
+        border: 2px solid $ternary-color;
+        outline: none;
+        text-transform: uppercase;
+        transition: 0.3s;
+        font-weight: 600;
+      }
+      .grab-now-btn:hover {
+        background-color: $ternary-color;
+        color: $default-color;
+        border: 2px solid transparent;
+        transition: 0.3s;
+      }
+    }
+  }
+}
