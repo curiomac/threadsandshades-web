@@ -4,6 +4,7 @@ import {
   ABOUT_PAGE,
   CONTACT_PAGE,
   HOME_PAGE,
+  LOGIN_PAGE,
   NOT_FOUND_404,
 } from "../../../helpers/route-paths/paths";
 import Header from "../../common/header/Header";
@@ -12,6 +13,7 @@ import Home from "../../pages/default-pages/home/Home";
 import About from "../../pages/default-pages/about/About";
 import ContactUs from "../../pages/default-pages/contact-us/ContactUs";
 import NotFound404 from "../../pages/error-pages/404NotFound";
+import Login from "../../pages/auth-pages/login/Login";
 
 const Pages = () => {
   return (
@@ -22,7 +24,10 @@ const Pages = () => {
         <Route path={HOME_PAGE} element={<Home />} />
         <Route path={ABOUT_PAGE} element={<About />} />
         <Route path={CONTACT_PAGE} element={<ContactUs />} />
-   
+
+        {/* Auth Pages */}
+        <Route path={LOGIN_PAGE} element={<Login />} />
+
         {/* Error Pages */}
         <Route path={NOT_FOUND_404} element={<NotFound404 />} />
       </Routes>

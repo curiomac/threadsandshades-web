@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import logo from '../../../assets/imgs/home/treadsandshades-logo-png.png';
+import logo from '../../../assets/imgs/home/logo.png';
+
 
 const Logo = ({ height }) => {
 
@@ -17,9 +18,9 @@ console.log(theme);
     return (
         <div>
             {isTheme() === 'dark' ? (
-                <img src={logo} height={70} width={170}/>
+                <img src={logo} height={60} width={170}/>
             ) : isTheme() === 'light' && (
-                <img src={logo} height={70} width={170}/>
+                <img src={logo} height={60} width={170}/>
             )}
 
         </div>
