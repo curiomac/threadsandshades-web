@@ -14,7 +14,8 @@ const Login = () => {
             </div>
             <div className="w-fill">
               <div className="font-size-3 font-weight-1 mt-3 mb-3 text-align-center secondary-color">
-Login              </div>
+                Login{" "}
+              </div>
               <form className="form-inputs">
                 <div className="email-input mt-2 mb-2">
                   <div>Email Id:</div>
