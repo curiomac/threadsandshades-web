@@ -11,8 +11,8 @@
   margin-right: 4.5rem;
 }
 .container-fluid {
-  margin-left: 1.5rem;
-  margin-right: 1.5rem;
+  margin-left: 0.5em;
+  margin-right: 0.5rem;
 }
 
 .container-fluid-padding {
@@ -660,6 +660,14 @@
 .transform-90 {
   transform: rotate(90deg);
   transition: 0.5s;
+}
+
+/*position*/
+
+.position-sticky-0 {
+  position: sticky;
+  top: 0;
+  z-index: 4;
 }
 
 /* content-box */

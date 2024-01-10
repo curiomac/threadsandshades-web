@@ -1,6 +1,7 @@
 import React from "react";
 import Logo from "../../../plugins/logo/Logo";
-import { FaDiscord, FaYoutube } from "react-icons/fa";
+// import { FaDiscord, FaYoutube } from "react-icons/fa";
+import { FaRegHeart } from "react-icons/fa";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { IoPersonOutline } from "react-icons/io5";
 import { RiSearch2Line } from "react-icons/ri";
@@ -23,28 +24,33 @@ const NavBar = () => {
           : theme?.mode === 0 && "box-shadow-light"
       }`}
     >
-      <div className="nav-bar-links container">
-        <div className="default-links">
-          <div className="links-container">
-            <Link to={HOME_PAGE} className="links-decoration-unset">
-              <div className="links ternary-color">HOME</div>
-            </Link>
-            <Link to={ABOUT_PAGE} className="links-decoration-unset">
-              <div className="links">SHOP</div>
-            </Link>
-            <Link to={CONTACT_PAGE} className="links-decoration-unset">
-              <div className="links">BLOG</div>
-            </Link>
-            <Link to={ABOUT_PAGE} className="links-decoration-unset">
-              <div className="links">ABOUT</div>
-            </Link>
-            <Link to={CONTACT_PAGE} className="links-decoration-unset">
-              <div className="links">CONTACT</div>
-            </Link>
+      <div className="nav-bar-links container-fluid">
+        <div className="nav-links">
+          <div className="nav-bar-logo">
+            <Logo height={60} />
           </div>
-        </div>
-        <div className="nav-bar-logo">
-          <Logo height={60} />
+          <div className="default-links">
+              <div className="links-container">
+                {/* <Link to={HOME_PAGE} className="links-decoration-unset">
+              <div className="links ternary-color">HOME</div>
+            </Link> */}
+                <Link to={ABOUT_PAGE} className="links-decoration-unset">
+                  <div className="links">SHOP</div>
+                </Link>
+                {/* <Link to={CONTACT_PAGE} className="links-decoration-unset">
+              <div className="links">BLOG</div>
+            </Link> */}
+                <Link to={ABOUT_PAGE} className="links-decoration-unset">
+                  <div className="links">MEN</div>
+                </Link>
+                <Link to={CONTACT_PAGE} className="links-decoration-unset">
+                  <div className="links">WOMEN</div>
+                </Link>
+                <Link to={CONTACT_PAGE} className="links-decoration-unset">
+                  <div className="links">NEW ARRIVALS</div>
+                </Link>
+              </div>
+            </div>
         </div>
         <div className="more-links">
           <div className="links-container">
@@ -53,7 +59,7 @@ const NavBar = () => {
                 <RiSearch2Line />
               </div>
             </Link>
-            <Link to={HOME_PAGE} className="links-decoration-unset">
+            {/* <Link to={HOME_PAGE} className="links-decoration-unset">
               <div className="links icon">
                 <FaDiscord />
               </div>
@@ -62,7 +68,7 @@ const NavBar = () => {
               <div className="links icon">
                 <FaYoutube />
               </div>
-            </Link>
+            </Link> */}
             <Link to={HOME_PAGE} className="links-decoration-unset">
               <div className="links icon">
                 <IoPersonOutline />
@@ -70,9 +76,16 @@ const NavBar = () => {
             </Link>
             <Link to={HOME_PAGE} className="links-decoration-unset">
               <div className="links icon">
+                <FaRegHeart />
+              </div>
+            </Link>
+            <Link to={HOME_PAGE} className="links-decoration-unset">
+              <div className="links icon">
                 <HiOutlineShoppingBag />
                 <div className="shopping-cart-count-container">
-                  <div className="shopping-cart-count d-flex align-items-center justify-content-center">3</div>
+                  <div className="shopping-cart-count d-flex align-items-center justify-content-center">
+                    3
+                  </div>
                 </div>
               </div>
             </Link>

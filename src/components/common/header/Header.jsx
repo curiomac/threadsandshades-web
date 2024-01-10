@@ -50,7 +50,7 @@ const Header = () => {
     }
 
     return (
-        <div className={`${(isAuthPage() || isErrorPage()) && 'd-none'}`}>
+        <div className={`${(isAuthPage() || isErrorPage()) && 'd-none'} position-sticky-0`}>
             {isDefaultPage() ? <NavBar /> : <TopBar />}
         </div>
     )

@@ -1,19 +1,44 @@
-import React from "react";
+import Aos from "aos";
+import React, { useEffect } from "react";
 
 const FashionBanner = () => {
+  useEffect(() => {
+    Aos.init({
+      duration: 800, // Animation duration in milliseconds
+      offset: 50, // Offset (in pixels) from the original trigger point
+      easing: "ease", // Type of easing animation ('ease', 'linear', 'ease-in', 'ease-out', etc.)
+    });
+  }, []);
   return (
-    <div className="fashion-banner">
-      <div className="banner-dark">
-        <div className="container">
-          <div className="fashion-offer-contents d-flex align-items-center">
-            <div>
-              <div className="font-size-2">This Winter</div>
-              <div className="font-size-8 ternary-color">FLASH SALE FRENZY</div>
-              <div className="font-size-2">
-                Every second counts. Hurry up, take action, and craft your
-                destiny.
+    <div className="container-fluid">
+      <div className="fashion-banner">
+        <div className="banner-dark">
+          <div className="container-fluid">
+            <div className="fashion-offer-contents d-flex align-items-center">
+              <div>
+                <div className="font-size-2" data-aos="fade-right">
+                  This Winter
+                </div>
+                <div
+                  className="font-size-8 ternary-color"
+                  style={{
+                    width: "67.5%",
+                  }}
+                  data-aos="fade-right"
+                  data-aos-delay="100"
+                >
+                  FLASH SALE FRENZY
+                </div>
+                <div data-aos="fade-right" data-aos-delay="300">
+                  <div className="font-size-2 w-5">
+                    Every second counts. Hurry up, take action, and craft your
+                    destiny.
+                  </div>
+                  <button className="grab-now-btn mt-3 mb-3 cursor-pointer">
+                    Grab Now
+                  </button>
+                </div>
               </div>
-              <button className="grab-now-btn mt-3 mb-3 cursor-pointer">Grab Now</button>
             </div>
           </div>
         </div>

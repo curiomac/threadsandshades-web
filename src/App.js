@@ -11,6 +11,7 @@ import './styles/scss/Header.scss';
 import './styles/scss/SiteSettings.scss';
 import './styles/scss/Footer.scss';
 import 'react-toastify/dist/ReactToastify.css';
+import 'aos/dist/aos.css';
 import { useDispatch, useSelector } from "react-redux";
 import { getTheme } from "./redux/actions/themeAction";
 import store from "./redux/store/store";

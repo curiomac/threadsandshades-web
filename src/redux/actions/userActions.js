@@ -56,9 +56,9 @@ export const login = (payload) => async (dispatch) => {
                 // withCredentials: true,
             }
         );
-        localStorage.setItem('user-token', response.data.token);
-        localStorage.setItem('user-id', response.data.user._id);
-        dispatch(loginSuccess(response.data));
+        localStorage.setItem('user-token', response?.data.token);
+        localStorage.setItem('user-id', response?.data.user._id);
+        dispatch(loginSuccess(response?.data));
     } catch (error) {
         dispatch(loginFail(error?.response?.data?.message));
     }

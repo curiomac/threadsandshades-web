@@ -9,21 +9,24 @@
 /* fashion-banner */
 
 .fashion-banner {
-  height: calc(100vh);
+  height: calc(100vh - 100px);
   width: 100%;
   background-image: url(../../assets/imgs/home/fashion-bg.jpg);
   background-position: center;
   background-attachment: scroll;
   background-size: cover;
   background-repeat: no-repeat;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
   .banner-dark {
-    height: calc(100vh);
+    height: calc(100vh - 100px);
     width: 100%;
-    background: linear-gradient(to top, #00000042, #000000b4);
+    background: linear-gradient(to right, #00000047, #00000000);
     .fashion-offer-contents {
       text-transform: uppercase;
       color: $default-color;
-      height: calc(100vh);
+      height: calc(100vh - 100px);
+      font-weight: 600;
       .grab-now-btn {
         height: 45px;
         width: 150px;
@@ -40,6 +43,84 @@
         color: $default-color;
         border: 2px solid transparent;
         transition: 0.3s;
+      }
+    }
+  }
+}
+
+/* shop-now-cards */
+
+.shop-now-cards {
+  .card-container {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 0.5rem;
+    margin-top:  0.5rem;
+    margin-bottom:  0.5rem;
+    .card {
+      height: 400px;
+      width: 100%;
+    }
+    .latest-card-bg {      
+      height: 400px;
+      width: 100%;
+      background-image: url(../../assets/imgs/home/latest-card-bg.jpg);
+      background-attachment: scroll;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+    .sweat-card-bg {      
+      height: 400px;
+      width: 100%;
+      background-image: url(../../assets/imgs/home/sweat-card-bg.jpg);
+      background-attachment: scroll;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+    .explore-card-bg {      
+      height: 400px;
+      width: 100%;
+      background-image: url(../../assets/imgs/home/explore-card-bg.jpg);
+      background-attachment: scroll;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+    .linear-bg {
+      height: 400px;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.36);
+      display: flex;
+      align-items: end;
+      .content {
+        padding-top: 20px;
+        padding-bottom: 20px;
+        .heading {
+          font-size: 16px;
+          color: #dddddd;
+        }
+        .sub-heading {
+          font-size: 12px;
+          color: rgb(198, 198, 198);
+        }
+        .linear-bg-btn {
+          height: 35px;
+          background-color: $ternary-color;
+          color: $default-color;
+          width: 150px;
+          outline: none;
+          border: 2px solid transparent;
+          font-size: 12px;
+          cursor: pointer
+        }
+        .linear-bg-btn:hover {
+          background-color: transparent;
+          border: 2px solid gray;
+          color: $default-color;      
+        }
       }
     }
   }

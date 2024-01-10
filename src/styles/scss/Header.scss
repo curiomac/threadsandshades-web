@@ -9,54 +9,72 @@ $items-card-width: 300px;
 /* Nav Bar */
 
 .nav-bar {
-  height: 50px;
+  height: 40px;
   width: -webkit-fill-available;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px;
-  position: absolute;
-  top: 0;
-  z-index: 1;
-  background-color:transparent;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  position: sticky;
+  top: 0px;
+  transition: top 0.3s ease;
+  z-index: 1000;
+  background-color: rgb(255, 255, 255) !important;
+  // &.nav-bar-on-scroll {
+  //   position: fixed;
+  // top: 0;
+  // transition: top 0.3s ease, background-color 0.3s ease; /* Added background-color transition */
+  // z-index: 1000;
+  // background-color: rgb(255, 255, 255) !important;
+  // }
   &.box-shadow-dark {
     box-shadow: 0 0 10px 1px #151b27 !important;
   }
-  // &.box-shadow-light {
-  //   box-shadow: 0 0 10px 1px rgba(39, 48, 67, 0.291) !important;
-  // }
+  &.box-shadow-light {
+    box-shadow: 0 0 10px 1px rgba(39, 48, 67, 0.291) !important;
+  }
 
   .nav-bar-links {
     width: -webkit-fill-available;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    
-
-    .default-links {
-      .links-container {
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      .nav-bar-logo {
         display: flex;
-        gap: 20px;
+        align-items: center;
+        cursor: pointer;
+      }
+      .default-links {
+        .links-container {
+          display: flex;
+          gap: 20px;
 
-        .links-decoration-unset {
-          text-decoration: unset;
+          .links-decoration-unset {
+            text-decoration: unset;
 
-          .links {
-            color: #c4c4c4;
-            cursor: pointer;
-            text-decoration: none;
-          }
-          :hover {
-            color: $secondary-font-color;
+            .links {
+              color: $ternary-color;
+              cursor: pointer;
+              text-decoration: none;
+              font-weight: 600;
+              // &.nav-bar-on-scroll-link {
+              //   color: $ternary-color;
+              //   :hover {
+              //     color: $primary-color;
+              //   }
+              // }
+            }
+            :hover {
+              color: $secondary-font-color;
+            }
           }
         }
       }
-    }
-
-    .nav-bar-logo {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
     }
 
     .more-links {

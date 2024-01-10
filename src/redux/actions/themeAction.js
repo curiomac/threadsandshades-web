@@ -15,7 +15,7 @@ export const getTheme = () => async (dispatch) => {
         }
         dispatch(themeRequest())
         const response = await axios.get(`${BASE_URL}/${endpoints.theme.get}/${getThemeId()}`);
-        dispatch(themeSuccess(response.data.theme));
+        dispatch(themeSuccess(response?.data.theme));
     } catch (error) {
         dispatch(themeFail(error));
     }

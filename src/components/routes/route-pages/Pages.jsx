@@ -31,7 +31,7 @@ const Pages = () => {
         {/* Error Pages */}
         <Route path={NOT_FOUND_404} element={<NotFound404 />} />
       </Routes>
-      {/* <Footer /> */}
+      <Footer />
     </Router>
   );
 };

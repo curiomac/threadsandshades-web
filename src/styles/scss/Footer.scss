@@ -1,25 +1,25 @@
 /* Values */
 
 @import url("https://fonts.googleapis.com/css?family=Audiowide");
+@import "_values";
 
-$primary-default-bg: #151b27;
+$primary-default-bg: #ffffff;
 $secondary-default-bg: #1f2741;
 
 $primary-color: #07338f;
-$secondary-color: #1c9bef;
 
 $Audiowide-font: "Audiowide";
 
 /* Footer */
 
 .footer {
-  height: 280px;
+  height: 200px;
   padding: 20px;
   display: flex;
   align-items: center;
-  background-color: $secondary-default-bg;
+  background-color: rgb(179, 179, 179);
 
-  .container {
+  .footer-container {
     height: 200px;
     width: 100%;
     display: flex;
@@ -33,8 +33,8 @@ $Audiowide-font: "Audiowide";
       .details {
         width: 80%;
         margin-top: 10px;
-        font-size: 16px;
-        color: #ffffff77;
+        font-size: 14px;
+        color: #313131;
         text-align: justify;
       }
     }
@@ -42,16 +42,16 @@ $Audiowide-font: "Audiowide";
     .quick-links {
       height: 200px;
       width: 20%;
-      color: #ffffff;
+      color: $ternary-color;
 
       .heading {
-        font-size: 20px;
+        font-size: 16px;
         font-weight: 600;
       }
 
       .links-container {
-        font-size: 16px;
-        color: #ffffff77;
+        font-size: 14px;
+        color: #313131;
 
         .links {
           margin-top: 10px;
@@ -60,7 +60,7 @@ $Audiowide-font: "Audiowide";
             cursor: pointer;
           }
           :hover {
-            color: #ffffff;
+            color: $ternary-color;
           }
         }
       }
@@ -70,16 +70,16 @@ $Audiowide-font: "Audiowide";
       height: 200px;
       width: 20%;
 
-      color: #ffffff;
+      color: $ternary-color;
 
       .heading {
-        font-size: 20px;
+          font-size: 16px;
         font-weight: 600;
       }
 
       .links-container {
-        font-size: 16px;
-        color: #ffffff77;
+        font-size: 14px;
+        color: #313131;
 
         .links {
           margin-top: 10px;
@@ -88,7 +88,7 @@ $Audiowide-font: "Audiowide";
             cursor: pointer;
           }
           :hover {
-            color: #ffffff;
+            color: $ternary-color;
           }
         }
       }
@@ -98,17 +98,17 @@ $Audiowide-font: "Audiowide";
       height: 200px;
       width: 30%;
 
-      color: #ffffff;
+      color: $ternary-color;
 
       .heading {
-        font-size: 20px;
+        font-size: 16px;
         font-weight: 600;
       }
 
       .details {
         margin-top: 10px;
-        font-size: 16px;
-        color: #ffffff77;
+        font-size: 14px;
+        color: #313131;
       }
 
       .mail-input {
@@ -122,7 +122,7 @@ $Audiowide-font: "Audiowide";
           height: 35px;
           width: 300px;
           padding: 5px;
-          background-color: #ffffff;
+          background-color: #fff;
           font-size: 18px;
           font-weight: 600;
           border: none;
@@ -135,9 +135,9 @@ $Audiowide-font: "Audiowide";
           display: flex;
           align-items: center;
           justify-content: center;
-          background-color: $primary-color;
-          color: #ffffff;
-          font-size: 20px;
+          background-color: $secondary-color;
+          color: $ternary-color;
+            font-size: 16px;
           border: none;
           outline: none;
           cursor: pointer;
