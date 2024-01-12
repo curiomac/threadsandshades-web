@@ -5,7 +5,7 @@ import './styles/css/common.css';
 import './styles/css/style.css';
 import './styles/scss/error.scss';
 import './styles/scss/Home.scss';
-import './styles/scss/Login.scss';
+import './styles/scss/auth.scss';
 import './styles/scss/plugins.scss';
 import './styles/scss/Header.scss';
 import './styles/scss/SiteSettings.scss';

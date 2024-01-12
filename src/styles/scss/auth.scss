@@ -85,3 +85,84 @@
     }
   }
 }
+
+/* Register */
+
+.register {
+  height: 100vh;
+  background-image: url(.././../assets/imgs/login/login-bg.jpg);
+  background-position: center;
+  background-size: cover;
+  background-attachment: scroll;
+  .register-dark-bg {
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.601);
+    overflow: auto;
+    .register-custom-width {
+      width: 50%;
+      .form-group-a,
+      .form-group-b,
+      .form-group-c,
+      .form-group-d {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+      }
+      .form-inputs {
+        color: #fff;
+        .form-input {
+          width: -webkit-fill-available;
+          div {
+            width: -webkit-fill-available;
+            font-size: 12px;
+          }
+          input {
+            height: 40px;
+            width: -webkit-fill-available;
+            outline: none;
+            border: 1px solid $secondary-color;
+            font-size: 12px;
+            padding-left: 10px;
+            padding-right: 10px;
+          }
+        }
+        button {
+          height: 40px;
+          width: -webkit-fill-available;
+          color: #fff;
+          background-color: $secondary-color;
+          outline: none;
+          border: 2px solid transparent;
+        }
+        .register-custom-hr {
+          height: 0.5px;
+          width: 30%;
+          background-color: $secondary-font-color;
+        }
+        .face-book-btn button {
+          height: 45px;
+          color: #1679f2;
+          background-color: $primary-color;
+          font-size: 18px;
+          border: none;
+          cursor: pointer;
+        }
+        .google-btn button {
+          height: 45px;
+          background-color: $primary-color;
+          font-size: 18px;
+          border: none;
+          cursor: pointer;
+        }
+        .register-now-btn {
+          color: #1679f2;
+        }
+        .powered-by-tag {
+          position: relative;
+          top: 50px;
+        }
+      }
+    }
+  }
+}

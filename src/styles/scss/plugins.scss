@@ -1,3 +1,5 @@
+@import "_values";
+
 /* Backdrop */
 .backdrop {
   position: fixed;
@@ -43,6 +45,118 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Dialog Modal */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+}
+
+.modal-content {
+  background-color: #fff;
+  border-radius: 5px;
+  width: 70%;
+  .content {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    max-width: 60%;
+    min-width: 60%;
+    .dialog-modal-quotes-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      .dialog-modal-quotes {
+        width: 70%;
+        font-size: 14px;
+        color: #343434;
+      }
+    }
+    .mail-input {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+
+      input {
+        height: 35px;
+        width: 300px;
+        padding: 5px;
+        background-color: rgba(197, 197, 197, 0.596);
+        font-size: 14px;
+        font-weight: 600;
+        border: none;
+        outline: none;
+      }
+
+      button {
+        height: 45px;
+        width: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: $secondary-color;
+        color: $ternary-color;
+        font-size: 16px;
+        border: none;
+        outline: none;
+        cursor: pointer;
+      }
+    }
+  }
+  .banner {
+    height: 290px;
+    max-width: 40%;
+    min-width: 40%;
+    background-image: url(../../assets/imgs/home/dialog-modal-banner.jpg);
+    background-attachment: scroll;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 0 5px 5px 0;
+    display: flex;
+    justify-content: flex-end;
+    .close-icon {
+      height: 30px;
+      width: 30px;
+      border-radius: 100%;
+      background-color: #34343425;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      top: 5px;
+      right: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-icon:hover {
+      background-color: rgba(52, 52, 52, 0.471);
+      transition: 0.3s;
+    }
+  }
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  cursor: pointer;
 }

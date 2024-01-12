@@ -4,9 +4,9 @@ import React, { useEffect } from "react";
 const FashionBanner = () => {
   useEffect(() => {
     Aos.init({
-      duration: 800, // Animation duration in milliseconds
-      offset: 50, // Offset (in pixels) from the original trigger point
-      easing: "ease", // Type of easing animation ('ease', 'linear', 'ease-in', 'ease-out', etc.)
+      duration: 800,
+      offset: 50,
+      easing: "ease",
     });
   }, []);
   return (

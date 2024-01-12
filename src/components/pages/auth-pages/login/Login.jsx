@@ -2,14 +2,17 @@ import React from "react";
 import Logo from "../../../plugins/logo/Logo";
 import { FaFacebookF } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
+import { useNavigate } from "react-router-dom";
+import { HOME_PAGE, REGISTER_PAGE } from "../../../../helpers/route-paths/paths";
 
 const Login = () => {
+  const navigate = useNavigate();
   return (
     <div className="login">
       <div className="login-dark-bg">
         <div className="d-flex justify-content-center">
           <div className="login-custom-width">
-            <div className="d-flex justify-content-center">
+            <div className="d-flex justify-content-center cursor-pointer" onClick={() => navigate(HOME_PAGE)}>
               <Logo />
             </div>
             <div className="w-fill">
@@ -56,7 +59,7 @@ const Login = () => {
                 <div>
                   <div className="d-flex align-items-center justify-content-center gap-2">
                     <div className="font-size-1-h">Don't have an account?</div>
-                    <div className="cursor-pointer register-now-btn font-size-1-h">
+                    <div className="cursor-pointer register-now-btn font-size-1-h" onClick={() => navigate(REGISTER_PAGE)}>
                       Register Now
                     </div>
                   </div>

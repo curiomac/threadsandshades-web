@@ -18,9 +18,9 @@ console.log(theme);
     return (
         <div>
             {isTheme() === 'dark' ? (
-                <img src={logo} height={60} width={170}/>
+                <img src={logo} height={40} width={150}/>
             ) : isTheme() === 'light' && (
-                <img src={logo} height={60} width={170}/>
+                <img src={logo} height={50} width={150}/>
             )}
 
         </div>

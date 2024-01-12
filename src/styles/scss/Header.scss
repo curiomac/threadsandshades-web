@@ -6,10 +6,37 @@ $items-card-width: 300px;
 
 /* Header */
 
+/* Signin Header */
+
+.signin-header {
+  height: 35px;
+  width: -webkit-fill-available;
+  background-color: #fff;
+  z-index: 10000;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.084);
+  .signin-header-links {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    font-size: 12px;
+    letter-spacing: 1px;
+    .link {
+      cursor: pointer;
+    }
+    .link:hover {
+      color: #626262;
+    }
+  }
+}
+
 /* Nav Bar */
 
 .nav-bar {
-  height: 40px;
+  height: 35px;
   width: -webkit-fill-available;
   display: flex;
   align-items: center;
@@ -32,7 +59,7 @@ $items-card-width: 300px;
     box-shadow: 0 0 10px 1px #151b27 !important;
   }
   &.box-shadow-light {
-    box-shadow: 0 0 10px 1px rgba(39, 48, 67, 0.291) !important;
+    box-shadow: 0 0 10px 1px #aeaeae !important;
   }
 
   .nav-bar-links {
@@ -40,6 +67,7 @@ $items-card-width: 300px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    letter-spacing: 2px;
     .nav-links {
       display: flex;
       align-items: center;
@@ -52,7 +80,7 @@ $items-card-width: 300px;
       .default-links {
         .links-container {
           display: flex;
-          gap: 20px;
+          gap: 30px;
 
           .links-decoration-unset {
             text-decoration: unset;
@@ -62,12 +90,9 @@ $items-card-width: 300px;
               cursor: pointer;
               text-decoration: none;
               font-weight: 600;
-              // &.nav-bar-on-scroll-link {
-              //   color: $ternary-color;
-              //   :hover {
-              //     color: $primary-color;
-              //   }
-              // }
+              &.active {
+                color: $primary-color;
+              }
             }
             :hover {
               color: $secondary-font-color;
@@ -91,7 +116,7 @@ $items-card-width: 300px;
           .links {
             display: flex;
             align-items: center;
-            color: #c4c4c4;
+            color: #949494;
             cursor: pointer;
           }
           .icon {
@@ -101,11 +126,11 @@ $items-card-width: 300px;
               .shopping-cart-count {
                 height: 13px;
                 width: 13px;
-                background-color: $ternary-color;
+                background-color: $primary-color;
                 border-radius: 100%;
                 font-size: 10px;
                 font-weight: 600;
-                color: #c4c4c4;
+                color: $default-color;
                 position: relative;
                 right: 10px;
               }
