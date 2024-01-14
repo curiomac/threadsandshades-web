@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import {
   ABOUT_PAGE,
+  COLLECTIONS_PAGE,
   CONTACT_PAGE,
   HOME_PAGE,
   LOGIN_PAGE,
@@ -18,6 +19,7 @@ import Login from "../../pages/auth-pages/login/Login";
 import DialogModal from "../../plugins/dialog-modal/DialogModal";
 import SigninHeader from "../../common/header/layouts/SigninHeader";
 import Register from "../../pages/auth-pages/register/Register";
+import Collections from "../../pages/default-pages/collections/Collections";
 
 const Pages = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,6 +41,7 @@ const Pages = () => {
         <Route path={HOME_PAGE} element={<Home />} />
         <Route path={ABOUT_PAGE} element={<About />} />
         <Route path={CONTACT_PAGE} element={<ContactUs />} />
+        <Route path={COLLECTIONS_PAGE} element={<Collections />} />
 
         {/* Auth Pages */}
         <Route path={LOGIN_PAGE} element={<Login />} />

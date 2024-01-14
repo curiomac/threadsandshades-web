@@ -689,6 +689,11 @@
     display: none !important;
   }
 }
+@media screen and (max-width: 849px) {
+  .res-849px-d-none {
+    display: none !important;
+  }
+}
 @media screen and (max-width: 768px) {
   .res-768px-d-none {
     display: none !important;
@@ -702,5 +707,30 @@
 @media screen and (max-width: 576px) {
   .res-576px-d-none {
     display: none !important;
+  }
+}
+@media screen and (max-width: 992px) {
+  .res-992px-d-block {
+    display: block !important;
+  }
+}
+@media screen and (max-width: 849px) {
+  .res-849px-d-block {
+    display: block !important;
+  }
+}
+@media screen and (max-width: 768px) {
+  .res-768px-d-block {
+    display: block !important;
+  }
+}
+@media screen and (max-width: 682px) {
+  .res-682px-d-block {
+    display: block !important;
+  }
+}
+@media screen and (max-width: 576px) {
+  .res-576px-d-block {
+    display: block !important;
   }
 }

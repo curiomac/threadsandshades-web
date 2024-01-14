@@ -29,7 +29,7 @@ const Footer = () => {
     <>
       {isDefaultPage() && (
         <div className="footer">
-          <div className="footer-container">
+          <div className="footer-container res-849px-d-block">
             <div className="brand">
               <Logo height={80} />
               <div className="details">

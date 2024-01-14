@@ -10,12 +10,21 @@ import {
   HOME_PAGE,
   ABOUT_PAGE,
   CONTACT_PAGE,
+  COLLECTIONS_PAGE,
 } from "../../../../helpers/route-paths/paths";
 import { useSelector } from "react-redux";
+import SideDrawer from "../../../plugins/side-drawer/SideDrawer";
 
 const NavBar = () => {
   const { theme } = useSelector((state) => state.themeState);
   const { pathname } = useLocation();
+  const isCurrentPath = (path) => {
+    if (path === pathname) {
+      return true;
+    } else {
+      return false;
+    }
+  };
   return (
     <>
       <div
@@ -26,31 +35,32 @@ const NavBar = () => {
         }`}
       >
         <div className="nav-bar-links container-fluid">
+          <div className="res-nav-btn">
+            <SideDrawer />
+          </div>
           <div className="nav-links">
             <div className="nav-bar-logo">
               <Logo height={50} />
             </div>
-            <div className="default-links">
+            <div className="default-links res-849px-d-none">
               <div className="links-container">
-                {/*
-              <Link to={HOME_PAGE} className="links-decoration-unset">
-              <div className="links ternary-color">HOME</div>
-              </Link>
-             */}
                 <Link to={HOME_PAGE} className="links-decoration-unset">
-                  <div className={`links ${pathname === "/" && "active"}`}>
+                  <div
+                    className={`links ${isCurrentPath(HOME_PAGE) && "active"}`}
+                  >
                     SHOP
                   </div>
                 </Link>
-                {/* 
-              <Link to={CONTACT_PAGE} className="links-decoration-unset">
-                 <div className="links">BLOG</div>
-              </Link> 
-            */}
-                <Link to={ABOUT_PAGE} className="links-decoration-unset">
-                  <div className="links">MEN</div>
+                <Link
+                  to={`${COLLECTIONS_PAGE}?type=men`}
+                  className="links-decoration-unset"
+                >
+                  <div className={`links ${isCurrentPath(COLLECTIONS_PAGE) && "active"}`}>MEN</div>
                 </Link>
-                <Link to={CONTACT_PAGE} className="links-decoration-unset">
+                <Link
+                  to={`${COLLECTIONS_PAGE}?type=women`}
+                  className="links-decoration-unset"
+                >
                   <div className="links">WOMEN</div>
                 </Link>
                 <Link to={CONTACT_PAGE} className="links-decoration-unset">

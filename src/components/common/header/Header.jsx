@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { ABOUT_PAGE, CONTACT_PAGE, HOME_PAGE, NOT_FOUND_404, LOGIN_PAGE, REGISTER_PAGE } from '../../../helpers/route-paths/paths';
+import { ABOUT_PAGE, CONTACT_PAGE, HOME_PAGE, NOT_FOUND_404, LOGIN_PAGE, REGISTER_PAGE, COLLECTIONS_PAGE } from '../../../helpers/route-paths/paths';
 import NavBar from './layouts/NavBar';
 import TopBar from './layouts/TopBar';
 import { useSelector } from 'react-redux';
@@ -13,7 +13,8 @@ const Header = () => {
     const defaultPages = [
         HOME_PAGE,
         ABOUT_PAGE,
-        CONTACT_PAGE
+        CONTACT_PAGE,
+        COLLECTIONS_PAGE
     ]
 
     const authPages = [

@@ -56,8 +56,8 @@
     gap: 0.8rem;
     .men {
       height: 80vh;
-      min-width: 50%;
-      max-width: 50%;
+      min-width: calc(50% - 0.4rem);
+      min-width: calc(50% - 0.4rem);
       background-image: url(../../assets/imgs/home/shop-for-men-bg.jpg);
       background-position: center;
       background-repeat: no-repeat;
@@ -119,8 +119,8 @@
     }
     .women {
       height: 80vh;
-      min-width: 50%;
-      max-width: 50%;
+      min-width: calc(50% - 0.4rem);
+      min-width: calc(50% - 0.4rem);
       background-image: url(../../assets/imgs/home/shop-for-women-bg.jpg);
       background-position: center;
       background-repeat: no-repeat;
@@ -320,7 +320,7 @@
   .products-grid {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 0.8rem;
     .product {
       height: 400px;
@@ -412,7 +412,7 @@
         }
       }
     }
-    .product:hover {      
+    .product:hover {
       box-shadow: 0 0 10px 1px #8888881c !important;
       transition: 0.5s;
       .add-to-cart-container {
@@ -421,6 +421,77 @@
         bottom: 30px;
         opacity: 1;
         transition: 0.5s;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1600px) {
+  .shop-now-cards {
+    .card-container {
+      grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+      .card {
+        height: 400px;
+      }
+      .latest-card-bg {
+        height: 400px;
+      }
+      .sweat-card-bg {
+        height: 400px;
+      }
+      .explore-card-bg {
+        height: 400px;
+      }
+      .linear-bg {
+        height: 400px;
+      }
+    }
+  }
+  .support-banner {
+    .contents {
+      grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    }
+  }
+}
+
+@media screen and (max-width: 849px) {
+  .men {
+    height: 40vh !important;
+    .contents-container {
+      height: 40vh !important;
+    }
+    .contents-container:hover {
+      background-color: #00000039;
+      transition: 0.3s;
+    }
+  }
+  .women {
+    height: 40vh !important;
+
+    .contents-container {
+      height: 40vh !important;
+    }
+  }
+}
+@media screen and (max-width: 426px) {
+  .shop-now-cards {
+    .card-container {
+      display: block;
+      width: 100%;
+      .card {
+        margin-top: 10px;
+      }
+    }
+  }
+  .support-banner {
+    .contents {
+      display: block;
+      width: 100%;
+      .content {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        margin-top: 10px;
       }
     }
   }

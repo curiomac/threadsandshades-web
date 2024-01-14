@@ -20,7 +20,7 @@ console.log(theme);
             {isTheme() === 'dark' ? (
                 <img src={logo} height={40} width={150}/>
             ) : isTheme() === 'light' && (
-                <img src={logo} height={50} width={150}/>
+                <img src={logo} height={53} width={140} className='logo-img'/>
             )}
 
         </div>

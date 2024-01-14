@@ -160,3 +160,132 @@
   font-size: 20px;
   cursor: pointer;
 }
+
+/* Side Drawer */
+
+.side-drawer {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #ffffff;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+  box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.218);
+  .links-container-res {
+    opacity: 0;
+    transition: 0.5s;
+    display: none;
+    .links-decoration-unset {
+      display: none;
+    }
+  }
+}
+
+.side-drawer {
+  &.open {
+    width: 250px;
+    .links-container-res {
+      opacity: 1;
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      text-align: center;
+      transition: 0.5s;
+      .links-decoration-unset {
+        text-decoration: unset;
+        display: unset !important;
+        .links {
+          padding-top: 10px;
+          color: $ternary-color;
+          cursor: pointer;
+          text-decoration: none;
+          font-weight: 600;
+          &.active {
+            color: $primary-color;
+          }
+        }
+        :hover {
+          color: $secondary-font-color;
+        }
+      }
+    }
+  }
+}
+
+.toggle-button {
+  font-size: 20px;
+  cursor: pointer;
+  color: rgb(0, 0, 0);
+  border: none;
+  padding: 10px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1;
+  display: none;
+  background-color: transparent;
+}
+/*Custom Checkbox*/
+
+.custom-checkbox {
+  display: block;
+  position: relative;
+  padding-left: 25px;
+  margin-bottom: 15px;
+  cursor: pointer;
+  font-size: 16px;
+  user-select: none;
+}
+
+.custom-checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.checkmark {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  height: 15px;
+  width: 15px;
+  background-color: #eee;
+  border: 1px solid #ccc;
+}
+
+.custom-checkbox input:checked ~ .checkmark {
+  background-color: $primary-color; /* Change this to your desired checkbox color */
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.custom-checkbox input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.custom-checkbox .checkmark:after {
+  left: 5px;
+  top: 2px;
+  width: 3px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+@media screen and (max-width: 849px) {
+  .toggle-button {
+    display: block;
+  }
+  .logo-img {
+    height: 40px !important;
+    width: 120px !important;
+  }
+}

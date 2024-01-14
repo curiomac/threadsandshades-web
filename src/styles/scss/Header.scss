@@ -68,6 +68,9 @@ $items-card-width: 300px;
     align-items: center;
     justify-content: space-between;
     letter-spacing: 2px;
+    .res-nav-btn {
+      display: none;
+    }
     .nav-links {
       display: flex;
       align-items: center;
@@ -219,5 +222,17 @@ $items-card-width: 300px;
     color: $primary-font-color;
     background-color: $secondary-color;
     box-shadow: 0 0 10px 1px #15271a !important;
+  }
+}
+
+@media screen and (max-width: 849px) {
+  .res-nav-btn {
+    display: unset !important;
+    // min-width: 40%;
+  }
+  .more-links {
+    // min-width: 40%;
+    display: flex;
+    justify-content: flex-end;
   }
 }
