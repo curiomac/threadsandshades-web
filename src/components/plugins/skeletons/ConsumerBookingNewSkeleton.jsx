@@ -9,11 +9,11 @@ const ConsumerBookingNewSkeleton = () => {
     //     <Skeleton count={5} /> {/* Multiple loading placeholders */}
     //   </div>
     <div className="d-flex gap-5">
-      <div className="vehicle-detail-info">
+      <div className="product-detail-info">
         <div>
-          <div className="vehicle-basic-info d-flex justify-content-space-between gap-5">
+          <div className="product-basic-info d-flex justify-content-space-between gap-5">
             <Skeleton height={200} width={300} />
-            <div className="vehicle-info-content primary-font font-14">
+            <div className="product-info-content primary-font font-14">
               <div className="d-flex align-items-center justify-content-space-between">
                 <Skeleton count={1} />
               </div>
@@ -54,9 +54,9 @@ const ConsumerBookingNewSkeleton = () => {
             <div className="car-amenities">
               <div className="w-fill">
                 <div className="primary-font font-16 font-weight-2">
-                  Vehicle Amenities
+                  Product Amenities
                 </div>
-                <div className="vehicle-amenities-container mt-1 mb-1">
+                <div className="product-amenities-container mt-1 mb-1">
                   {car_amenities_demo.map((value) => {
                     return (
                       <div className="d-flex align-items-center gap-1 font-14 secondary-font">
@@ -94,8 +94,8 @@ const ConsumerBookingNewSkeleton = () => {
             </div> */}
         </div>
       </div>
-      <div className="vehicle-booking-info">
-        <div className="vehicle-booking-tab">
+      <div className="product-booking-info">
+        <div className="product-booking-tab">
           {/* <div className="font-18 primary-font">Wallet & Offers</div>
           <div
             className="d-flex align-items-center justify-content-space-between mt-2 mb-2 cursor-pointer"
@@ -163,7 +163,7 @@ const ConsumerBookingNewSkeleton = () => {
                 <div className="d-flex align-items-center">
                   <BiDollar />
                 </div>
-                <div>{vehicleData.price * 8}</div>
+                <div>{productData.price * 8}</div>
               </div>
               <div className="primary-font d-flex align-items-center cursor-pointer">
                 <div className="font-14">See Details</div>

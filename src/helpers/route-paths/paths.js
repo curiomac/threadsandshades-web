@@ -4,6 +4,7 @@ export const HOME_PAGE = `/`;
 export const ABOUT_PAGE = `/about`;
 export const CONTACT_PAGE = `/contact-us`;
 export const COLLECTIONS_PAGE = `/collections`;
+export const LOCKED_CLOTH_PAGE = `/locked`;
 
 /* Auth Pages */
 

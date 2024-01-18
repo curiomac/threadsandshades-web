@@ -5,10 +5,14 @@ export const endpoints = {
     theme: {
         get: 'theme/get'
     },
-    vehicles: {
-        get: 'vehicles'
+    products: {
+        get: 'products'
     },
-    vehicle: {
-        get: 'vehicle'
+    product: {
+        get: 'product'
+    },
+    cart: {
+        get: 'cart',
+        add: 'cart/add'
     }
 }

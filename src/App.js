@@ -6,6 +6,7 @@ import './styles/css/style.css';
 import './styles/scss/error.scss';
 import './styles/scss/Home.scss';
 import './styles/scss/Collections.scss';
+import './styles/scss/LockedCloth.scss';
 import './styles/scss/auth.scss';
 import './styles/scss/plugins.scss';
 import './styles/scss/Header.scss';
@@ -42,9 +43,9 @@ function App() {
     document.documentElement.style.setProperty('--default-color', theme?.default_color);
   }, [theme_req]);
 
-  useEffect(() => {
-    store.dispatch(loadUser());
-  }, [])
+  // useEffect(() => {
+  //   store.dispatch(loadUser());
+  // }, [])
 
   return (
     <div>

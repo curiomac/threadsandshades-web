@@ -1,37 +1,37 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 
-const vehicleSlice = createSlice({
-    name: 'vehicle',
+const productSlice = createSlice({
+    name: 'product',
     initialState:{
         loading: false,
-        vehicle: {}
+        product: {}
     },
     reducers:{
-        vehicleRequest(state, action){
+        productRequest(state, action){
             return{
                 ...state,
                 loading: true
             }
         },
-        vehicleSuccess(state, action){
+        productSuccess(state, action){
             return{
                 ...state,
                 loading: false,
-                vehicle: action.payload.vehicle
+                product: action.payload.product
             }
         },
-        vehicleFail(state, action){
+        productFail(state, action){
             return{
                 ...state,
                 loading: false,
                 error: action.payload
             }
         },
-        clearVehicle(state, action){
+        clearProduct(state, action){
             return{
                 ...state,
-                vehicle: {}
+                product: {}
             }
         },
         clearError(state, action){
@@ -43,8 +43,8 @@ const vehicleSlice = createSlice({
     }
 });
 
-const {actions, reducer} = vehicleSlice;
+const {actions, reducer} = productSlice;
 
-export const {vehicleRequest,vehicleFail,vehicleSuccess, clearVehicle, clearError} = actions
+export const {productRequest,productFail,productSuccess, clearProduct, clearError} = actions
 
 export default reducer;

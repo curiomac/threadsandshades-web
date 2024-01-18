@@ -1,0 +1,216 @@
+@import "_values";
+
+/* Locked Cloth */
+
+/* product Details */
+
+.product-details {
+  padding-top: 30px;
+  padding-bottom: 30px;
+  .bread-crumbs {
+    font-size: 12px;
+    letter-spacing: 1px;
+    .border-bottom {
+      border-bottom: 1px solid black;
+      cursor: pointer;
+    }
+  }
+  .product-details-content {
+    width: 100%;
+    display: flex;
+    // justify-content: space-between;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    gap: 20px;
+    .show-case-container {
+      display: flex;
+      gap: 10px;
+      .avail-images-container {
+        .avail-image {
+          height: 100px;
+          width: 100px;
+          box-shadow: 0 0 10px 1px rgba(68, 68, 68, 0.096);
+          img {
+            height: 100%;
+            width: 100%;
+          }
+        }
+      }
+      .target-image-container {
+        .target-image {
+          height: 500px;
+          width: 500px;
+          img {
+            height: 100%;
+            width: 100%;
+          }
+        }
+      }
+    }
+    .product-info-container {
+      min-height: 80px;
+      max-height: 80px;
+      .product-title {
+        color: #404040;
+        //   font-size: 12px;
+        letter-spacing: 1px !important;
+        text-transform: uppercase;
+        font-size: 18px;
+        font-weight: 800;
+        font-family: "Poppins:wght@400;800", sans-serif;
+      }
+      .rating-container {
+        overflow: hidden;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        .rating {
+          display: flex;
+          align-items: center;
+          gap: 2px;
+          font-size: 18px;
+          color: rgba(128, 128, 128, 0.27);
+          .rating-value {
+            font-size: 14px !important;
+            color: #404040c9 !important;
+          }
+
+          .filled {
+            color: $primary-color;
+          }
+        }
+      }
+      .price {
+        // font-size: 14px;
+      }
+      .offered {
+        text-decoration: line-through;
+        color: #939393;
+        font-size: 14px !important;
+      }
+      .discount {
+        font-size: 12px;
+        color: $primary-color;
+      }
+      .tax-inclusion {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #40404088;
+      }
+      .custom-hr {
+        height: 1.5px;
+        width: 100%;
+        background-color: #93939336 !important;
+      }
+      .color-container {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        .title {
+          font-size: 14px;
+          font-weight: 600;
+        }
+        .avail-colors-container {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          margin-top: 10px;
+          margin-bottom: 10px;
+          .color {
+            height: 45px;
+            width: 45px;
+            border-radius: 100%;
+            &.active {
+              padding: 3px;
+              div {
+                box-shadow: unset !important;
+              }
+            }
+            div {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              height: 45px;
+              width: 45px;
+              border-radius: 100%;
+              box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.249);
+            }
+          }
+        }
+      }
+      .sizes-container {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        .title {
+          font-size: 14px;
+          font-weight: 600;
+        }
+        .sizes-content-container {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          margin-top: 10px;
+          margin-bottom: 10px;
+          .size {
+            height: 18px;
+            padding-left: 10px;
+            padding-right: 10px;
+            font-size: 14px;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 2px;
+            &.active {
+              border: 1px solid black;
+            }
+          }
+        }
+      }
+      .product-actions {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        .qty-container {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          .title {
+            font-size: 14px;
+            font-weight: 600;
+          }
+          .select-input {
+            height: 40px;
+            width: 70px;
+            border: none;
+            border-bottom: 1px solid black;
+            font-weight: 600;
+            outline: none;
+          }
+        }
+        .add-to-cart-btn {
+            height: 40px;
+            width: 150px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px solid $primary-color;
+            outline: none;
+            color: $primary-color;
+            background-color: transparent;
+        }
+        .buy-now-btn {
+            height: 40px;
+            width: 150px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px solid transparent;
+            outline: none;
+            color: $default-color;
+            background-color: $primary-color;
+        }
+      }
+    }
+  }
+}

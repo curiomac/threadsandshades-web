@@ -12,7 +12,6 @@ const SigninHeader = () => {
   const authPages = [LOGIN_PAGE, REGISTER_PAGE];
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [auth, setAuth] = useState("");
-
   const closeModal = () => {
     setIsModalOpen(false);
   };

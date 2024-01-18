@@ -5,6 +5,7 @@ import {
   COLLECTIONS_PAGE,
   CONTACT_PAGE,
   HOME_PAGE,
+  LOCKED_CLOTH_PAGE,
   LOGIN_PAGE,
   NOT_FOUND_404,
   REGISTER_PAGE,
@@ -20,6 +21,7 @@ import DialogModal from "../../plugins/dialog-modal/DialogModal";
 import SigninHeader from "../../common/header/layouts/SigninHeader";
 import Register from "../../pages/auth-pages/register/Register";
 import Collections from "../../pages/default-pages/collections/Collections";
+import LockedCloth from "../../pages/default-pages/locked-cloth/LockedCloth";
 
 const Pages = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -42,6 +44,7 @@ const Pages = () => {
         <Route path={ABOUT_PAGE} element={<About />} />
         <Route path={CONTACT_PAGE} element={<ContactUs />} />
         <Route path={COLLECTIONS_PAGE} element={<Collections />} />
+        <Route path={LOCKED_CLOTH_PAGE} element={<LockedCloth />} />
 
         {/* Auth Pages */}
         <Route path={LOGIN_PAGE} element={<Login />} />

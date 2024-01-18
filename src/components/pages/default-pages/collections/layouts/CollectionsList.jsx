@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import image_1 from "../../../../../assets/imgs/sample-photos/image-1.png";
 import image_2 from "../../../../../assets/imgs/sample-photos/image-2.png";
 import image_3 from "../../../../../assets/imgs/sample-photos/image-3.png";
@@ -7,8 +7,16 @@ import image_5 from "../../../../../assets/imgs/sample-photos/image-5.png";
 import image_6 from "../../../../../assets/imgs/sample-photos/image-6.png";
 import { FaRegHeart } from "react-icons/fa";
 import { TiShoppingCart } from "react-icons/ti";
+import { TiTick } from "react-icons/ti";
+import { LOCKED_CLOTH_PAGE } from "../../../../../helpers/route-paths/paths";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getProducts } from "../../../../../redux/actions/productsAction";
+import { addCart } from "../../../../../redux/actions/cartAction";
+import SpinnerLoader from "../../../../plugins/loaders/spinner-loader/SpinnerLoader";
 
 const CollectionsList = () => {
+  const navigate = useNavigate();
   const sample_products = [
     {
       id: 1,
@@ -115,6 +123,22 @@ const CollectionsList = () => {
       availableColors: ["#28252d", "#fff"],
     },
   ];
+  const { products } = useSelector((state) => state.productsState);
+  const { cartItems, loading: cartLoading } = useSelector(
+    (state) => state.cartState
+  );
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getProducts());
+  }, []);
+  const handleAddToCart = (product) => {
+    const payload = {
+      product_id: product._id,
+      user_id: "65a7eef1a7e2b0eda9f545e8",
+      quantity: 2,
+    };
+    dispatch(addCart(payload));
+  };
   return (
     <div className="collection-list">
       <div>
@@ -123,11 +147,13 @@ const CollectionsList = () => {
             MEN'S COLLECTION
           </div>
           <div className="products-grid">
-            {sample_products?.map((product) => {
-              console.log(product?.availableColors, "<<<<<<<<<<<<<<<");
+            {products?.map((product) => {
               return (
-                <div className="product">
-                  <img src={product.image} alt="image_1" />
+                <div
+                  className="product"
+                  // onClick={() => navigate(`${LOCKED_CLOTH_PAGE}?type=men&product_id=${product?.id}`)}
+                >
+                  <img src={product?.images[0]?.image} alt="image_1" />
                   <div className="container-fluid-padding base-container">
                     <div className="add-to-fav-icon-container">
                       <div className="add-to-fav-icon">
@@ -135,11 +161,51 @@ const CollectionsList = () => {
                       </div>
                     </div>
                     <div className="add-to-cart-container">
-                      <button className="add-to-cart-btn d-flex align-items-center justify-content-center gap-3">
+                      <button
+                        className={`add-to-cart-btn d-flex align-items-center justify-content-center gap-3 ${
+                          (cartItems?.some(
+                            (cartProduct) => cartProduct?._id === product?._id
+                          ) ||
+                            cartLoading) &&
+                          "disabled"
+                        }`}
+                        onClick={() => {
+                          if (
+                            cartItems?.some(
+                              (cartProduct) => cartProduct?._id === product?._id
+                            ) ||
+                            cartLoading
+                          ) {
+                            return;
+                          } else {
+                            handleAddToCart(product);
+                          }
+                        }}
+                      >
+                        {cartLoading ? (
+                          <div>
+                            <SpinnerLoader />
+                          </div>
+                        ) : (
+                          <div>
+                            {cartItems?.some(
+                              (cartProduct) => cartProduct?._id === product?._id
+                            ) ? (
+                              <TiTick className="font-size-3 d-flex align-items-center" />
+                            ) : (
+                              <TiShoppingCart className="font-size-3 d-flex align-items-center" />
+                            )}
+                          </div>
+                        )}
                         <div>
-                          <TiShoppingCart className="font-size-3 d-flex align-items-center" />
+                          {cartItems?.some(
+                            (cartProduct) => cartProduct?._id === product?._id
+                          )
+                            ? "Item added to Cart"
+                            : cartLoading
+                            ? "Adding to Cart"
+                            : "Add To Cart"}
                         </div>
-                        <div>Add To Cart</div>
                       </button>
                     </div>
                     <div className="product-title">{product.title}</div>
@@ -181,7 +247,6 @@ const CollectionsList = () => {
                 </div>
               );
             })}
-            <div></div>
           </div>
         </div>
       </div>

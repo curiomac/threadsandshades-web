@@ -3,15 +3,17 @@ import thunk from "redux-thunk";
 import authReducer from "../slices/authSlice";
 import userReducer from "../slices/userSlice";
 import themeReducer from "../slices/themeSlice";
-import vehiclesReducer from "../slices/vehiclesSlice";
-import vehicleReducer from "../slices/vehicleSlice";
+import productsReducer from "../slices/productsSlice";
+import productReducer from "../slices/productSlice";
+import cartReducer from "../slices/cartSlice";
 
 const reducer = combineReducers({
     authState: authReducer,
     userState: userReducer,
     themeState: themeReducer,
-    vehiclesState: vehiclesReducer,
-    vehicleState: vehicleReducer,
+    productsState: productsReducer,
+    productState: productReducer,
+    cartState: cartReducer,
 })
 
 const store = configureStore({
