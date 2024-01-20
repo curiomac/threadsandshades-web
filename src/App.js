@@ -7,17 +7,17 @@ import './styles/scss/error.scss';
 import './styles/scss/Home.scss';
 import './styles/scss/Collections.scss';
 import './styles/scss/LockedCloth.scss';
-import './styles/scss/auth.scss';
+import './styles/scss/Auth.scss';
 import './styles/scss/plugins.scss';
 import './styles/scss/Header.scss';
 import './styles/scss/SiteSettings.scss';
+import './styles/scss/Cart.scss';
+import './styles/scss/WishList.scss';
 import './styles/scss/Footer.scss';
 import 'react-toastify/dist/ReactToastify.css';
 import 'aos/dist/aos.css';
 import { useDispatch, useSelector } from "react-redux";
 import { getTheme } from "./redux/actions/themeAction";
-import store from "./redux/store/store";
-import { loadUser } from "./redux/actions/userActions";
 
 function App() {
 

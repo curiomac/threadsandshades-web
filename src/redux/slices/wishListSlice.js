@@ -1,49 +1,49 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const cartSlice = createSlice({
-  name: "cart",
+const wishListSlice = createSlice({
+  name: "wishList",
   initialState: {
     loading: false,
-    cartItems: [],
-    cartCount: 0
+    wishListItems: [],
+    wishListCount: 0
   },
   reducers: {
-    cartRequest(state, action) {
+    wishListRequest(state, action) {
       return {
         ...state,
         loading: true,
       };
     },
-    cartSuccess(state, action) {
+    wishListSuccess(state, action) {
       return {
         ...state,
         loading: false,
-        cartItems: action.payload.cart_items,
-        cartCount: action.payload.cart_count,
+        wishListItems: action.payload.wish_list_items,
+        wishListCount: action.payload.wish_list_count,
       };
     },
-    cartFail(state, action) {
+    wishListFail(state, action) {
       return {
         ...state,
         loading: false,
         error: action.payload,
       };
     },
-    cartAddRequest(state, action) {
+    wishListAddRequest(state, action) {
       return {
         ...state,
         loading: true,
       };
     },
-    cartAddSuccess(state, action) {
+    wishListAddSuccess(state, action) {
       return {
         ...state,
         loading: false,
-        cartItems: action.payload.cart_items,
-        cartCount: action.payload.cart_count,
+        wishListItems: action.payload.wish_list_items,
+        wishListCount: action.payload.wish_list_count,
       };
     },
-    cartAddFail(state, action) {
+    wishListAddFail(state, action) {
       return {
         ...state,
         loading: false,
@@ -59,15 +59,15 @@ const cartSlice = createSlice({
   },
 });
 
-const { actions, reducer } = cartSlice;
+const { actions, reducer } = wishListSlice;
 
 export const {
-  cartRequest,
-  cartFail,
-  cartSuccess,
-  cartAddRequest,
-  cartAddFail,
-  cartAddSuccess,
+  wishListRequest,
+  wishListFail,
+  wishListSuccess,
+  wishListAddRequest,
+  wishListAddFail,
+  wishListAddSuccess,
   clearError,
 } = actions;
 

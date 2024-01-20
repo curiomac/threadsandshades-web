@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { RxSlash } from "react-icons/rx";
 import { useLocation } from "react-router-dom";
 import {
+  CART_ITEMS_PAGE,
+  CART_PAGE,
+  DELIVERY_ADDRESS_PAGE,
   LOGIN_PAGE,
   REGISTER_PAGE,
 } from "../../../../helpers/route-paths/paths";
@@ -10,19 +13,22 @@ import DialogModalAuth from "../../../plugins/dialog-modal-auth/DialogModalAuth"
 const SigninHeader = () => {
   const location = useLocation();
   const authPages = [LOGIN_PAGE, REGISTER_PAGE];
+  const defaultPages = [CART_PAGE, CART_ITEMS_PAGE, DELIVERY_ADDRESS_PAGE];
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [auth, setAuth] = useState("");
   const closeModal = () => {
     setIsModalOpen(false);
   };
-  const isNotAuthPage = () => {
+  const isNotRestrictedPage = () => {
     if (authPages.find((page) => page === location.pathname)) {
+      return false;
+    } else if (defaultPages.find((page) => page === location.pathname)) {
       return false;
     } else {
       return true;
     }
   };
-  if (isNotAuthPage()) {
+  if (isNotRestrictedPage()) {
     return (
       <div className="signin-header">
         <div className="container-fluid">

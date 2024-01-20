@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import {
   ABOUT_PAGE,
+  CART_PAGE,
+  CART_ITEMS_PAGE,
   COLLECTIONS_PAGE,
   CONTACT_PAGE,
+  DELIVERY_ADDRESS_PAGE,
   HOME_PAGE,
   LOCKED_CLOTH_PAGE,
   LOGIN_PAGE,
@@ -22,9 +25,12 @@ import SigninHeader from "../../common/header/layouts/SigninHeader";
 import Register from "../../pages/auth-pages/register/Register";
 import Collections from "../../pages/default-pages/collections/Collections";
 import LockedCloth from "../../pages/default-pages/locked-cloth/LockedCloth";
+import CartItems from "../../pages/protected-pages/cart/layouts/CartItems";
+import DeliveryAddress from "../../pages/protected-pages/cart/layouts/DeliveryAddress";
+import Cart from "../../pages/protected-pages/cart/Cart";
 
 const Pages = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(true);
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -45,6 +51,12 @@ const Pages = () => {
         <Route path={CONTACT_PAGE} element={<ContactUs />} />
         <Route path={COLLECTIONS_PAGE} element={<Collections />} />
         <Route path={LOCKED_CLOTH_PAGE} element={<LockedCloth />} />
+
+        {/* Protected Pages */}
+        <Route path={CART_PAGE} element={<Cart />}>
+          <Route path={CART_ITEMS_PAGE} element={<CartItems />} />
+          <Route path={DELIVERY_ADDRESS_PAGE} element={<DeliveryAddress />} />
+        </Route>
 
         {/* Auth Pages */}
         <Route path={LOGIN_PAGE} element={<Login />} />

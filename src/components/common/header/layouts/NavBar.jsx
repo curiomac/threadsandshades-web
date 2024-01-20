@@ -12,18 +12,26 @@ import {
   CONTACT_PAGE,
   COLLECTIONS_PAGE,
   LOCKED_CLOTH_PAGE,
+  CART_ITEMS_PAGE,
 } from "../../../../helpers/route-paths/paths";
 import { useDispatch, useSelector } from "react-redux";
 import SideDrawer from "../../../plugins/side-drawer/SideDrawer";
 import { getCart } from "../../../../redux/actions/cartAction";
 import CartDrawer from "./CartDrawer";
+import { getWishList } from "../../../../redux/actions/wishListAction";
+import DialogModalWishList from "../../../plugins/dialog-modal-wishlist/DialogModalWishList";
 
 const NavBar = () => {
   const { theme } = useSelector((state) => state.themeState);
   const { pathname } = useLocation();
-  const { cartCount, cartItem } = useSelector((state) => state.cartState);
+  const { cartCount } = useSelector((state) => state.cartState);
+  const { wishListCount } = useSelector((state) => state.wishListState);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const dispatch = useDispatch();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
   const isCurrentPath = (path) => {
     if (path === pathname) {
       return true;
@@ -32,10 +40,14 @@ const NavBar = () => {
     }
   };
   useEffect(() => {
-    const payload = {
+    const cartPayload = {
       user_id: "65a7eef1a7e2b0eda9f545e8",
     };
-    dispatch(getCart(payload));
+    const wishListPayload = {
+      user_id: "65a7eef1a7e2b0eda9f545e8",
+    };
+    dispatch(getCart(cartPayload));
+    dispatch(getWishList(wishListPayload));
   }, []);
   return (
     <>
@@ -111,15 +123,20 @@ const NavBar = () => {
                   <IoPersonOutline />
                 </div>
               </Link>
-              <Link to={HOME_PAGE} className="links-decoration-unset">
+              <div
+                onClick={() => setIsModalOpen(true)}
+                className="links-decoration-unset"
+              >
                 <div className="links icon">
                   <FaRegHeart />
+                  <div className="shopping-cart-count-container">
+                    <div className="shopping-cart-count d-flex align-items-center justify-content-center">
+                      {wishListCount}
+                    </div>
+                  </div>
                 </div>
-              </Link>
-              <Link
-                className="links-decoration-unset"
-                onClick={() => setIsCartOpen(true)}
-              >
+              </div>
+              <Link className="links-decoration-unset" to={CART_ITEMS_PAGE}>
                 <div className="links icon">
                   <HiOutlineShoppingBag />
                   <div className="shopping-cart-count-container">
@@ -145,6 +162,11 @@ const NavBar = () => {
           </div>
         </div>
       </div>
+      <DialogModalWishList
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        isAuth={"auth"}
+      />
     </>
   );
 };

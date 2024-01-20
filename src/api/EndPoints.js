@@ -14,5 +14,9 @@ export const endpoints = {
     cart: {
         get: 'cart',
         add: 'cart/add'
+    },
+    wish_list: {
+        get: 'wishlist',
+        move: 'wishlist/move'
     }
 }
