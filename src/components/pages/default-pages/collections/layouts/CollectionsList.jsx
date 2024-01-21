@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { TiShoppingCart } from "react-icons/ti";
 import { TiTick } from "react-icons/ti";
-// import { LOCKED_CLOTH_PAGE } from "../../../../../helpers/route-paths/paths";
-// import { useNavigate } from "react-router-dom";
+import { LOCKED_CLOTH_PAGE } from "../../../../../helpers/route-paths/paths";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getProducts } from "../../../../../redux/actions/productsAction";
 import { addCart } from "../../../../../redux/actions/cartAction";
@@ -11,7 +11,7 @@ import SpinnerLoader from "../../../../plugins/loaders/spinner-loader/SpinnerLoa
 import { moveWishList } from "../../../../../redux/actions/wishListAction";
 
 const CollectionsList = () => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const { products } = useSelector((state) => state.productsState);
   const { cartItems, loading: cartLoading } = useSelector(
     (state) => state.cartState
@@ -19,6 +19,7 @@ const CollectionsList = () => {
   const { wishListItems, loading: wishListLoading } = useSelector(
     (state) => state.wishListState
   );
+  const [selectedProductId, setSelectedProductId] = useState("");
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getProducts());
@@ -34,7 +35,7 @@ const CollectionsList = () => {
     const payload = {
       product_id: product._id,
       user_id: "65a7eef1a7e2b0eda9f545e8",
-      is_from: 'default'
+      is_from: "default",
     };
     dispatch(moveWishList(payload));
   };
@@ -50,7 +51,7 @@ const CollectionsList = () => {
               return (
                 <div
                   className="product"
-                  // onClick={() => navigate(`${LOCKED_CLOTH_PAGE}?type=men&product_id=${product?.id}`)}
+                  onClick={() => setSelectedProductId(product._id)}
                 >
                   <img src={product?.images[0]?.image} alt="image_1" />
                   <div className="container-fluid-padding base-container">
@@ -80,7 +81,8 @@ const CollectionsList = () => {
                           (cartItems?.some(
                             (cartProduct) => cartProduct?._id === product?._id
                           ) ||
-                            cartLoading) &&
+                            (cartLoading &&
+                              selectedProductId === product._id)) &&
                           "disabled"
                         }`}
                         onClick={() => {
@@ -96,15 +98,15 @@ const CollectionsList = () => {
                           }
                         }}
                       >
-                        {cartLoading ? (
+                        {cartLoading && selectedProductId === product._id ? (
                           <div>
                             <SpinnerLoader />
                           </div>
                         ) : (
                           <div>
-                            {cartItems?.some(
+                            {(cartItems?.some(
                               (cartProduct) => cartProduct?._id === product?._id
-                            ) ? (
+                            )) ? (
                               <TiTick className="font-size-3 d-flex align-items-center" />
                             ) : (
                               <TiShoppingCart className="font-size-3 d-flex align-items-center" />
@@ -112,17 +114,26 @@ const CollectionsList = () => {
                           </div>
                         )}
                         <div>
-                          {cartItems?.some(
+                          {(cartItems?.some(
                             (cartProduct) => cartProduct?._id === product?._id
-                          )
+                          ))
                             ? "Item added to Cart"
-                            : cartLoading
+                            : (cartLoading && selectedProductId === product._id)
                             ? "Adding to Cart"
                             : "Add To Cart"}
                         </div>
                       </button>
                     </div>
-                    <div className="product-title">{product.title}</div>
+                    <div
+                      className="product-title"
+                      onClick={() =>
+                        navigate(
+                          `${LOCKED_CLOTH_PAGE}?type=men&product_id=${product?._id}`
+                        )
+                      }
+                    >
+                      {product.title}
+                    </div>
                     <div className="d-flex align-items-center font-weight-1">
                       {/* <div>
                       <BsCurrencyRupee className="d-flex align-items-center"/>

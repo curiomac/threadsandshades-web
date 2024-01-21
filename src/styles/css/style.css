@@ -73,7 +73,7 @@
 /* width */
 
 .w-none {
-  width: 0%;
+  width: 0% !important;
 }
 .w-1 {
   width: 12.5%;

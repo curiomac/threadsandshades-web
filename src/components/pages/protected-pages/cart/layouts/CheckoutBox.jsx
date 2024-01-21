@@ -1,14 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BiDollar, BiSolidCoupon } from "react-icons/bi";
 import { IoIosArrowForward, IoIosWallet } from "react-icons/io";
 import { MdShoppingCartCheckout } from "react-icons/md";
+import { getQueryParam } from "../../../../../helpers/search-query-params/getQueryParams";
+import { useDispatch, useSelector } from "react-redux";
+import { proceedTrigger } from "../../../../../redux/slices/resCartSlice";
 
 const CheckoutBox = () => {
-  const [applyCoupons, setApplyCoupons] = useState(false);
-  const [useWallet, setUseWallet] = useState(false);
   const [couponValue, setCouponValue] = useState("");
+  const trigger = getQueryParam("proceed");
+  const { proceed } = useSelector((state) => state.resCartState);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(proceedTrigger(trigger));
+  }, [trigger]);
   return (
-    <div className="checkout-box">
+    <div
+      className={`checkout-box ${
+        (proceed === true  || proceed === 'true') ? "show-checkout-box" : "hide-checkout-box"
+      }`}
+    >
       <div>
         <div className="offer-box">
           <div className="offer-box-info">
@@ -85,7 +96,7 @@ const CheckoutBox = () => {
           <div className="custom-hr mt-2 mb-2"></div>
           <button className="checkout-button d-flex align-items-center gap-2 justify-content-center">
             <div>
-              <MdShoppingCartCheckout className="font-size-3 d-flex align-items-center"/>
+              <MdShoppingCartCheckout className="font-size-3 d-flex align-items-center" />
             </div>
             <div>CHECKOUT</div>
           </button>

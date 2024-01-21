@@ -184,7 +184,7 @@
 .modal-content-auth {
   background-color: #fff;
   border-radius: 5px;
-  width: 30%;
+  width: 350px;
   .auth-btn {
     height: 35px;
     width: 60%;
@@ -304,6 +304,13 @@
   .collection-list {
     max-width: 100% !important;
     min-width: 100% !important;
+    .add-to-cart-container {
+      visibility: visible !important;
+      position: relative !important;
+      bottom: 30px !important;
+      opacity: 1 !important;
+      transition: 0.5s !important;
+    }
   }
   .filter-bar-res {
     width: 100%;
@@ -398,5 +405,11 @@
         }
       }
     }
+  }
+}
+
+@media screen and (max-width: 539px) {
+  .modal-content-auth {
+    width: 90% !important;
   }
 }

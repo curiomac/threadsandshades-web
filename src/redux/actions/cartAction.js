@@ -9,6 +9,9 @@ import {
   cartAddFail,
   cartAddRequest,
   cartAddSuccess,
+  cartRemoveFail,
+  cartRemoveRequest,
+  cartRemoveSuccess,
 } from "../slices/cartSlice";
 
 export const getCart = (payload) => async (dispatch) => {
@@ -35,6 +38,20 @@ export const addCart = (payload) => async (dispatch) => {
     dispatch(cartAddSuccess(response?.data?.cart));
   } catch (error) {
     dispatch(cartAddFail(error?.response?.data?.message));
+  }
+};
+export const removeCart = (payload) => async (dispatch) => {
+  const formattedPayload = `${
+    payload?.product_id ? `?product_id=${payload?.product_id}` : ""
+  }${payload?.user_id ? `&user_id=${payload?.user_id}` : ""}`;
+  try {
+    dispatch(cartRemoveRequest());
+    const response = await axios.post(
+      `${BASE_URL}/${endpoints.cart.remove}${formattedPayload}`
+    );
+    dispatch(cartRemoveSuccess(response?.data?.cart));
+  } catch (error) {
+    dispatch(cartRemoveFail(error?.response?.data?.message));
   }
 };
 

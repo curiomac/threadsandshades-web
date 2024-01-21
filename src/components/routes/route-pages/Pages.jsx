@@ -30,7 +30,7 @@ import DeliveryAddress from "../../pages/protected-pages/cart/layouts/DeliveryAd
 import Cart from "../../pages/protected-pages/cart/Cart";
 
 const Pages = () => {
-  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const closeModal = () => {
     setIsModalOpen(false);

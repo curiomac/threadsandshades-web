@@ -1,16 +1,45 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { IoClose } from "react-icons/io5";
 import { IoMailOutline } from "react-icons/io5";
-import { TiShoppingCart } from "react-icons/ti";
-import { useSelector } from "react-redux";
+import { TiShoppingCart, TiTick } from "react-icons/ti";
+import { useDispatch, useSelector } from "react-redux";
+import { getProducts } from "../../../redux/actions/productsAction";
+import { moveWishList } from "../../../redux/actions/wishListAction";
+import SpinnerLoader from "../loaders/spinner-loader/SpinnerLoader";
+import { addCart } from "../../../redux/actions/cartAction";
 
 const DialogModalWishList = ({ isOpen, onClose }) => {
-  const { wishListItems } = useSelector((state) => state.wishListState);
+  const { wishListItems, loading: wishListLoading } = useSelector(
+    (state) => state.wishListState
+  );
+  const { cartItems, loading: cartLoading } = useSelector(
+    (state) => state.cartState
+  );
+  const [selectedWishListProductId, setSelectedWishListProductId] =
+    useState("");
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getProducts());
+  }, [dispatch]);
+  const handleAddToCart = (product) => {
+    const payload = {
+      product_id: product._id,
+      user_id: "65a7eef1a7e2b0eda9f545e8",
+    };
+    dispatch(addCart(payload));
+  };
+  const handleReMoveFromWishList = (product) => {
+    const payload = {
+      product_id: product._id,
+      user_id: "65a7eef1a7e2b0eda9f545e8",
+      is_from: "default",
+    };
+    dispatch(moveWishList(payload));
+  };
   if (!isOpen) {
     return null;
   }
-  console.log(wishListItems);
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div
@@ -33,7 +62,10 @@ const DialogModalWishList = ({ isOpen, onClose }) => {
               <div className="wish-list-container">
                 {wishListItems?.map((wishList) => {
                   return (
-                    <div className="wish-list">
+                    <div
+                      className="wish-list"
+                      onClick={() => setSelectedWishListProductId(wishList._id)}
+                    >
                       <div>
                         <img
                           className="wish-list-image"
@@ -54,12 +86,80 @@ const DialogModalWishList = ({ isOpen, onClose }) => {
                             <div className="size-code">L</div>
                           </div>
                         </div>
-                        <div className="add-to-cart-container">
-                          <button className="add-to-cart-btn d-flex align-items-center justify-content-center gap-3">
+                        <div className="add-to-cart-container-wishlist">
+                          <button
+                            className={`add-to-cart-btn d-flex align-items-center justify-content-center gap-3 ${
+                              (cartItems?.some(
+                                (cartProduct) =>
+                                  cartProduct?._id === wishList?._id
+                              ) ||
+                                (cartLoading &&
+                                  selectedWishListProductId ===
+                                    wishList._id)) &&
+                              "disabled"
+                            }`}
+                            onClick={() => {
+                              if (
+                                cartItems?.some(
+                                  (cartProduct) =>
+                                    cartProduct?._id === wishList?._id
+                                ) ||
+                                cartLoading
+                              ) {
+                                return;
+                              } else {
+                                handleAddToCart(wishList);
+                              }
+                            }}
+                          >
+                            {cartLoading &&
+                            selectedWishListProductId === wishList._id ? (
+                              <div>
+                                <SpinnerLoader />
+                              </div>
+                            ) : (
+                              <div>
+                                {cartItems?.some(
+                                  (cartProduct) =>
+                                    cartProduct?._id === wishList?._id
+                                ) ? (
+                                  <TiTick className="font-size-3 d-flex align-items-center" />
+                                ) : (
+                                  <TiShoppingCart className="font-size-3 d-flex align-items-center" />
+                                )}
+                              </div>
+                            )}
                             <div>
-                              <TiShoppingCart className="font-size-3 d-flex align-items-center" />
+                              {cartItems?.some(
+                                (cartProduct) =>
+                                  cartProduct?._id === wishList?._id
+                              )
+                                ? "Item added to Cart"
+                                : cartLoading &&
+                                  selectedWishListProductId === wishList._id
+                                ? "Adding to Cart"
+                                : "Add To Cart"}
                             </div>
-                            <div>Add To Cart</div>
+                          </button>
+                          <button
+                            className="remove-btn"
+                            onClick={() => {
+                              if (
+                                wishListLoading &&
+                                selectedWishListProductId === wishList._id
+                              )
+                                return;
+                              else {
+                                handleReMoveFromWishList(wishList);
+                              }
+                            }}
+                          >
+                            {wishListLoading &&
+                            selectedWishListProductId === wishList._id ? (
+                              <SpinnerLoader />
+                            ) : (
+                              "Remove"
+                            )}
                           </button>
                         </div>
                       </div>

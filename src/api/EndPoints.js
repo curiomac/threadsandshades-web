@@ -13,7 +13,8 @@ export const endpoints = {
     },
     cart: {
         get: 'cart',
-        add: 'cart/add'
+        add: 'cart/add',
+        remove: 'cart/remove'
     },
     wish_list: {
         get: 'wishlist',
