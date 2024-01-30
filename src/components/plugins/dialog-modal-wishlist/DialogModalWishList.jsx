@@ -8,6 +8,7 @@ import { getProducts } from "../../../redux/actions/productsAction";
 import { moveWishList } from "../../../redux/actions/wishListAction";
 import SpinnerLoader from "../loaders/spinner-loader/SpinnerLoader";
 import { addCart } from "../../../redux/actions/cartAction";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const DialogModalWishList = ({ isOpen, onClose }) => {
   const { wishListItems, loading: wishListLoading } = useSelector(
@@ -16,6 +17,8 @@ const DialogModalWishList = ({ isOpen, onClose }) => {
   const { cartItems, loading: cartLoading } = useSelector(
     (state) => state.cartState
   );
+  const {pathname} = useLocation();
+  const navigate = useNavigate()
   const [selectedWishListProductId, setSelectedWishListProductId] =
     useState("");
   const dispatch = useDispatch();
@@ -49,7 +52,10 @@ const DialogModalWishList = ({ isOpen, onClose }) => {
         <div>
           <div className="content container-fluid-padding">
             <div className="close-icon-container">
-              <div className="close-icon" onClick={onClose}>
+              <div className="close-icon" onClick={() => {
+                onClose()
+                navigate(`${pathname}?wishlist=false`)
+                }}>
                 <IoClose />
               </div>
             </div>

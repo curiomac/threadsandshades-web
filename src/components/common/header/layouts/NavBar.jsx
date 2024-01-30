@@ -5,7 +5,7 @@ import { FaRegHeart } from "react-icons/fa";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { IoClose, IoPersonOutline } from "react-icons/io5";
 import { RiSearch2Line } from "react-icons/ri";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   HOME_PAGE,
   ABOUT_PAGE,
@@ -27,6 +27,7 @@ const NavBar = () => {
   const { cartCount } = useSelector((state) => state.cartState);
   const { wishListCount } = useSelector((state) => state.wishListState);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const navigate = useNavigate()
   const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const closeModal = () => {
@@ -124,7 +125,10 @@ const NavBar = () => {
                 </div>
               </Link>
               <div
-                onClick={() => setIsModalOpen(true)}
+                onClick={() => {
+                  setIsModalOpen(true);
+                  navigate(`${pathname}?wishlist=true`)
+                }}
                 className="links-decoration-unset"
               >
                 <div className="links icon">

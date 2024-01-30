@@ -63,13 +63,14 @@
   min-width: calc(100% - 350px);
   overflow: hidden;
   letter-spacing: 2px;
+  background-color: $default-inner-color;
   .products-grid {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 0.8rem;
     .product {
-      height: 400px;
+      height: 380px;
       background-color: rgb(255, 255, 255);
       cursor: pointer;
       transition: 0.5s;
@@ -102,6 +103,10 @@
         min-height: 80px;
         max-height: 80px;
         .product-title {
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
           color: #404040;
           font-size: 12px;
           letter-spacing: 1px !important;
@@ -411,5 +416,11 @@
 @media screen and (max-width: 539px) {
   .modal-content-auth {
     width: 90% !important;
+  }
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important;
+    .product {
+      height: 370px !important;
+    }
   }
 }

@@ -51,14 +51,20 @@ const CollectionsList = () => {
               return (
                 <div
                   className="product"
-                  onClick={() => setSelectedProductId(product._id)}
+                  onClick={() => {
+                    setSelectedProductId(product._id);
+                    navigate(
+                      `${LOCKED_CLOTH_PAGE}?type=men&product_id=${product?._id}`
+                    );
+                  }}
                 >
                   <img src={product?.images[0]?.image} alt="image_1" />
                   <div className="container-fluid-padding base-container">
                     <div className="add-to-fav-icon-container">
                       <div
                         className="add-to-fav-icon"
-                        onClick={() => {
+                        onClick={(e) => {
+                          e.stopPropagation()
                           if (wishListLoading) {
                             return;
                           } else {
@@ -71,7 +77,9 @@ const CollectionsList = () => {
                         ) ? (
                           <FaHeart className="primary-color" />
                         ) : (
-                          <FaRegHeart />
+                          <FaRegHeart
+                            className={wishListLoading && "primary-color"}
+                          />
                         )}
                       </div>
                     </div>
@@ -104,9 +112,9 @@ const CollectionsList = () => {
                           </div>
                         ) : (
                           <div>
-                            {(cartItems?.some(
+                            {cartItems?.some(
                               (cartProduct) => cartProduct?._id === product?._id
-                            )) ? (
+                            ) ? (
                               <TiTick className="font-size-3 d-flex align-items-center" />
                             ) : (
                               <TiShoppingCart className="font-size-3 d-flex align-items-center" />
@@ -114,11 +122,11 @@ const CollectionsList = () => {
                           </div>
                         )}
                         <div>
-                          {(cartItems?.some(
+                          {cartItems?.some(
                             (cartProduct) => cartProduct?._id === product?._id
-                          ))
+                          )
                             ? "Item added to Cart"
-                            : (cartLoading && selectedProductId === product._id)
+                            : cartLoading && selectedProductId === product._id
                             ? "Adding to Cart"
                             : "Add To Cart"}
                         </div>

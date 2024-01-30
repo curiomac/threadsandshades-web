@@ -9,8 +9,10 @@ import {
   REGISTER_PAGE,
 } from "../../../../helpers/route-paths/paths";
 import DialogModalAuth from "../../../plugins/dialog-modal-auth/DialogModalAuth";
+import { getQueryParam } from "../../../../helpers/search-query-params/getQueryParams";
 
 const SigninHeader = () => {
+  const wishList = getQueryParam('wishlist');
   const location = useLocation();
   const authPages = [LOGIN_PAGE, REGISTER_PAGE];
   const defaultPages = [CART_PAGE, CART_ITEMS_PAGE, DELIVERY_ADDRESS_PAGE];
@@ -23,6 +25,8 @@ const SigninHeader = () => {
     if (authPages.find((page) => page === location.pathname)) {
       return false;
     } else if (defaultPages.find((page) => page === location.pathname)) {
+      return false;
+    } else if (wishList === true || wishList === "true") {
       return false;
     } else {
       return true;
