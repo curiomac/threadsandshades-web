@@ -108,6 +108,9 @@
                     .color-heading {
                       color: $primary-color;
                     }
+                    .color-value {
+                      text-transform: capitalize;
+                    }
                   }
                   .size-container {
                     display: flex;

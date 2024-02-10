@@ -44,7 +44,7 @@ const CartItems = () => {
       }`}
     >
       <div>
-        {cartItems.length > 0 && (
+        {cartItems?.length > 0 && (
           <div className="res-proceed-checkout">
             <div className="sub-total d-flex align-items-center justify-content-space-between">
               <div className="heading">Subtotal</div>
@@ -65,23 +65,25 @@ const CartItems = () => {
           </div>
         )}
         <div className="cart-items-container">
-          {cartItems.length > 0 ? (
+          {cartItems?.length > 0 ? (
             cartItems?.map((cartItem) => {
               return (
                 <div
                   className="cart-item-content"
-                  onClick={() => setCartItemSelectedId(cartItem._id)}
+                  onClick={() => setCartItemSelectedId(cartItem?.product?._id)}
                 >
-                  {cartItemsLoading && cartItemsSelectedId === cartItem._id && (
-                    <div className="loader-container">
-                      <div className="spinner-brand">
-                        <SpinnerLoaderBrand />
+                  {cartItemsLoading &&
+                    cartItemsSelectedId === cartItem?.product?._id && (
+                      <div className="loader-container">
+                        <div className="spinner-brand">
+                          <SpinnerLoaderBrand />
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
                   <div
                     className={`${
-                      cartItemsLoading && cartItemsSelectedId === cartItem._id
+                      cartItemsLoading &&
+                      cartItemsSelectedId === cartItem._product?.id
                         ? "cart-loader"
                         : "cart-default"
                     }`}
@@ -89,30 +91,51 @@ const CartItems = () => {
                     <div className="cart-item">
                       <div className="cart-item-img">
                         <img
-                          src={cartItem.images[0].image}
-                          alt={cartItem._id}
+                          src={cartItem?.product?.product_images[0]}
+                          alt={cartItem?.product?._id}
                         />
                       </div>
                       <div>
-                        <div className="title">{cartItem.title}</div>
+                        <div className="title">
+                          {cartItem?.product?.product_title}
+                        </div>
                         <div className="price">
-                          <div className="discount-price">
-                            ₹{parseInt(cartItem.price) - 100}
-                          </div>
-                          <div className="original-price">
-                            ₹{cartItem.price}
-                          </div>
-                          <div className="discount">(60% Off)</div>
+                          {cartItem?.product?.no_discount && (
+                            <div className="discount-price">
+                              ₹{cartItem?.product?.sale_price}
+                            </div>
+                          )}
+                          {cartItem?.product?.discount_price && (
+                            <div className="discount-price">
+                              ₹
+                              {cartItem?.product?.sale_price -
+                                cartItem?.product?.discount_price}
+                            </div>
+                          )}
+                          {cartItem?.product?.discount_price && (
+                            <div className="original-price">
+                              ₹{cartItem?.product?.sale_price}
+                            </div>
+                          )}
+                          {cartItem?.product?.discount_price && (
+                            <div className="discount">
+                              ({cartItem?.product?.discount_percentage}% Off)
+                            </div>
+                          )}
                         </div>
                         <div className="custom-hr mt-2 mb-2"></div>
                         <div className="product-features">
                           <div className="color-container">
                             <div className="color-heading">Color:</div>
-                            <div className="color-code">Black</div>
+                            <div className="color-value">
+                              {cartItem?.selected_appearance?.selected_color}
+                            </div>
                           </div>
                           <div className="size-container">
                             <div className="size-heading">Size:</div>
-                            <div className="size-code">L</div>
+                            <div className="size-value">
+                              {cartItem?.selected_appearance?.selected_size}
+                            </div>
                           </div>
                         </div>
                       </div>

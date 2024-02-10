@@ -75,13 +75,13 @@ const DialogModalWishList = ({ isOpen, onClose }) => {
                       <div>
                         <img
                           className="wish-list-image"
-                          src={wishList?.images[0].image}
+                          src={wishList?.product_images[0]}
                           alt={wishList._id}
                         />
                       </div>
                       <div>
-                        <div className="title">{wishList?.title}</div>
-                        <div className="price">₹{wishList?.price}</div>
+                        <div className="title">{wishList?.product_title}</div>
+                        <div className="price">₹{wishList?.sale_price}</div>
                         <div className="product-features">
                           <div className="color-container">
                             <div className="color-heading">Color:</div>

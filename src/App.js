@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Pages from "./components/routes/route-pages/Pages";
 import "./styles/css/App.css";
 import "./styles/css/common.css";
@@ -22,6 +22,8 @@ import logo from "./assets/imgs/store-room/logo-loader.png";
 
 function App() {
   const dispatch = useDispatch();
+  const [loadingPointA, setLoadingPointA] = useState(false);
+  const [loadingPointB, setLoadingPointB] = useState(false);
   const { theme, loading: themeLoading } = useSelector(
     (state) => state.themeState
   );
@@ -61,21 +63,31 @@ function App() {
     );
   }, [theme_req]);
 
-  // useEffect(() => {
-  //   store.dispatch(loadUser());
-  // }, [])
+  useEffect(() => {
+    if (themeLoading) {
+      setTimeout(() => {
+        setLoadingPointA(!loadingPointA);
+      }, 1000);
+      setTimeout(() => {
+        setLoadingPointB(!loadingPointB);
+      }, 500);
+    }
+  }, [themeLoading, loadingPointA, loadingPointB]);
 
   return (
     <div>
       {themeLoading ? (
-      <div className="logo-loading-container">
-      <div>
-        <div className="spinner"></div>
-        <div className="logo-img d-flex align-items-center justify-content-center">
-          <img src={logo} height={50} width={50} />
+        <div className="logo-loading-container">
+          <div>
+            <div className="logo-img d-flex align-items-center justify-content-center">
+              <img src={logo} height={50} width={50} />
+            </div>
+            <div style={{width: '110px'}}>
+              Please wait.{loadingPointA && "." }
+              {loadingPointB && "."}
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
       ) : (
         <Pages />
       )}

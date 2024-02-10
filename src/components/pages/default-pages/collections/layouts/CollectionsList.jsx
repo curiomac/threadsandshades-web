@@ -28,6 +28,9 @@ const CollectionsList = () => {
     const payload = {
       product_id: product._id,
       user_id: "65a7eef1a7e2b0eda9f545e8",
+      selected_color: product.available_colors[0],
+      selected_color_code: product.available_color_codes[0],
+      selected_size: product.available_sizes[0],
     };
     dispatch(addCart(payload));
   };
@@ -58,13 +61,13 @@ const CollectionsList = () => {
                     );
                   }}
                 >
-                  <img src={product?.images[0]?.image} alt="image_1" />
+                  <img src={product?.product_images[0]} alt="image_1" />
                   <div className="container-fluid-padding base-container">
                     <div className="add-to-fav-icon-container">
                       <div
                         className="add-to-fav-icon"
                         onClick={(e) => {
-                          e.stopPropagation()
+                          e.stopPropagation();
                           if (wishListLoading) {
                             return;
                           } else {
@@ -73,7 +76,8 @@ const CollectionsList = () => {
                         }}
                       >
                         {wishListItems?.some(
-                          (cartProduct) => cartProduct?._id === product?._id
+                          (cartProduct) =>
+                            cartProduct?.product?._id === product?._id
                         ) ? (
                           <FaHeart className="primary-color" />
                         ) : (
@@ -87,16 +91,20 @@ const CollectionsList = () => {
                       <button
                         className={`add-to-cart-btn d-flex align-items-center justify-content-center gap-3 ${
                           (cartItems?.some(
-                            (cartProduct) => cartProduct?._id === product?._id
+                            (cartProduct) =>
+                              cartProduct?.product?._id === product?._id
                           ) ||
                             (cartLoading &&
                               selectedProductId === product._id)) &&
                           "disabled"
                         }`}
-                        onClick={() => {
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedProductId(product._id);
                           if (
                             cartItems?.some(
-                              (cartProduct) => cartProduct?._id === product?._id
+                              (cartProduct) =>
+                                cartProduct?.product?._id === product?._id
                             ) ||
                             cartLoading
                           ) {
@@ -106,6 +114,9 @@ const CollectionsList = () => {
                           }
                         }}
                       >
+                        {console.log(cartLoading)}
+                        {console.log(selectedProductId, 
+                          '<<<<<<<<<<<<<<')}
                         {cartLoading && selectedProductId === product._id ? (
                           <div>
                             <SpinnerLoader />
@@ -113,7 +124,8 @@ const CollectionsList = () => {
                         ) : (
                           <div>
                             {cartItems?.some(
-                              (cartProduct) => cartProduct?._id === product?._id
+                              (cartProduct) =>
+                                cartProduct?.product?._id === product?._id
                             ) ? (
                               <TiTick className="font-size-3 d-flex align-items-center" />
                             ) : (
@@ -123,7 +135,8 @@ const CollectionsList = () => {
                         )}
                         <div>
                           {cartItems?.some(
-                            (cartProduct) => cartProduct?._id === product?._id
+                            (cartProduct) =>
+                              cartProduct?.product?._id === product?._id
                           )
                             ? "Item added to Cart"
                             : cartLoading && selectedProductId === product._id
@@ -140,33 +153,35 @@ const CollectionsList = () => {
                         )
                       }
                     >
-                      {product.title}
+                      {product.product_title}
                     </div>
                     <div className="d-flex align-items-center font-weight-1">
                       {/* <div>
                       <BsCurrencyRupee className="d-flex align-items-center"/>
                     </div> */}
                       <div className="d-flex align-items-center gap-2 mt-1 mb-1">
-                        {product?.offerPrice && (
-                          <span className="price">₹ {product.offerPrice}</span>
+                        {product?.discount_price && (
+                          <span className="price">
+                            ₹ {product.sale_price - product.discount_price}
+                          </span>
                         )}
                         <span
                           className={`${
-                            product?.offerPrice && "offered"
+                            product?.discount_price && "offered"
                           } price`}
                         >
-                          ₹ {product.price}
+                          ₹ {product?.sale_price}
                         </span>{" "}
-                        {product?.offerPrice && (
+                        {product?.discount_percentage && (
                           <span className="discount price">
-                            ({product.discount}% offer)
+                            ({product.discount_percentage}% offer)
                           </span>
                         )}
                       </div>
                     </div>
                   </div>
                   <div className="avail-colors-container">
-                    {product?.availableColors?.map((color) => {
+                    {product?.available_color_codes?.map((color) => {
                       return (
                         <div
                           className="avail-color"

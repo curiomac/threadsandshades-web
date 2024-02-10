@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { getQueryParam } from "../../../../../helpers/search-query-params/getQueryParams";
 import { RxSlash } from "react-icons/rx";
 import { FaRegStar, FaStar } from "react-icons/fa";
@@ -11,9 +11,28 @@ const ProductDetails = () => {
   const productId = getQueryParam("product_id");
   const dispatch = useDispatch();
   const { product } = useSelector((state) => state.productState);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isVisible, setIsVisible] = useState(false);
+  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+
   const filledStars = Array.from({ length: Math.floor(rating) }, (_, index) => (
     <FaStar key={index} className="filled d-flex align-items-center" />
   ));
+
+  const handleMouseMove = (e) => {
+    const { left, top, width, height } =
+      e.currentTarget.getBoundingClientRect();
+    const x = ((e.pageX - left) / width) * 100;
+    const y = ((e.pageY - top) / height) * 100;
+
+    setPosition({ x, y });
+    setCursorPosition({ x: e.pageX - left, y: e.pageY - top });
+    setIsVisible(true)
+  };
+
+  const handleMouseLeave = () => {
+    setIsVisible(false);
+  };
   const remainingStars = Array.from(
     { length: 5 - Math.floor(rating) },
     (_, index) => <FaRegStar key={index} />
@@ -32,23 +51,72 @@ const ProductDetails = () => {
           <div>
             <RxSlash className="d-flex align-items-center" />
           </div>
-          <div className="border-bottom product">{product?.title}</div>
+          <div className="border-bottom product">{product?.product_title}</div>
         </div>
         <div className="product-details-content">
           <div className="show-case-container">
             <div className="avail-images-container">
-              <div className="avail-image">
-                <img src={product?.images?.length >=0 && product?.images[0]?.image} alt={product?.title} />
-              </div>
+              {product?.product_images?.map((product_image, index) => {
+                return (
+                  <div className={`avail-image ${index !== 0 && 'mt-1'}`}>
+                    <img
+                      src={
+                        product_image &&
+                        product_image
+                      }
+                      alt={product_image}
+                    />
+                  </div>
+                );
+              })}
             </div>
             <div className="target-image-container">
               <div className="target-image">
-                <img src={product?.images?.length >=0 && product?.images[0]?.image} alt={product?.title} />
+                <div
+                  className="magnifier-container"
+                  onMouseMove={handleMouseMove}
+                  onMouseLeave={handleMouseLeave}
+                >
+                  <div
+                    className={`magnifier-box ${isVisible ? "visible" : ""}`}
+                    style={{
+                      position: "absolute",
+                      left: `${cursorPosition.x - 100}px`,
+                      top: `${cursorPosition.y - 100}px`,
+                      pointerEvents: "none",
+                    }}
+                  ></div>
+                  <img
+                    src={
+                      product?.product_images?.length >= 0 &&
+                      product?.product_images[0]
+                    }
+                    alt={product?.product_title}
+                  />
+                </div>
               </div>
             </div>
           </div>
           <div className="product-info-container">
-            <div className="product-title">{product?.title}</div>
+            {isVisible && (
+              <div className="magnifier-view-container">
+                <div className="magnifier-view">
+                  <div
+                    className="view"
+                    style={{
+                      backgroundImage: `url(${
+                        product?.product_images?.length >= 0 &&
+                        product?.product_images[0]
+                      })`,
+                      backgroundPosition: `${position.x}% ${position.y}%`,
+                      backgroundRepeat: "no-repeat",
+                      transform: "scale(2)",
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+            <div className="product-title">{product?.product_title}</div>
             <div className="rating-container">
               <div className="rating">
                 {filledStars}
@@ -58,15 +126,19 @@ const ProductDetails = () => {
             </div>
             <div className="d-flex align-items-center font-weight-1">
               <div className="d-flex align-items-center gap-2">
-                {product?.offerPrice && (
-                  <span className="price">₹ {product?.offerPrice}</span>
+                {product?.discount_price && (
+                  <span className="price">
+                    ₹ {product?.sale_price - product?.discount_price}
+                  </span>
                 )}
-                <span className={`${product?.offerPrice && "offered"} price`}>
-                  ₹ {product?.price}
+                <span
+                  className={`${product?.discount_price && "offered"} price`}
+                >
+                  ₹ {product?.sale_price}
                 </span>{" "}
-                {product?.offerPrice && (
+                {product?.discount_percentage && (
                   <span className="discount price">
-                    ({product?.discount}% offer)
+                    ({product?.discount_percentage}% offer)
                   </span>
                 )}
               </div>
@@ -76,15 +148,15 @@ const ProductDetails = () => {
             <div className="color-container">
               <div className="title">Color</div>
               <div className="avail-colors-container">
-                {product?.availableColors?.map((color) => {
+                {product?.available_color_codes?.map((color) => {
                   return (
                     <div
                       className={`color ${
-                        product?.availableColors[0] === color && "active"
+                        product?.available_color_codes[0] === color && "active"
                       }`}
                       style={{
                         border:
-                          product?.availableColors[0] === color &&
+                          product?.available_color_codes[0] === color &&
                           `1px solid ${color}`,
                       }}
                     >

@@ -47,12 +47,13 @@ const TopSellingBanner = () => {
         </div>
         <div className="products-grid">
           {products?.map((product) => {
+            console.log(product, '<<<<<<<<<<<<<product')
             return (
               <div
                 className="product"
                 onClick={() => setSelectedProductId(product._id)}
               >
-                <img src={product?.images[0]?.image} alt="image_1" />
+                <img src={product?.product_images[0]} alt="image_1" />
                 <div className="container-fluid-padding base-container">
                   <div className="add-to-fav-icon-container">
                     <div
@@ -130,31 +131,31 @@ const TopSellingBanner = () => {
                       )
                     }
                   >
-                    {product.title}
+                    {product.product_title}
                   </div>
                   <div className="d-flex align-items-center font-weight-1">
                     {/* <div>
                       <BsCurrencyRupee className="d-flex align-items-center"/>
                     </div> */}
                     <div className="d-flex align-items-center gap-2 mt-1 mb-1">
-                      {product?.offerPrice && (
-                        <span className="price">₹ {product.offerPrice}</span>
+                      {product?.discount_price && (
+                        <span className="price">₹ {product.sale_price - product.discount_price}</span>
                       )}
                       <span
-                        className={`${product?.offerPrice && "offered"} price`}
+                        className={`${product?.discount_price && "offered"} price`}
                       >
-                        ₹ {product.price}
+                        ₹ {product.sale_price}
                       </span>{" "}
-                      {product?.offerPrice && (
+                      {product?.discount_price && (
                         <span className="discount price">
-                          ({product.discount}% offer)
+                          ({product.discount_percentage}% offer)
                         </span>
                       )}
                     </div>
                   </div>
                 </div>
                 <div className="avail-colors-container">
-                  {product?.availableColors?.map((color) => {
+                  {product?.available_color_codes?.map((color) => {
                     return (
                       <div
                         className="avail-color"
