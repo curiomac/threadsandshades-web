@@ -31,8 +31,9 @@ const CartItems = () => {
     dispatch(moveWishList(payload));
   };
   const handleRemoveCart = (cartItem) => {
+    console.log("cartItem: ", cartItem);
     const payload = {
-      product_id: cartItem._id,
+      product_id: cartItem?.product?._id,
       user_id: "65a7eef1a7e2b0eda9f545e8",
     };
     dispatch(removeCart(payload));

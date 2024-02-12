@@ -12,8 +12,10 @@ const rating = 4.5;
 const ProductDetails = () => {
   const productId = getQueryParam("product_id");
   const dispatch = useDispatch();
-  const navigate = useNavigate()
-  const { product, products_group } = useSelector((state) => state.productState);
+  const navigate = useNavigate();
+  const { product, products_group } = useSelector(
+    (state) => state.productState
+  );
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isVisible, setIsVisible] = useState(false);
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
@@ -30,7 +32,7 @@ const ProductDetails = () => {
 
     setPosition({ x, y });
     setCursorPosition({ x: e.pageX - left, y: e.pageY - top });
-    setIsVisible(true)
+    setIsVisible(true);
   };
 
   const handleMouseLeave = () => {
@@ -61,12 +63,9 @@ const ProductDetails = () => {
             <div className="avail-images-container">
               {product?.product_images?.map((product_image, index) => {
                 return (
-                  <div className={`avail-image ${index !== 0 && 'mt-1'}`}>
+                  <div className={`avail-image ${index !== 0 && "mt-1"}`}>
                     <img
-                      src={
-                        product_image &&
-                        product_image
-                      }
+                      src={product_image && product_image}
                       alt={product_image}
                     />
                   </div>
@@ -149,27 +148,38 @@ const ProductDetails = () => {
             <div className="tax-inclusion">Inclusive of all taxes</div>
             <div className="custom-hr"></div>
             <div className="color-container">
-              <div className="title">Color</div>
+              <div className="title d-flex align-items-center gap-1">
+                <div>Color:</div>
+                <div className="font-12 d-flex align-items-center">{product?.target_color}</div>
+              </div>
               <div className="avail-colors-container">
                 {products_group?.group?.map((product_group) => {
-                  console.log("product: ", product)
+                  console.log("product: ", product);
                   return (
                     <div
                       className={`color cursor-pointer ${
-                        product?.target_color_code === product_group?.target_color_code && "active"
+                        product?.target_color_code ===
+                          product_group?.target_color_code && "active"
                       }`}
                       style={{
                         border:
-                          product?.target_color_code === product_group?.target_color_code &&
+                          product?.target_color_code ===
+                            product_group?.target_color_code &&
                           `1px solid gray`,
                       }}
                       onClick={() => {
                         navigate(
                           `${LOCKED_CLOTH_PAGE}?type=men&product_id=${product_group?._id}`
                         );
+                        window.scrollTo({
+                          top: 0,
+                          behavior: "smooth",
+                        });
                       }}
                     >
-                      <div style={{ background: product_group?.target_color_code }}></div>
+                      <div
+                        style={{ background: product_group?.target_color_code }}
+                      ></div>
                     </div>
                   );
                 })}
@@ -179,17 +189,19 @@ const ProductDetails = () => {
             <div className="sizes-container">
               <div className="title">Size</div>
               <div className="sizes-content-container">
-              {product?.available_sizes?.map((size) => {
+                {product?.available_sizes?.map((size) => {
                   return (
-                      <div  className={`size ${
+                    <div
+                      className={`size ${
                         product?.available_sizes[0] === size && "active"
-                      }`}>{size}</div>
+                      }`}
+                    >
+                      {size}
+                    </div>
                   );
                 })}
-              {product?.out_of_stock_sizes?.map((size) => {
-                  return (
-                      <div  className={`size out-of-stock`}>{size}</div>
-                  );
+                {product?.out_of_stock_sizes?.map((size) => {
+                  return <div className={`size out-of-stock`}>{size}</div>;
                 })}
                 {/* <div className="size active">S</div>
                 <div className="size">M</div>

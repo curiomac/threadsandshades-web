@@ -28,8 +28,8 @@ const CollectionsList = () => {
     const payload = {
       product_id: product._id,
       user_id: "65a7eef1a7e2b0eda9f545e8",
-      selected_color: product.available_colors[0],
-      selected_color_code: product.available_color_codes[0],
+      selected_color: product.target_color,
+      selected_color_code: product.target_color_code,
       selected_size: product.available_sizes[0],
     };
     dispatch(addCart(payload));
@@ -51,6 +51,7 @@ const CollectionsList = () => {
           </div>
           <div className="products-grid">
             {products?.map((product) => {
+              console.log("product: ", product);
               return (
                 <div
                   className="product"
@@ -68,6 +69,7 @@ const CollectionsList = () => {
                         className="add-to-fav-icon"
                         onClick={(e) => {
                           e.stopPropagation();
+                          setSelectedProductId(product._id);
                           if (wishListLoading) {
                             return;
                           } else {
@@ -75,14 +77,19 @@ const CollectionsList = () => {
                           }
                         }}
                       >
+                        {console.log("wishListItems: ", wishListItems)}
                         {wishListItems?.some(
-                          (cartProduct) =>
-                            cartProduct?.product?._id === product?._id
+                          (wishListProduct) =>
+                            wishListProduct?._id === product?._id
                         ) ? (
                           <FaHeart className="primary-color" />
                         ) : (
                           <FaRegHeart
-                            className={wishListLoading && "primary-color"}
+                            className={
+                              (wishListLoading &&
+                              selectedProductId === product._id) &&
+                              "primary-color"
+                            }
                           />
                         )}
                       </div>
@@ -115,8 +122,7 @@ const CollectionsList = () => {
                         }}
                       >
                         {console.log(cartLoading)}
-                        {console.log(selectedProductId, 
-                          '<<<<<<<<<<<<<<')}
+                        {console.log(selectedProductId, "<<<<<<<<<<<<<<")}
                         {cartLoading && selectedProductId === product._id ? (
                           <div>
                             <SpinnerLoader />

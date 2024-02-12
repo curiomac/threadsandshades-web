@@ -27,7 +27,6 @@ export const getCart = (payload) => async (dispatch) => {
 };
 
 export const addCart = (payload) => async (dispatch) => {
-  console.log('payload', payload)
   try {
     dispatch(cartAddRequest());
     const response = await axios.post(
@@ -42,6 +41,7 @@ export const removeCart = (payload) => async (dispatch) => {
   const formattedPayload = `${
     payload?.product_id ? `?product_id=${payload?.product_id}` : ""
   }${payload?.user_id ? `&user_id=${payload?.user_id}` : ""}`;
+  console.log('formattedPayload: ', formattedPayload);
   try {
     dispatch(cartRemoveRequest());
     const response = await axios.post(

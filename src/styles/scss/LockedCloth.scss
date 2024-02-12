@@ -294,6 +294,9 @@
     display: block !important;
     .show-case-container {
       display: block !important;
+      max-width: 100% !important;
+      min-width: 100% !important;
+      padding-bottom: 20px;
       .avail-images-container {
         display: none;
       }
@@ -305,7 +308,33 @@
         .target-image {
           height: 300px !important;
           width: 300px !important;
+          .magnifier-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            height: 500px;
+            width: 100%;
+            overflow: hidden;
+            cursor: none;
+            user-select: none;
+
+            img {
+              height: 300px !important;
+            }
+
+            .magnifier-box {
+              display: none !important;
+            }
+          }
         }
+      }
+    }
+    .product-info-container {
+      max-width: 100% !important;
+      min-width: 100% !important;
+      .magnifier-view-container {
+        display: none !important;
       }
     }
     .product-actions {

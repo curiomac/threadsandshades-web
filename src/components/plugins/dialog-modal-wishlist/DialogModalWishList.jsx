@@ -29,6 +29,9 @@ const DialogModalWishList = ({ isOpen, onClose }) => {
     const payload = {
       product_id: product._id,
       user_id: "65a7eef1a7e2b0eda9f545e8",
+      selected_color: product.target_color,
+      selected_color_code: product.target_color_code,
+      selected_size: product.available_sizes[0],
     };
     dispatch(addCart(payload));
   };
