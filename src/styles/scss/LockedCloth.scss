@@ -188,7 +188,13 @@
             &.active {
               padding: 3px;
               div {
-                box-shadow: unset !important;
+                height: 45px;
+                width: 45px;
+                position: relative;
+                bottom: 0.6px;
+                right: 0.6px;
+                border: 1px solid rgba(128, 128, 128, 0.125);
+                box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.101) !important;
               }
             }
             div {
@@ -228,6 +234,10 @@
             border-radius: 2px;
             &.active {
               border: 1px solid black;
+            }
+            &.out-of-stock {
+              opacity: 0.3;
+              cursor: default;
             }
           }
         }

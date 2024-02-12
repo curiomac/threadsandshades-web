@@ -5,7 +5,8 @@ const productSlice = createSlice({
     name: 'product',
     initialState:{
         loading: false,
-        product: {}
+        product: {},
+        products_group: {}
     },
     reducers:{
         productRequest(state, action){
@@ -18,7 +19,8 @@ const productSlice = createSlice({
             return{
                 ...state,
                 loading: false,
-                product: action.payload.product
+                product: action.payload.product,
+                products_group: action.payload.products_group
             }
         },
         productFail(state, action){
@@ -31,7 +33,8 @@ const productSlice = createSlice({
         clearProduct(state, action){
             return{
                 ...state,
-                product: {}
+                product: {},
+                products_group: {}
             }
         },
         clearError(state, action){
