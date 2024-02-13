@@ -31,10 +31,11 @@ const Footer = () => {
         <div className="footer">
           <div className="footer-container res-849px-d-block">
             <div className="brand">
-              <Logo height={80} />
+              <Logo height={100} />
               <div className="details">
-                Immerse yourself in a world of top-tier entertainment and stay
-                at the forefront of the gaming industry.
+                Dive into the world of premium fashion, where style meets
+                innovation. Stay ahead in the trend game with our top-tier
+                clothing collection.
               </div>
             </div>
             <div className="quick-links">
@@ -115,7 +116,9 @@ const Footer = () => {
               </div>
             </div>
           </div>
-          <div className="copy-rights">© 2024 Threads and Shades. All rights reserved</div>
+          <div className="copy-rights">
+            © 2024 Threads and Shades. All rights reserved
+          </div>
         </div>
       )}
     </>
