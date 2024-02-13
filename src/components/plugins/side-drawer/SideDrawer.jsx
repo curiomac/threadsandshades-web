@@ -9,9 +9,12 @@ import {
 import { RxHamburgerMenu } from "react-icons/rx";
 import { IoClose } from "react-icons/io5";
 import Logo from "../logo/Logo";
+import { useDispatch } from "react-redux";
+import { clearProduct } from "../../../redux/slices/productSlice";
 
 const SideDrawer = () => {
   const { pathname } = useLocation();
+  const dispatch = useDispatch()
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDrawer = () => {
@@ -19,6 +22,7 @@ const SideDrawer = () => {
   };
   const handleCloseDrawer = () => {
     setIsOpen(false);
+    dispatch(clearProduct())
   };
   return (
     <div>

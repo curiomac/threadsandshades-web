@@ -21,9 +21,7 @@ const CollectionsList = () => {
   );
   const [selectedProductId, setSelectedProductId] = useState("");
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getProducts());
-  }, [dispatch]);
+
   const handleAddToCart = (product) => {
     const payload = {
       product_id: product._id,
@@ -42,6 +40,9 @@ const CollectionsList = () => {
     };
     dispatch(moveWishList(payload));
   };
+  useEffect(() => {
+    dispatch(getProducts());
+  }, [dispatch]);
   return (
     <div className="collection-list">
       <div>
@@ -86,8 +87,8 @@ const CollectionsList = () => {
                         ) : (
                           <FaRegHeart
                             className={
-                              (wishListLoading &&
-                              selectedProductId === product._id) &&
+                              wishListLoading &&
+                              selectedProductId === product._id &&
                               "primary-color"
                             }
                           />
@@ -165,7 +166,7 @@ const CollectionsList = () => {
                       {/* <div>
                       <BsCurrencyRupee className="d-flex align-items-center"/>
                     </div> */}
-                      <div className="d-flex align-items-center gap-2 mt-1 mb-1">
+                      <div className="d-flex align-items-center gap-2 mt-1 mb-1 res-849px-d-none">
                         {product?.discount_price && (
                           <span className="price">
                             ₹ {product.sale_price - product.discount_price}
@@ -184,15 +185,38 @@ const CollectionsList = () => {
                           </span>
                         )}
                       </div>
+                      {product?.discount_price && (
+                        <div className="mt-1 mb-1">
+                          {product?.discount_price && (
+                            <div className="price">
+                              ₹ {product.sale_price - product.discount_price}
+                            </div>
+                          )}
+                          <div className="d-flex align-items-center gap-2">
+                            <span
+                              className={`${
+                                product?.discount_price && "offered"
+                              } font-12`}
+                            >
+                              ₹ {product?.sale_price}
+                            </span>{" "}
+                            {product?.discount_percentage && (
+                              <span className="discount price">
+                                ({product.discount_percentage}% offer)
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                   <div className="avail-colors-container">
-                    {product?.available_color_codes?.map((color) => {
+                    {product?.group?.map((product_group) => {
                       return (
                         <div
                           className="avail-color"
                           style={{
-                            backgroundColor: color,
+                            backgroundColor: product_group?.target_color_code,
                           }}
                         ></div>
                       );

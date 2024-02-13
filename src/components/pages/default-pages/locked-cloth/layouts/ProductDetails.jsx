@@ -6,6 +6,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { getProduct } from "../../../../../redux/actions/productAction";
 import { LOCKED_CLOTH_PAGE } from "../../../../../helpers/route-paths/paths";
 import { useNavigate } from "react-router-dom";
+import { TiShoppingCart, TiTick } from "react-icons/ti";
+import { getProducts } from "../../../../../redux/actions/productsAction";
+import { addCart } from "../../../../../redux/actions/cartAction";
+import SpinnerLoader from "../../../../plugins/loaders/spinner-loader/SpinnerLoader";
+import BackdropLoader from "../../../../plugins/loaders/backdrop-loader/BackdropLoader";
 
 const rating = 4.5;
 
@@ -13,12 +18,19 @@ const ProductDetails = () => {
   const productId = getQueryParam("product_id");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { product, products_group } = useSelector(
-    (state) => state.productState
+  const {
+    product,
+    products_group,
+    loading: productLoading,
+  } = useSelector((state) => state.productState);
+  const { cartItems, loading: cartLoading } = useSelector(
+    (state) => state.cartState
   );
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isVisible, setIsVisible] = useState(false);
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+  const [productIndex, setProductIndex] = useState(0);
+  const [selectedProductId, setSelectedProductId] = useState("");
 
   const filledStars = Array.from({ length: Math.floor(rating) }, (_, index) => (
     <FaStar key={index} className="filled d-flex align-items-center" />
@@ -38,10 +50,27 @@ const ProductDetails = () => {
   const handleMouseLeave = () => {
     setIsVisible(false);
   };
+  const handleProductImage = (index) => {
+    setProductIndex(index);
+    console.log("index: ", index);
+  };
   const remainingStars = Array.from(
     { length: 5 - Math.floor(rating) },
     (_, index) => <FaRegStar key={index} />
   );
+  const handleAddToCart = (product) => {
+    const payload = {
+      product_id: product._id,
+      user_id: "65a7eef1a7e2b0eda9f545e8",
+      selected_color: product.target_color,
+      selected_color_code: product.target_color_code,
+      selected_size: product.available_sizes[0],
+    };
+    dispatch(addCart(payload));
+  };
+  useEffect(() => {
+    dispatch(getProducts());
+  }, [dispatch]);
   useEffect(() => {
     const payload = {
       product_id: productId,
@@ -50,6 +79,7 @@ const ProductDetails = () => {
   }, [productId, dispatch]);
   return (
     <div className="product-details">
+      {productLoading ? <BackdropLoader /> : ""}
       <div className="container-fluid">
         <div className="d-flex align-items-center gap-2 bread-crumbs">
           <div className="border-bottom brand">Threads and Shades</div>
@@ -63,7 +93,16 @@ const ProductDetails = () => {
             <div className="avail-images-container">
               {product?.product_images?.map((product_image, index) => {
                 return (
-                  <div className={`avail-image ${index !== 0 && "mt-1"}`}>
+                  <div
+                    className={`avail-image ${index !== 0 && "mt-1"}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleProductImage(index);
+                    }}
+                    onMouseOver={() => {
+                      handleProductImage(index);
+                    }}
+                  >
                     <img
                       src={product_image && product_image}
                       alt={product_image}
@@ -91,12 +130,27 @@ const ProductDetails = () => {
                   <img
                     src={
                       product?.product_images?.length >= 0 &&
-                      product?.product_images[0]
+                      product?.product_images[productIndex]
                     }
                     alt={product?.product_title}
                   />
                 </div>
               </div>
+            </div>
+            <div className="avail-images-container-res">
+              {product?.product_images?.map((product_image, index) => {
+                return (
+                  <div
+                    className={`avail-image`}
+                    onClick={() => handleProductImage(index)}
+                  >
+                    <img
+                      src={product_image && product_image}
+                      alt={product_image}
+                    />
+                  </div>
+                );
+              })}
             </div>
           </div>
           <div className="product-info-container">
@@ -108,7 +162,7 @@ const ProductDetails = () => {
                     style={{
                       backgroundImage: `url(${
                         product?.product_images?.length >= 0 &&
-                        product?.product_images[0]
+                        product?.product_images[productIndex]
                       })`,
                       backgroundPosition: `${position.x}% ${position.y}%`,
                       backgroundRepeat: "no-repeat",
@@ -150,7 +204,9 @@ const ProductDetails = () => {
             <div className="color-container">
               <div className="title d-flex align-items-center gap-1">
                 <div>Color:</div>
-                <div className="font-12 d-flex align-items-center">{product?.target_color}</div>
+                <div className="font-12 d-flex align-items-center">
+                  {product?.target_color}
+                </div>
               </div>
               <div className="avail-colors-container">
                 {products_group?.group?.map((product_group) => {
@@ -203,11 +259,6 @@ const ProductDetails = () => {
                 {product?.out_of_stock_sizes?.map((size) => {
                   return <div className={`size out-of-stock`}>{size}</div>;
                 })}
-                {/* <div className="size active">S</div>
-                <div className="size">M</div>
-                <div className="size">L</div>
-                <div className="size">XL</div>
-                <div className="size">XXL</div> */}
               </div>
             </div>
             <div className="custom-hr"></div>
@@ -222,7 +273,58 @@ const ProductDetails = () => {
                   <option>5</option>
                 </select>
               </div>
-              <button className="add-to-cart-btn">Add to cart</button>
+              <button
+                className={`add-to-cart-btn d-flex align-items-center justify-content-center gap-3 ${
+                  (cartItems?.some(
+                    (cartProduct) => cartProduct?.product?._id === product?._id
+                  ) ||
+                    (cartLoading && selectedProductId === product._id)) &&
+                  "disabled"
+                }`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedProductId(product._id);
+                  if (
+                    cartItems?.some(
+                      (cartProduct) =>
+                        cartProduct?.product?._id === product?._id
+                    ) ||
+                    cartLoading
+                  ) {
+                    return;
+                  } else {
+                    handleAddToCart(product);
+                  }
+                }}
+              >
+                {console.log(cartLoading)}
+                {console.log(selectedProductId, "<<<<<<<<<<<<<<")}
+                {cartLoading && selectedProductId === product._id ? (
+                  <div>
+                    <SpinnerLoader />
+                  </div>
+                ) : (
+                  <div>
+                    {cartItems?.some(
+                      (cartProduct) =>
+                        cartProduct?.product?._id === product?._id
+                    ) ? (
+                      <TiTick className="font-size-3 d-flex align-items-center" />
+                    ) : (
+                      <TiShoppingCart className="font-size-3 d-flex align-items-center" />
+                    )}
+                  </div>
+                )}
+                <div>
+                  {cartItems?.some(
+                    (cartProduct) => cartProduct?.product?._id === product?._id
+                  )
+                    ? "Item added to Cart"
+                    : cartLoading && selectedProductId === product._id
+                    ? "Adding to Cart"
+                    : "Add To Cart"}
+                </div>
+              </button>
               <button className="buy-now-btn">Buy now</button>
             </div>
           </div>
