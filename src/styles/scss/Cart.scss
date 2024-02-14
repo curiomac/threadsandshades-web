@@ -97,30 +97,46 @@
                   }
                 }
                 .product-features {
-                  display: flex;
-                  align-items: center;
-                  .color-container {
+                  .appearance-container {
                     display: flex;
                     align-items: center;
-                    gap: 10px;
-                    font-size: 12px;
-                    width: 50%;
-                    .color-heading {
-                      color: $primary-color;
+                    .color-container {
+                      display: flex;
+                      align-items: center;
+                      gap: 10px;
+                      font-size: 12px;
+                      width: 50%;
+                      .color-heading {
+                        color: $primary-color;
+                      }
+                      .color-value {
+                        text-transform: capitalize;
+                      }
                     }
-                    .color-value {
-                      text-transform: capitalize;
+                    .size-container {
+                      display: flex;
+                      align-items: center;
+                      gap: 10px;
+                      font-size: 12px;
+                      width: 50%;
+                      .size-heading {
+                        color: $primary-color;
+                      }
                     }
                   }
-                  .size-container {
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    font-size: 12px;
-                    width: 50%;
-                    .size-heading {
-                      color: $primary-color;
-                    }
+                  .quantity-container {
+                      display: flex;
+                      align-items: center;
+                      gap: 10px;
+                      font-size: 12px;
+                      width: 50%;
+                      margin-top: 10px;
+                      .quantity-heading {
+                        color: $primary-color;
+                      }
+                      .quantity-value {
+                        text-transform: capitalize;
+                      }
                   }
                 }
               }

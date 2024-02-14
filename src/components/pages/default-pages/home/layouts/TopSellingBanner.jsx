@@ -31,6 +31,7 @@ const TopSellingBanner = () => {
       selected_color: product.target_color,
       selected_color_code: product.target_color_code,
       selected_size: product.available_sizes[0],
+      selected_quantity: 1
     };
     dispatch(addCart(payload));
   };
@@ -185,7 +186,7 @@ const TopSellingBanner = () => {
                         )}
                       </div>
                       {product?.discount_price && (
-                        <div className="mt-1 mb-1">
+                        <div className="mt-1 mb-1 res-849px-d-unset">
                           {product?.discount_price && (
                             <div className="price">
                               ₹ {product.sale_price - product.discount_price}

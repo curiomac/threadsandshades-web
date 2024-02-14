@@ -687,6 +687,12 @@
 
 /* res-screen */
 
+.res-849px-d-none {
+  display: unset;
+}
+.res-849px-d-unset {
+  display: none;
+}
 @media screen and (max-width: 992px) {
   .res-992px-d-none {
     display: none !important;
@@ -695,6 +701,11 @@
 @media screen and (max-width: 849px) {
   .res-849px-d-none {
     display: none !important;
+  }
+}
+@media screen and (max-width: 849px) {
+  .res-849px-d-unset {
+    display: unset !important;
   }
 }
 @media screen and (max-width: 768px) {

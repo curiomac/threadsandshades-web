@@ -126,16 +126,33 @@ const CartItems = () => {
                         </div>
                         <div className="custom-hr mt-2 mb-2"></div>
                         <div className="product-features">
-                          <div className="color-container">
-                            <div className="color-heading">Color:</div>
-                            <div className="color-value">
-                              {cartItem?.selected_appearance?.selected_color}
+                          <div className="appearance-container">
+                            <div className="color-container">
+                              <div className="color-heading">Color:</div>
+                              <div className="color-value">
+                                {
+                                  cartItem?.selected_product_details
+                                    ?.selected_color
+                                }
+                              </div>
+                            </div>
+                            <div className="size-container">
+                              <div className="size-heading">Size:</div>
+                              <div className="size-value">
+                                {
+                                  cartItem?.selected_product_details
+                                    ?.selected_size
+                                }
+                              </div>
                             </div>
                           </div>
-                          <div className="size-container">
-                            <div className="size-heading">Size:</div>
-                            <div className="size-value">
-                              {cartItem?.selected_appearance?.selected_size}
+                          <div className="quantity-container">
+                            <div className="quantity-heading">Quantity:</div>
+                            <div className="quantity-value">
+                              {
+                                cartItem?.selected_product_details
+                                  ?.selected_quantity
+                              }
                             </div>
                           </div>
                         </div>

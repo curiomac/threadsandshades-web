@@ -11,6 +11,7 @@ import { getProducts } from "../../../../../redux/actions/productsAction";
 import { addCart } from "../../../../../redux/actions/cartAction";
 import SpinnerLoader from "../../../../plugins/loaders/spinner-loader/SpinnerLoader";
 import BackdropLoader from "../../../../plugins/loaders/backdrop-loader/BackdropLoader";
+import { clearProduct } from "../../../../../redux/slices/productSlice";
 
 const rating = 4.5;
 
@@ -29,6 +30,8 @@ const ProductDetails = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isVisible, setIsVisible] = useState(false);
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+  const [productData, setProductData] = useState({});
+  const [productGroupData, setProductGroupData] = useState({});
   const [productIndex, setProductIndex] = useState(0);
   const [selectedProductId, setSelectedProductId] = useState("");
 
@@ -52,7 +55,6 @@ const ProductDetails = () => {
   };
   const handleProductImage = (index) => {
     setProductIndex(index);
-    console.log("index: ", index);
   };
   const remainingStars = Array.from(
     { length: 5 - Math.floor(rating) },
@@ -69,6 +71,9 @@ const ProductDetails = () => {
     dispatch(addCart(payload));
   };
   useEffect(() => {
+    dispatch(clearProduct());
+  }, []);
+  useEffect(() => {
     dispatch(getProducts());
   }, [dispatch]);
   useEffect(() => {
@@ -77,259 +82,277 @@ const ProductDetails = () => {
     };
     dispatch(getProduct(payload));
   }, [productId, dispatch]);
+  useEffect(() => {
+    if (product && products_group) {
+      setProductData(product);
+      setProductGroupData(products_group);
+    }
+  }, [product, products_group]);
+  console.log("product-console: ", product);
   return (
     <div className="product-details">
       {productLoading ? <BackdropLoader /> : ""}
-      <div className="container-fluid">
-        <div className="d-flex align-items-center gap-2 bread-crumbs">
-          <div className="border-bottom brand">Threads and Shades</div>
-          <div>
-            <RxSlash className="d-flex align-items-center" />
-          </div>
-          <div className="border-bottom product">{product?.product_title}</div>
-        </div>
-        <div className="product-details-content">
-          <div className="show-case-container">
-            <div className="avail-images-container">
-              {product?.product_images?.map((product_image, index) => {
-                return (
-                  <div
-                    className={`avail-image ${index !== 0 && "mt-1"}`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleProductImage(index);
-                    }}
-                    onMouseOver={() => {
-                      handleProductImage(index);
-                    }}
-                  >
-                    <img
-                      src={product_image && product_image}
-                      alt={product_image}
-                    />
-                  </div>
-                );
-              })}
+      {Object.keys(productData).length !== 0 && (
+        <div className="container-fluid">
+          <div className="d-flex align-items-center gap-2 bread-crumbs">
+            <div className="border-bottom brand">Threads and Shades</div>
+            <div>
+              <RxSlash className="d-flex align-items-center" />
             </div>
-            <div className="target-image-container">
-              <div className="target-image">
-                <div
-                  className="magnifier-container"
-                  onMouseMove={handleMouseMove}
-                  onMouseLeave={handleMouseLeave}
-                >
-                  <div
-                    className={`magnifier-box ${isVisible ? "visible" : ""}`}
-                    style={{
-                      position: "absolute",
-                      left: `${cursorPosition.x - 100}px`,
-                      top: `${cursorPosition.y - 100}px`,
-                      pointerEvents: "none",
-                    }}
-                  ></div>
-                  <img
-                    src={
-                      product?.product_images?.length >= 0 &&
-                      product?.product_images[productIndex]
-                    }
-                    alt={product?.product_title}
-                  />
-                </div>
+            <div className="border-bottom product">
+              {product?.product_title}
+            </div>
+          </div>
+          <div className="product-details-content">
+            <div className="show-case-container">
+              <div className="avail-images-container">
+                {product?.product_images?.map((product_image, index) => {
+                  return (
+                    <div
+                      className={`avail-image ${index !== 0 && "mt-1"}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleProductImage(index);
+                      }}
+                      onMouseOver={() => {
+                        handleProductImage(index);
+                      }}
+                      onMouseLeave={() => {
+                        handleProductImage(index);
+                      }}
+                    >
+                      <img
+                        src={product_image && product_image}
+                        alt={product_image}
+                      />
+                    </div>
+                  );
+                })}
               </div>
-            </div>
-            <div className="avail-images-container-res">
-              {product?.product_images?.map((product_image, index) => {
-                return (
+              <div className="target-image-container">
+                <div className="target-image">
                   <div
-                    className={`avail-image`}
-                    onClick={() => handleProductImage(index)}
+                    className="magnifier-container"
+                    onMouseMove={handleMouseMove}
+                    onMouseLeave={handleMouseLeave}
                   >
+                    <div
+                      className={`magnifier-box ${isVisible ? "visible" : ""}`}
+                      style={{
+                        position: "absolute",
+                        left: `${cursorPosition.x - 100}px`,
+                        top: `${cursorPosition.y - 100}px`,
+                        pointerEvents: "none",
+                      }}
+                    ></div>
                     <img
-                      src={product_image && product_image}
-                      alt={product_image}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-          <div className="product-info-container">
-            {isVisible && (
-              <div className="magnifier-view-container">
-                <div className="magnifier-view">
-                  <div
-                    className="view"
-                    style={{
-                      backgroundImage: `url(${
+                      src={
                         product?.product_images?.length >= 0 &&
                         product?.product_images[productIndex]
-                      })`,
-                      backgroundPosition: `${position.x}% ${position.y}%`,
-                      backgroundRepeat: "no-repeat",
-                      transform: "scale(2)",
-                    }}
-                  />
+                      }
+                      alt={product?.product_title}
+                    />
+                  </div>
                 </div>
               </div>
-            )}
-            <div className="product-title">{product?.product_title}</div>
-            <div className="rating-container">
-              <div className="rating">
-                {filledStars}
-                {remainingStars}
-                <span className="rating-value">{`(${rating})`}</span>
-              </div>
-            </div>
-            <div className="d-flex align-items-center font-weight-1">
-              <div className="d-flex align-items-center gap-2">
-                {product?.discount_price && (
-                  <span className="price">
-                    ₹ {product?.sale_price - product?.discount_price}
-                  </span>
-                )}
-                <span
-                  className={`${product?.discount_price && "offered"} price`}
-                >
-                  ₹ {product?.sale_price}
-                </span>{" "}
-                {product?.discount_percentage && (
-                  <span className="discount price">
-                    ({product?.discount_percentage}% offer)
-                  </span>
-                )}
-              </div>
-            </div>
-            <div className="tax-inclusion">Inclusive of all taxes</div>
-            <div className="custom-hr"></div>
-            <div className="color-container">
-              <div className="title d-flex align-items-center gap-1">
-                <div>Color:</div>
-                <div className="font-12 d-flex align-items-center">
-                  {product?.target_color}
-                </div>
-              </div>
-              <div className="avail-colors-container">
-                {products_group?.group?.map((product_group) => {
-                  console.log("product: ", product);
+              <div className="avail-images-container-res">
+                {product?.product_images?.map((product_image, index) => {
                   return (
                     <div
-                      className={`color cursor-pointer ${
-                        product?.target_color_code ===
-                          product_group?.target_color_code && "active"
-                      }`}
+                      className={`avail-image`}
+                      onClick={() => handleProductImage(index)}
+                    >
+                      <img
+                        src={product_image && product_image}
+                        alt={product_image}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            <div className="product-info-container">
+              {isVisible && (
+                <div className="magnifier-view-container">
+                  <div className="magnifier-view">
+                    <div
+                      className="view"
                       style={{
-                        border:
-                          product?.target_color_code ===
-                            product_group?.target_color_code &&
-                          `1px solid gray`,
+                        backgroundImage: `url(${
+                          product?.product_images?.length >= 0 &&
+                          product?.product_images[productIndex]
+                        })`,
+                        backgroundPosition: `${position.x}% ${position.y}%`,
+                        backgroundRepeat: "no-repeat",
+                        transform: "scale(2)",
                       }}
-                      onClick={() => {
-                        navigate(
-                          `${LOCKED_CLOTH_PAGE}?type=men&product_id=${product_group?._id}`
-                        );
-                        window.scrollTo({
-                          top: 0,
-                          behavior: "smooth",
-                        });
-                      }}
-                    >
+                    />
+                  </div>
+                </div>
+              )}
+              <div className="product-title">{product?.product_title}</div>
+              <div className="rating-container">
+                <div className="rating">
+                  {filledStars}
+                  {remainingStars}
+                  <span className="rating-value">{`(${rating})`}</span>
+                </div>
+              </div>
+              <div className="d-flex align-items-center font-weight-1">
+                <div className="d-flex align-items-center gap-2">
+                  {product?.discount_price && (
+                    <span className="price">
+                      ₹ {product?.sale_price - product?.discount_price}
+                    </span>
+                  )}
+                  <span
+                    className={`${product?.discount_price && "offered"} price`}
+                  >
+                    ₹ {product?.sale_price}
+                  </span>{" "}
+                  {product?.discount_percentage && (
+                    <span className="discount price">
+                      ({product?.discount_percentage}% offer)
+                    </span>
+                  )}
+                </div>
+              </div>
+              <div className="tax-inclusion">Inclusive of all taxes</div>
+              <div className="custom-hr"></div>
+              <div className="color-container">
+                <div className="title d-flex align-items-center gap-1">
+                  <div>Color:</div>
+                  <div className="font-12 d-flex align-items-center">
+                    {product?.target_color}
+                  </div>
+                </div>
+                <div className="avail-colors-container">
+                  {productGroupData?.group?.map((product_group) => {
+                    console.log("product: ", product);
+                    return (
                       <div
-                        style={{ background: product_group?.target_color_code }}
-                      ></div>
-                    </div>
-                  );
-                })}
+                        className={`color cursor-pointer ${
+                          product?.target_color_code ===
+                            product_group?.target_color_code && "active"
+                        }`}
+                        style={{
+                          border:
+                            product?.target_color_code ===
+                              product_group?.target_color_code &&
+                            `1px solid gray`,
+                        }}
+                        onClick={() => {
+                          navigate(
+                            `${LOCKED_CLOTH_PAGE}?type=men&product_id=${product_group?._id}`
+                          );
+                          window.scrollTo({
+                            top: 0,
+                            behavior: "smooth",
+                          });
+                        }}
+                      >
+                        <div
+                          style={{
+                            background: product_group?.target_color_code,
+                          }}
+                        ></div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-            <div className="custom-hr"></div>
-            <div className="sizes-container">
-              <div className="title">Size</div>
-              <div className="sizes-content-container">
-                {product?.available_sizes?.map((size) => {
-                  return (
-                    <div
-                      className={`size ${
-                        product?.available_sizes[0] === size && "active"
-                      }`}
-                    >
-                      {size}
-                    </div>
-                  );
-                })}
-                {product?.out_of_stock_sizes?.map((size) => {
-                  return <div className={`size out-of-stock`}>{size}</div>;
-                })}
+              <div className="custom-hr"></div>
+              <div className="sizes-container">
+                <div className="title">Size</div>
+                <div className="sizes-content-container">
+                  {product?.available_sizes?.map((size) => {
+                    return (
+                      <div
+                        className={`size ${
+                          product?.available_sizes[0] === size && "active"
+                        }`}
+                      >
+                        {size}
+                      </div>
+                    );
+                  })}
+                  {product?.out_of_stock_sizes?.map((size) => {
+                    return <div className={`size out-of-stock`}>{size}</div>;
+                  })}
+                </div>
               </div>
-            </div>
-            <div className="custom-hr"></div>
-            <div className="product-actions">
-              <div className="qty-container">
-                <div className="title">Qty</div>
-                <select className="select-input">
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5</option>
-                </select>
-              </div>
-              <button
-                className={`add-to-cart-btn d-flex align-items-center justify-content-center gap-3 ${
-                  (cartItems?.some(
-                    (cartProduct) => cartProduct?.product?._id === product?._id
-                  ) ||
-                    (cartLoading && selectedProductId === product._id)) &&
-                  "disabled"
-                }`}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setSelectedProductId(product._id);
-                  if (
-                    cartItems?.some(
+              <div className="custom-hr"></div>
+              <div className="product-actions">
+                <div className="qty-container">
+                  <div className="title">Qty</div>
+                  <select className="select-input">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                  </select>
+                </div>
+                <button
+                  className={`add-to-cart-btn d-flex align-items-center justify-content-center gap-3 ${
+                    (cartItems?.some(
                       (cartProduct) =>
                         cartProduct?.product?._id === product?._id
                     ) ||
-                    cartLoading
-                  ) {
-                    return;
-                  } else {
-                    handleAddToCart(product);
-                  }
-                }}
-              >
-                {console.log(cartLoading)}
-                {console.log(selectedProductId, "<<<<<<<<<<<<<<")}
-                {cartLoading && selectedProductId === product._id ? (
-                  <div>
-                    <SpinnerLoader />
-                  </div>
-                ) : (
+                      (cartLoading && selectedProductId === product._id)) &&
+                    "disabled"
+                  }`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedProductId(product._id);
+                    if (
+                      cartItems?.some(
+                        (cartProduct) =>
+                          cartProduct?.product?._id === product?._id
+                      ) ||
+                      cartLoading
+                    ) {
+                      return;
+                    } else {
+                      handleAddToCart(product);
+                    }
+                  }}
+                >
+                  {console.log(cartLoading)}
+                  {console.log(selectedProductId, "<<<<<<<<<<<<<<")}
+                  {cartLoading && selectedProductId === product._id ? (
+                    <div>
+                      <SpinnerLoader />
+                    </div>
+                  ) : (
+                    <div>
+                      {cartItems?.some(
+                        (cartProduct) =>
+                          cartProduct?.product?._id === product?._id
+                      ) ? (
+                        <TiTick className="font-size-3 d-flex align-items-center" />
+                      ) : (
+                        <TiShoppingCart className="font-size-3 d-flex align-items-center" />
+                      )}
+                    </div>
+                  )}
                   <div>
                     {cartItems?.some(
                       (cartProduct) =>
                         cartProduct?.product?._id === product?._id
-                    ) ? (
-                      <TiTick className="font-size-3 d-flex align-items-center" />
-                    ) : (
-                      <TiShoppingCart className="font-size-3 d-flex align-items-center" />
-                    )}
+                    )
+                      ? "Item added to Cart"
+                      : cartLoading && selectedProductId === product._id
+                      ? "Adding to Cart"
+                      : "Add To Cart"}
                   </div>
-                )}
-                <div>
-                  {cartItems?.some(
-                    (cartProduct) => cartProduct?.product?._id === product?._id
-                  )
-                    ? "Item added to Cart"
-                    : cartLoading && selectedProductId === product._id
-                    ? "Adding to Cart"
-                    : "Add To Cart"}
-                </div>
-              </button>
-              <button className="buy-now-btn">Buy now</button>
+                </button>
+                <button className="buy-now-btn">Buy now</button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

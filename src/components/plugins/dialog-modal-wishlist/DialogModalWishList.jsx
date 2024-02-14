@@ -32,6 +32,7 @@ const DialogModalWishList = ({ isOpen, onClose }) => {
       selected_color: product.target_color,
       selected_color_code: product.target_color_code,
       selected_size: product.available_sizes[0],
+      selected_quantity: 1
     };
     dispatch(addCart(payload));
   };
