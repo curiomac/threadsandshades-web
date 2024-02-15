@@ -12,6 +12,7 @@ import { addCart } from "../../../../../redux/actions/cartAction";
 import SpinnerLoader from "../../../../plugins/loaders/spinner-loader/SpinnerLoader";
 import BackdropLoader from "../../../../plugins/loaders/backdrop-loader/BackdropLoader";
 import { clearProduct } from "../../../../../redux/slices/productSlice";
+import { IoIosClose } from "react-icons/io";
 
 const rating = 4.5;
 
@@ -34,6 +35,10 @@ const ProductDetails = () => {
   const [productGroupData, setProductGroupData] = useState({});
   const [productIndex, setProductIndex] = useState(0);
   const [selectedProductId, setSelectedProductId] = useState("");
+  const [targetProductSize, setTargetProductSize] = useState("");
+  const [targetProductQuantity, setTargetProductQuantity] = useState("");
+  const [targetProductCustomQuantity, setTargetProductCustomQuantity] =
+    useState(1);
 
   const filledStars = Array.from({ length: Math.floor(rating) }, (_, index) => (
     <FaStar key={index} className="filled d-flex align-items-center" />
@@ -66,7 +71,11 @@ const ProductDetails = () => {
       user_id: "65a7eef1a7e2b0eda9f545e8",
       selected_color: product.target_color,
       selected_color_code: product.target_color_code,
-      selected_size: product.available_sizes[0],
+      selected_size: targetProductSize,
+      selected_quantity:
+        targetProductQuantity === "Custom"
+          ? targetProductCustomQuantity
+          : targetProductQuantity,
     };
     dispatch(addCart(payload));
   };
@@ -86,6 +95,10 @@ const ProductDetails = () => {
     if (product && products_group) {
       setProductData(product);
       setProductGroupData(products_group);
+      if (product?.available_sizes?.length > 0) {
+        setTargetProductSize(product?.available_sizes[0]);
+      }
+      setTargetProductQuantity(1);
     }
   }, [product, products_group]);
   console.log("product-console: ", product);
@@ -268,9 +281,10 @@ const ProductDetails = () => {
                   {product?.available_sizes?.map((size) => {
                     return (
                       <div
-                        className={`size ${
-                          product?.available_sizes[0] === size && "active"
+                        className={`size cursor-pointer ${
+                          targetProductSize === size && "active"
                         }`}
+                        onClick={() => setTargetProductSize(size)}
                       >
                         {size}
                       </div>
@@ -283,15 +297,52 @@ const ProductDetails = () => {
               </div>
               <div className="custom-hr"></div>
               <div className="product-actions">
-                <div className="qty-container">
+                <div
+                  className="qty-container"
+                  style={{
+                    gap: targetProductQuantity === "Custom" ? "5px" : "10px",
+                  }}
+                >
                   <div className="title">Qty</div>
-                  <select className="select-input">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                  </select>
+                  {targetProductQuantity === "Custom" && (
+                    <div className="ic-close">
+                      <IoIosClose
+                        className="icon"
+                        onClick={() => {
+                          setTargetProductQuantity("");
+                          setTargetProductCustomQuantity(1);
+                        }}
+                      />
+                    </div>
+                  )}
+                  {targetProductQuantity === "Custom" ? (
+                    <input
+                      className="product-quantity-input"
+                      value={targetProductCustomQuantity}
+                      onChange={(e) =>
+                        setTargetProductCustomQuantity(e.target.value)
+                      }
+                      type="number"
+                    />
+                  ) : (
+                    <select
+                      className="select-input"
+                      value={targetProductQuantity}
+                      onChange={(e) => {
+                        setTargetProductQuantity(e.target.value);
+                        if (e.target.value === "Custom") {
+                          setTargetProductCustomQuantity(1);
+                        }
+                      }}
+                    >
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                      <option>4</option>
+                      <option>5</option>
+                      <option>Custom</option>
+                    </select>
+                  )}
                 </div>
                 <button
                   className={`add-to-cart-btn d-flex align-items-center justify-content-center gap-3 ${

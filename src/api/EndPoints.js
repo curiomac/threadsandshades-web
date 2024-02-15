@@ -16,6 +16,9 @@ export const endpoints = {
         add: 'cart/add',
         remove: 'cart/remove'
     },
+    checkout_details: {
+        get: 'checkoutdetails',
+    },
     wish_list: {
         get: 'wishlist',
         move: 'wishlist/move'

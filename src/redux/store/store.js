@@ -6,6 +6,7 @@ import themeReducer from "../slices/themeSlice";
 import productsReducer from "../slices/productsSlice";
 import productReducer from "../slices/productSlice";
 import cartReducer from "../slices/cartSlice";
+import checkoutDetailsReducer from "../slices/checkoutDetailsSlice";
 import wishListReducer from "../slices/wishListSlice";
 import resCartReducer from "../slices/resCartSlice";
 
@@ -16,7 +17,9 @@ const reducer = combineReducers({
     productsState: productsReducer,
     productState: productReducer,
     cartState: cartReducer,
+    checkoutDetailsState: checkoutDetailsReducer,
     wishListState: wishListReducer,
+    checkoutDetailsState: checkoutDetailsReducer,
     resCartState: resCartReducer,
 })
 

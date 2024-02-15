@@ -70,9 +70,11 @@
                 .cart-item-img {
                   height: 150px;
                   width: 150px;
+                  object-fit: contain;
                   img {
                     height: -webkit-fill-available;
                     width: -webkit-fill-available;
+                    object-fit: contain;
                   }
                 }
                 .title {

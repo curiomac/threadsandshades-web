@@ -5,21 +5,36 @@ import { MdShoppingCartCheckout } from "react-icons/md";
 import { getQueryParam } from "../../../../../helpers/search-query-params/getQueryParams";
 import { useDispatch, useSelector } from "react-redux";
 import { proceedTrigger } from "../../../../../redux/slices/resCartSlice";
+import { getCheckoutDetails } from "../../../../../redux/actions/checkoutDetailsAction";
 
 const CheckoutBox = () => {
   const [couponValue, setCouponValue] = useState("");
   const trigger = getQueryParam("proceed");
   const { proceed } = useSelector((state) => state.resCartState);
+  const { cartItems, loading: cartItemsLoading } = useSelector(
+    (state) => state.cartState
+  );
+  const { checkoutDetails } = useSelector(
+    (state) => state.checkoutDetailsState
+  );
   const dispatch = useDispatch();
   useEffect(() => {
+    const payload = {
+      user_id: "65a7eef1a7e2b0eda9f545e8",
+    };
     dispatch(proceedTrigger(trigger));
+    dispatch(getCheckoutDetails(payload));
   }, [trigger]);
+  console.log("checkoutDetails: ", checkoutDetails);
   return (
     <div
       className={`checkout-box ${
-        (proceed === true  || proceed === 'true') ? "show-checkout-box" : "hide-checkout-box"
+        proceed === true || proceed === "true"
+          ? "show-checkout-box"
+          : "hide-checkout-box"
       }`}
     >
+      {cartItems?.length > 0 ? 
       <div>
         <div className="offer-box">
           <div className="offer-box-info">
@@ -70,28 +85,29 @@ const CheckoutBox = () => {
           <div className="custom-hr mt-2 mb-2"></div>
           <div className="d-flex align-items-center justify-content-space-between mt-2 mb-2">
             <div>Total MRP (Inc. of Taxes)</div>
-            <div>₹1999</div>
+            <div>₹{checkoutDetails?.total_mrp}</div>
           </div>
           <div className="d-flex align-items-center justify-content-space-between mt-2 mb-2">
             <div>Shades Discount</div>
-            <div>- ₹1200</div>
+            <div>0</div>
           </div>
           <div className="d-flex align-items-center justify-content-space-between mt-2 mb-2">
             <div>Shipping</div>
             <div className="d-flex align-items-center gap-1">
-              <div>₹49</div>
-              <div>Free</div>
+              <div>₹{checkoutDetails?.shipping_charge}</div>
+              {(checkoutDetails?.discounted_delivery_charge === 0) &&
+              <div style={{color: '#00d100'}}>(Free)</div>}
             </div>
           </div>
           <div className="d-flex align-items-center justify-content-space-between mt-2 mb-2">
             <div>Cart Total</div>
-            <div>₹799</div>
+            <div>₹{checkoutDetails?.cart_total}</div>
           </div>
         </div>
         <div className="amount-box">
           <div className="heading d-flex align-items-center justify-content-space-between">
             <div>Total Amount</div>
-            <div>₹799</div>
+            <div>₹{checkoutDetails?.cart_total}</div>
           </div>
           <div className="custom-hr mt-2 mb-2"></div>
           <button className="checkout-button d-flex align-items-center gap-2 justify-content-center">
@@ -102,6 +118,9 @@ const CheckoutBox = () => {
           </button>
         </div>
       </div>
+ : <div className="checkout-empty">
+  
+  </div>}
     </div>
   );
 };

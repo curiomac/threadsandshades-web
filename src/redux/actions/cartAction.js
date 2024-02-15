@@ -13,6 +13,7 @@ import {
   cartRemoveRequest,
   cartRemoveSuccess,
 } from "../slices/cartSlice";
+import { getCheckoutDetails } from "./checkoutDetailsAction";
 
 export const getCart = (payload) => async (dispatch) => {
   try {
@@ -20,6 +21,10 @@ export const getCart = (payload) => async (dispatch) => {
     const response = await axios.get(
       `${BASE_URL}/${endpoints.cart.get}/${payload.user_id}`
     );
+    const checkout_details_payload = {
+      user_id: payload?.user_id
+    }
+    dispatch(getCheckoutDetails(checkout_details_payload))
     dispatch(cartSuccess(response?.data?.cart));
   } catch (error) {
     dispatch(cartFail(error?.response?.data?.message));
@@ -32,6 +37,10 @@ export const addCart = (payload) => async (dispatch) => {
     const response = await axios.post(
       `${BASE_URL}/${endpoints.cart.add}`, payload
     );
+    const checkout_details_payload = {
+      user_id: payload?.user_id
+    }
+    dispatch(getCheckoutDetails(checkout_details_payload))
     dispatch(cartAddSuccess(response?.data?.cart));
   } catch (error) {
     dispatch(cartAddFail(error?.response?.data?.message));
@@ -47,6 +56,10 @@ export const removeCart = (payload) => async (dispatch) => {
     const response = await axios.post(
       `${BASE_URL}/${endpoints.cart.remove}${formattedPayload}`
     );
+    const checkout_details_payload = {
+      user_id: payload?.user_id
+    }
+    dispatch(getCheckoutDetails(checkout_details_payload))
     dispatch(cartRemoveSuccess(response?.data?.cart));
   } catch (error) {
     dispatch(cartRemoveFail(error?.response?.data?.message));
