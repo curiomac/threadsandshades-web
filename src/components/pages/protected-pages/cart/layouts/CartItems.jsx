@@ -13,6 +13,9 @@ const CartItems = () => {
   const { cartItems, loading: cartItemsLoading } = useSelector(
     (state) => state.cartState
   );
+  const { checkoutDetails } = useSelector(
+    (state) => state.checkoutDetailsState
+  );
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const trigger = getQueryParam("proceed");
@@ -49,7 +52,7 @@ const CartItems = () => {
           <div className="res-proceed-checkout">
             <div className="sub-total d-flex align-items-center justify-content-space-between">
               <div className="heading">Subtotal</div>
-              <div className="price">₹3,000</div>
+              <div className="price">₹{checkoutDetails?.cart_total}</div>
             </div>
             <div className="free-delivery">
               <div>
