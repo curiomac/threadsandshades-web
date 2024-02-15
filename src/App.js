@@ -28,7 +28,6 @@ function App() {
     (state) => state.themeState
   );
   const theme_req = theme?._id;
-
   const getThemeId = () => {
     if (!localStorage.getItem("theme-id")) {
       localStorage.setItem("theme-id", process.env.REACT_APP_DEFAULT_THEME_ID);
@@ -82,8 +81,8 @@ function App() {
             <div className="logo-img d-flex align-items-center justify-content-center">
               <img src={logo} height={50} width={50} />
             </div>
-            <div style={{width: '110px'}}>
-              Please wait.{loadingPointA && "." }
+            <div style={{ width: "110px" }}>
+              Please wait.{loadingPointA && "."}
               {loadingPointB && "."}
             </div>
           </div>

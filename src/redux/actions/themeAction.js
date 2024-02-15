@@ -4,10 +4,10 @@ import { endpoints } from "../../api/EndPoints";
 import { themeFail, themeRequest, themeSuccess } from "../slices/themeSlice";
 
 export const getTheme = () => async (dispatch) => {
-
+console.log("process.env.REACT_APP_DEFAULT_THEME_ID", process.env.REACT_APP_DEFAULT_THEME_ID);
     try {
         const getThemeId = () => {
-            if (localStorage.getItem('theme-id')) {
+            if (localStorage.getItem('theme-id') !== undefined || localStorage.getItem('theme-id') !== 'undefined') {
                 return localStorage.getItem('theme-id');
             } else {
                 return process.env.REACT_APP_DEFAULT_THEME_ID;
