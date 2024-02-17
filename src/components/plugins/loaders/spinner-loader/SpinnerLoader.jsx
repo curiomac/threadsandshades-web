@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
-const SpinnerLoader = () => {
-  return (
-    <div className="spinner"></div>
-  )
-}
+const SpinnerLoader = ({ dark }) => {
+  return <div className={`spinner ${dark && "dark"}`}></div>;
+};
 
-export default SpinnerLoader
+export default SpinnerLoader;

@@ -36,7 +36,7 @@ const CheckoutBox = () => {
     setCouponTriggered(false);
     dispatch(clearError());
     const payload = {
-      user_id: "65a7eef1a7e2b0eda9f545e8"
+      user_id: "65a7eef1a7e2b0eda9f545e8",
     };
     dispatch(getCheckoutDetails(payload));
   };
@@ -114,11 +114,27 @@ const CheckoutBox = () => {
                 {checkoutDetails.coupon_applied === true ? (
                   <div className="offer-container">
                     <div className="offer-heading font-weight-1 primary-color">
-                      {checkoutDetails.coupon_code} <span className="font-10" style={{
-                        color: 'gray'
-                      }}>applied!</span>
+                      {checkoutDetails.coupon_code}{" "}
+                      <span
+                        className="font-10"
+                        style={{
+                          color: "gray",
+                        }}
+                      >
+                        applied!
+                      </span>
                     </div>
-                    <div className="font-12 remove-btn" onClick={() => handleRemoveCoupon()}>REMOVE</div>
+                    <div
+                      className="font-12 remove-btn"
+                      onClick={() => handleRemoveCoupon()}
+                    >
+                      {checkoutDetails.coupon_applied === true &&
+                      checkoutDetailsLoading ? (
+                        <SpinnerLoader dark />
+                      ) : (
+                        "REMOVE"
+                      )}
+                    </div>
                   </div>
                 ) : (
                   <div className="offer-container">

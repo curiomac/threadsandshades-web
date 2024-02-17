@@ -271,7 +271,8 @@
                 align-items: center;
                 justify-content: space-between;
                 .offer-heading {
-                  font-size: 14px;
+                  font-size: 12px;
+                  font-weight: 600;
                 }
                 .coupon-code {
                   height: 30px;
@@ -285,8 +286,19 @@
                   font-weight: 600;
                 }
                 .remove-btn {
+                  height: 30px;
+                  width: 100px;
                   border: 1px solid gray;
-                  padding: 5px 10px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  cursor: pointer;
+                  transition: 0.3s;
+                }
+                .remove-btn:hover {
+                  background-color: rgba(128, 128, 128, 0.175);
+                  cursor: pointer;
+                  transition: 0.3s;
                 }
               }
               .readme-quotes {
