@@ -31,7 +31,7 @@ const TopSellingBanner = () => {
       selected_color: product.target_color,
       selected_color_code: product.target_color_code,
       selected_size: product.available_sizes[0],
-      selected_quantity: 1
+      selected_quantity: 1,
     };
     dispatch(addCart(payload));
   };
@@ -185,29 +185,27 @@ const TopSellingBanner = () => {
                           </span>
                         )}
                       </div>
-                      {product?.is_discounted_product && (
-                        <div className="mt-1 mb-1 res-849px-d-unset">
-                          {product?.is_discounted_product && (
-                            <div className="price">
-                              ₹ {product.sale_price - product.discount_price}
-                            </div>
-                          )}
-                          <div className="d-flex align-items-center gap-2">
-                            <span
-                              className={`${
-                                product?.is_discounted_product && "offered"
-                              } font-12`}
-                            >
-                              ₹ {product?.sale_price}
-                            </span>{" "}
-                            {product?.is_discounted_product && (
-                              <span className="discount price">
-                                ({product.discount_percentage}% offer)
-                              </span>
-                            )}
+                      <div className="mt-1 mb-1 res-849px-d-unset">
+                        {product?.is_discounted_product && (
+                          <div className="price">
+                            ₹ {product.sale_price - product.discount_price}
                           </div>
+                        )}
+                        <div className="d-flex align-items-center gap-2">
+                          <span
+                            className={`${
+                              product?.is_discounted_product && "offered"
+                            } font-12`}
+                          >
+                            ₹ {product?.sale_price}
+                          </span>{" "}
+                          {product?.is_discounted_product && (
+                            <span className="discount price">
+                              ({product.discount_percentage}% offer)
+                            </span>
+                          )}
                         </div>
-                      )}
+                      </div>
                     </div>
                   </div>
                   <div className="avail-colors-container">
