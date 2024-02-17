@@ -69,6 +69,9 @@
 .h-full {
   height: 100%;
 }
+.h-0 {
+  height: 0;
+}
 
 /* width */
 
@@ -101,6 +104,9 @@
 }
 .w-fill {
   width: -webkit-fill-available;
+}
+.w-0 {
+  width: 0;
 }
 
 .min-w-none {
