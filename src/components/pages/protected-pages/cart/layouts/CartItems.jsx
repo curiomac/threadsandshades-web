@@ -8,6 +8,7 @@ import { getQueryParam } from "../../../../../helpers/search-query-params/getQue
 import { proceedTrigger } from "../../../../../redux/slices/resCartSlice";
 import { removeCart } from "../../../../../redux/actions/cartAction";
 import SpinnerLoaderBrand from "../../../../plugins/loaders/spinner-loader-brand/SpinnerLoaderBrand";
+import { LOCKED_CLOTH_PAGE } from "../../../../../helpers/route-paths/paths";
 
 const CartItems = () => {
   const { cartItems, loading: cartItemsLoading } = useSelector(
@@ -97,31 +98,42 @@ const CartItems = () => {
                         <img
                           src={cartItem?.product?.product_images[0]}
                           alt={cartItem?.product?._id}
+                          onClick={() => {
+                            navigate(
+                              `${LOCKED_CLOTH_PAGE}?type=men&product_id=${cartItem?.product?._id}`
+                            );
+                          }}
                         />
                       </div>
-                      <div>
-                        <div className="title">
+                      <div style={{
+                        width: "-webkit-fill-available"
+                      }}>
+                        <div className="title" onClick={() => {
+                          navigate(
+                            `${LOCKED_CLOTH_PAGE}?type=men&product_id=${cartItem?.product?._id}`
+                          );
+                        }}>
                           {cartItem?.product?.product_title}
                         </div>
                         <div className="price">
-                          {cartItem?.product?.no_discount && (
+                          {cartItem?.product?.is_discounted_product === false && (
                             <div className="discount-price">
                               ₹{cartItem?.product?.sale_price}
                             </div>
                           )}
-                          {cartItem?.product?.discount_price && (
+                          {cartItem?.product?.is_discounted_product && (
                             <div className="discount-price">
                               ₹
                               {cartItem?.product?.sale_price -
                                 cartItem?.product?.discount_price}
                             </div>
                           )}
-                          {cartItem?.product?.discount_price && (
+                          {cartItem?.product?.is_discounted_product && (
                             <div className="original-price">
                               ₹{cartItem?.product?.sale_price}
                             </div>
                           )}
-                          {cartItem?.product?.discount_price && (
+                          {cartItem?.product?.is_discounted_product && (
                             <div className="discount">
                               ({cartItem?.product?.discount_percentage}% Off)
                             </div>

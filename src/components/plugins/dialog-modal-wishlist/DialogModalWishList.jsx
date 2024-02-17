@@ -83,9 +83,34 @@ const DialogModalWishList = ({ isOpen, onClose }) => {
                           alt={wishList._id}
                         />
                       </div>
-                      <div>
+                      <div style={{
+                        width: '-webkit-fill-available'
+                      }}>
                         <div className="title">{wishList?.product_title}</div>
-                        <div className="price">₹{wishList?.sale_price}</div>
+                        <div className="price">
+                          {wishList?.is_discounted_product === false && (
+                            <div className="discount-price">
+                              ₹{wishList?.sale_price}
+                            </div>
+                          )}
+                          {wishList?.is_discounted_product && (
+                            <div className="discount-price">
+                              ₹
+                              {wishList?.sale_price -
+                                wishList?.discount_price}
+                            </div>
+                          )}
+                          {wishList?.is_discounted_product && (
+                            <div className="original-price">
+                              ₹{wishList?.sale_price}
+                            </div>
+                          )}
+                          {wishList?.is_discounted_product && (
+                            <div className="discount">
+                              ({wishList?.discount_percentage}% Off)
+                            </div>
+                          )}
+                        </div>
                         <div className="product-features">
                           <div className="color-container">
                             <div className="color-heading">Color:</div>

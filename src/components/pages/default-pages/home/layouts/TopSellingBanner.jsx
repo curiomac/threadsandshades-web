@@ -167,27 +167,27 @@ const TopSellingBanner = () => {
                       <BsCurrencyRupee className="d-flex align-items-center"/>
                     </div> */}
                       <div className="d-flex align-items-center gap-2 mt-1 mb-1 res-849px-d-none">
-                        {product?.discount_price && (
+                        {product?.is_discounted_product && (
                           <span className="price">
                             ₹ {product.sale_price - product.discount_price}
                           </span>
                         )}
                         <span
                           className={`${
-                            product?.discount_price && "offered"
+                            product?.is_discounted_product && "offered"
                           } price`}
                         >
                           ₹ {product?.sale_price}
                         </span>{" "}
-                        {product?.discount_percentage && (
+                        {product?.is_discounted_product && (
                           <span className="discount price">
                             ({product.discount_percentage}% offer)
                           </span>
                         )}
                       </div>
-                      {product?.discount_price && (
+                      {product?.is_discounted_product && (
                         <div className="mt-1 mb-1 res-849px-d-unset">
-                          {product?.discount_price && (
+                          {product?.is_discounted_product && (
                             <div className="price">
                               ₹ {product.sale_price - product.discount_price}
                             </div>
@@ -195,12 +195,12 @@ const TopSellingBanner = () => {
                           <div className="d-flex align-items-center gap-2">
                             <span
                               className={`${
-                                product?.discount_price && "offered"
+                                product?.is_discounted_product && "offered"
                               } font-12`}
                             >
                               ₹ {product?.sale_price}
                             </span>{" "}
-                            {product?.discount_percentage && (
+                            {product?.is_discounted_product && (
                               <span className="discount price">
                                 ({product.discount_percentage}% offer)
                               </span>

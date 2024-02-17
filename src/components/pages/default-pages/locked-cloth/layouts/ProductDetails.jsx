@@ -4,7 +4,7 @@ import { RxSlash } from "react-icons/rx";
 import { FaRegStar, FaStar } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { getProduct } from "../../../../../redux/actions/productAction";
-import { LOCKED_CLOTH_PAGE } from "../../../../../helpers/route-paths/paths";
+import { COLLECTIONS_PAGE, LOCKED_CLOTH_PAGE } from "../../../../../helpers/route-paths/paths";
 import { useNavigate } from "react-router-dom";
 import { TiShoppingCart, TiTick } from "react-icons/ti";
 import { getProducts } from "../../../../../redux/actions/productsAction";
@@ -18,6 +18,7 @@ const rating = 4.5;
 
 const ProductDetails = () => {
   const productId = getQueryParam("product_id");
+  const productType = getQueryParam("type");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {
@@ -108,7 +109,7 @@ const ProductDetails = () => {
       {Object.keys(productData).length !== 0 && (
         <div className="container-fluid">
           <div className="d-flex align-items-center gap-2 bread-crumbs">
-            <div className="border-bottom brand">Threads and Shades</div>
+            <div className="border-bottom brand" onClick={() => navigate(`${COLLECTIONS_PAGE}?type=${productType}`)}>Threads and Shades</div>
             <div>
               <RxSlash className="d-flex align-items-center" />
             </div>
