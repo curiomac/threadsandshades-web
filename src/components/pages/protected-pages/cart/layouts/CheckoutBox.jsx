@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BiDollar, BiSolidCoupon } from "react-icons/bi";
+import { BiSolidCoupon } from "react-icons/bi";
 import { IoIosArrowForward, IoIosWallet } from "react-icons/io";
 import { MdShoppingCartCheckout } from "react-icons/md";
 import { getQueryParam } from "../../../../../helpers/search-query-params/getQueryParams";
@@ -8,9 +8,11 @@ import { proceedTrigger } from "../../../../../redux/slices/resCartSlice";
 import { getCheckoutDetails } from "../../../../../redux/actions/checkoutDetailsAction";
 import SpinnerLoader from "../../../../plugins/loaders/spinner-loader/SpinnerLoader";
 import { clearError } from "../../../../../redux/slices/checkoutDetailsSlice";
-
+import CustomTooltip from "../../../../plugins/custom-tooltip/CustomTooltip";
+import { AiOutlineQuestionCircle } from "react-icons/ai";
 const CheckoutBox = () => {
   const [couponValue, setCouponValue] = useState("");
+  const [textCopied, setTextCopied] = useState(false);
   const [couponTriggered, setCouponTriggered] = useState(false);
   const trigger = getQueryParam("proceed");
   const { proceed } = useSelector((state) => state.resCartState);
@@ -23,6 +25,18 @@ const CheckoutBox = () => {
     error: checkoutDetailsError,
   } = useSelector((state) => state.checkoutDetailsState);
   const dispatch = useDispatch();
+  const handleCopyToClipboard = (text) => {
+    const textToCopy = text;
+    navigator.clipboard
+      .writeText(textToCopy)
+      .then(() => {
+        setTextCopied(true);
+        console.log("Text copied to clipboard");
+      })
+      .catch((err) => {
+        console.error("Error copying text: ", err);
+      });
+  };
   const handleApplyCoupon = () => {
     dispatch(clearError());
     const payload = {
@@ -48,7 +62,6 @@ const CheckoutBox = () => {
     dispatch(proceedTrigger(trigger));
     dispatch(getCheckoutDetails(payload));
   }, [trigger]);
-  useEffect(() => {});
   return (
     <div
       className={`checkout-box ${
@@ -129,7 +142,8 @@ const CheckoutBox = () => {
                       onClick={() => handleRemoveCoupon()}
                     >
                       {checkoutDetails.coupon_applied === true &&
-                      checkoutDetailsLoading ? (
+                      checkoutDetailsLoading &&
+                      !couponTriggered ? (
                         <SpinnerLoader dark />
                       ) : (
                         "REMOVE"
@@ -141,7 +155,17 @@ const CheckoutBox = () => {
                     <div className="offer-heading">
                       Flat ₹500 off on orders above ₹1999 -
                     </div>
-                    <div className="coupon-code">SHADES500</div>
+                    <CustomTooltip
+                      tip={textCopied ? "Code copied" : "Copy code"}
+                      width={"100px"}
+                    >
+                      <div
+                        className="coupon-code cursor-pointer"
+                        onClick={() => handleCopyToClipboard("SHADES500")}
+                      >
+                        SHADES500
+                      </div>
+                    </CustomTooltip>
                   </div>
                 )}
                 <div className="custom-hr mt-2 mb-2"></div>
@@ -168,12 +192,33 @@ const CheckoutBox = () => {
               </div>
             )}
             <div className="d-flex align-items-center justify-content-space-between mt-2 mb-2">
-              <div>Shipping</div>
+              <div className="d-flex align-items-center gap-2">
+                <div>Shipping</div>
+                {checkoutDetails?.discounted_delivery_charge === 0 && (
+                  <CustomTooltip
+                    tip={"Shipping is free for orders over ₹500!"}
+                    width={"160px"}
+                  >
+                    <div className="primary-color font-size-2-h d-flex align-items-center justify-content-center">
+                      <AiOutlineQuestionCircle />
+                    </div>
+                  </CustomTooltip>
+                )}
+              </div>
               <div className="d-flex align-items-center gap-1">
-                <div>₹{checkoutDetails?.shipping_charge}</div>
                 {checkoutDetails?.discounted_delivery_charge === 0 && (
                   <div style={{ color: "#00d100" }}>(Free)</div>
                 )}
+                <div
+                  style={{
+                    textDecoration:
+                      checkoutDetails?.discounted_delivery_charge === 0
+                        ? "line-through"
+                        : "",
+                  }}
+                >
+                  ₹{checkoutDetails?.shipping_charge}
+                </div>
               </div>
             </div>
             <div className="d-flex align-items-center justify-content-space-between mt-2 mb-2">

@@ -146,7 +146,7 @@ const CollectionsList = () => {
                             (cartProduct) =>
                               cartProduct?.product?._id === product?._id
                           )
-                            ? "Item added to Cart"
+                            ? "Added to Cart"
                             : cartLoading && selectedProductId === product._id
                             ? "Adding to Cart"
                             : "Add To Cart"}

@@ -17,8 +17,8 @@ const DialogModalWishList = ({ isOpen, onClose }) => {
   const { cartItems, loading: cartLoading } = useSelector(
     (state) => state.cartState
   );
-  const {pathname} = useLocation();
-  const navigate = useNavigate()
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
   const [selectedWishListProductId, setSelectedWishListProductId] =
     useState("");
   const dispatch = useDispatch();
@@ -32,11 +32,12 @@ const DialogModalWishList = ({ isOpen, onClose }) => {
       selected_color: product.target_color,
       selected_color_code: product.target_color_code,
       selected_size: product.available_sizes[0],
-      selected_quantity: 1
+      selected_quantity: 1,
     };
     dispatch(addCart(payload));
   };
   const handleReMoveFromWishList = (product) => {
+    console.log("product-data: ", product);
     const payload = {
       product_id: product._id,
       user_id: "65a7eef1a7e2b0eda9f545e8",
@@ -56,10 +57,13 @@ const DialogModalWishList = ({ isOpen, onClose }) => {
         <div>
           <div className="content container-fluid-padding">
             <div className="close-icon-container">
-              <div className="close-icon" onClick={() => {
-                onClose()
-                navigate(`${pathname}?wishlist=false`)
-                }}>
+              <div
+                className="close-icon"
+                onClick={() => {
+                  onClose();
+                  navigate(`${pathname}?wishlist=false`);
+                }}
+              >
                 <IoClose />
               </div>
             </div>
@@ -83,9 +87,11 @@ const DialogModalWishList = ({ isOpen, onClose }) => {
                           alt={wishList._id}
                         />
                       </div>
-                      <div style={{
-                        width: '-webkit-fill-available'
-                      }}>
+                      <div
+                        style={{
+                          width: "-webkit-fill-available",
+                        }}
+                      >
                         <div className="title">{wishList?.product_title}</div>
                         <div className="price">
                           {wishList?.is_discounted_product === false && (
@@ -95,9 +101,7 @@ const DialogModalWishList = ({ isOpen, onClose }) => {
                           )}
                           {wishList?.is_discounted_product && (
                             <div className="discount-price">
-                              ₹
-                              {wishList?.sale_price -
-                                wishList?.discount_price}
+                              ₹{wishList?.sale_price - wishList?.discount_price}
                             </div>
                           )}
                           {wishList?.is_discounted_product && (
@@ -126,7 +130,7 @@ const DialogModalWishList = ({ isOpen, onClose }) => {
                             className={`add-to-cart-btn d-flex align-items-center justify-content-center gap-3 ${
                               (cartItems?.some(
                                 (cartProduct) =>
-                                  cartProduct?._id === wishList?._id
+                                  cartProduct?.product._id === wishList?._id
                               ) ||
                                 (cartLoading &&
                                   selectedWishListProductId ===
@@ -137,7 +141,7 @@ const DialogModalWishList = ({ isOpen, onClose }) => {
                               if (
                                 cartItems?.some(
                                   (cartProduct) =>
-                                    cartProduct?._id === wishList?._id
+                                    cartProduct?.product._id === wishList?._id
                                 ) ||
                                 cartLoading
                               ) {
@@ -156,7 +160,7 @@ const DialogModalWishList = ({ isOpen, onClose }) => {
                               <div>
                                 {cartItems?.some(
                                   (cartProduct) =>
-                                    cartProduct?._id === wishList?._id
+                                    cartProduct?.product._id === wishList?._id
                                 ) ? (
                                   <TiTick className="font-size-3 d-flex align-items-center" />
                                 ) : (
@@ -167,7 +171,7 @@ const DialogModalWishList = ({ isOpen, onClose }) => {
                             <div>
                               {cartItems?.some(
                                 (cartProduct) =>
-                                  cartProduct?._id === wishList?._id
+                                  cartProduct?.product._id === wishList?._id
                               )
                                 ? "Item added to Cart"
                                 : cartLoading &&
@@ -191,7 +195,9 @@ const DialogModalWishList = ({ isOpen, onClose }) => {
                           >
                             {wishListLoading &&
                             selectedWishListProductId === wishList._id ? (
-                              <SpinnerLoader />
+                              <div className="d-flex align-items-center justify-content-center">
+                                <SpinnerLoader brand/>
+                              </div>
                             ) : (
                               "Remove"
                             )}

@@ -14,12 +14,16 @@ const CartItems = () => {
   const { cartItems, loading: cartItemsLoading } = useSelector(
     (state) => state.cartState
   );
+  const { loading: wishListLoading } = useSelector(
+    (state) => state.wishListState
+  );
   const { checkoutDetails } = useSelector(
     (state) => state.checkoutDetailsState
   );
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const trigger = getQueryParam("proceed");
+  const wishlist_params = getQueryParam("wishlist");
   const { proceed } = useSelector((state) => state.resCartState);
   const dispatch = useDispatch();
   const [cartItemsSelectedId, setCartItemSelectedId] = useState("");
@@ -28,7 +32,7 @@ const CartItems = () => {
   }, [trigger]);
   const handleMoveToWishList = (cartItem) => {
     const payload = {
-      product_id: cartItem._id,
+      product_id: cartItem?.product?._id,
       user_id: "65a7eef1a7e2b0eda9f545e8",
       is_from: "cart",
     };
@@ -77,8 +81,9 @@ const CartItems = () => {
                   className="cart-item-content"
                   onClick={() => setCartItemSelectedId(cartItem?.product?._id)}
                 >
-                  {cartItemsLoading &&
-                    cartItemsSelectedId === cartItem?.product?._id && (
+                  {(cartItemsLoading || wishListLoading) &&
+                    cartItemsSelectedId === cartItem?.product?._id &&
+                    (wishlist_params === false || wishlist_params === 'false') && (
                       <div className="loader-container">
                         <div className="spinner-brand">
                           <SpinnerLoaderBrand />
@@ -87,8 +92,9 @@ const CartItems = () => {
                     )}
                   <div
                     className={`${
-                      cartItemsLoading &&
-                      cartItemsSelectedId === cartItem._product?.id
+                      (cartItemsLoading || wishListLoading) &&
+                      cartItemsSelectedId === cartItem.product?._id &&
+                      (wishlist_params === false || wishlist_params === 'false')
                         ? "cart-loader"
                         : "cart-default"
                     }`}
@@ -105,18 +111,24 @@ const CartItems = () => {
                           }}
                         />
                       </div>
-                      <div style={{
-                        width: "-webkit-fill-available"
-                      }}>
-                        <div className="title" onClick={() => {
-                          navigate(
-                            `${LOCKED_CLOTH_PAGE}?type=men&product_id=${cartItem?.product?._id}`
-                          );
-                        }}>
+                      <div
+                        style={{
+                          width: "-webkit-fill-available",
+                        }}
+                      >
+                        <div
+                          className="title"
+                          onClick={() => {
+                            navigate(
+                              `${LOCKED_CLOTH_PAGE}?type=men&product_id=${cartItem?.product?._id}`
+                            );
+                          }}
+                        >
                           {cartItem?.product?.product_title}
                         </div>
                         <div className="price">
-                          {cartItem?.product?.is_discounted_product === false && (
+                          {cartItem?.product?.is_discounted_product ===
+                            false && (
                             <div className="discount-price">
                               ₹{cartItem?.product?.sale_price}
                             </div>
