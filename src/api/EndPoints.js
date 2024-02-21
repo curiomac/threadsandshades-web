@@ -1,6 +1,12 @@
 export const endpoints = {
+    otp: {
+        post: 'otp/send'
+    },
     login: {
         post: 'login'
+    },
+    register: {
+        post: 'register'
     },
     theme: {
         get: 'theme/get'

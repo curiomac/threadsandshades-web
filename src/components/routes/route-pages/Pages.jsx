@@ -28,10 +28,11 @@ import LockedCloth from "../../pages/default-pages/locked-cloth/LockedCloth";
 import CartItems from "../../pages/protected-pages/cart/layouts/CartItems";
 import DeliveryAddress from "../../pages/protected-pages/cart/layouts/DeliveryAddress";
 import Cart from "../../pages/protected-pages/cart/Cart";
+import { useSelector } from "react-redux";
 
 const Pages = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const { isAuthenticated } = useSelector((state) => state.authState);
   const closeModal = () => {
     setIsModalOpen(false);
   };
@@ -42,7 +43,7 @@ const Pages = () => {
   // }, []);
   return (
     <Router>
-      <SigninHeader />
+      {isAuthenticated ? "" : <SigninHeader />}
       <Header />
       <Routes>
         {/* Default Pages */}

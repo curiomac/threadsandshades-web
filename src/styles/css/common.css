@@ -21,7 +21,7 @@ button {
   color: var(--ternary-color);
 }
 .default-color {
-  color: var(--default-color);
+  color: var(--default-color) !important;
 }
 .primary-bg {
   background-color: var(--primary-color);
@@ -31,6 +31,9 @@ button {
 }
 .ternary-bg {
   background-color: var(--ternary-color);
+}
+.default-bg {
+  background-color: var(--default-color) !important;
 }
 
 /* custom hr */

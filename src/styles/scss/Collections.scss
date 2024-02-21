@@ -146,7 +146,7 @@
         position: relative;
         bottom: 0px;
         transition: 0.5s;
-      
+
         .add-to-cart-btn {
           height: 40px;
           width: 100%;
@@ -157,12 +157,12 @@
           text-transform: uppercase;
           cursor: pointer;
           font-size: 12px;
-      
+
           &.disabled {
             opacity: 0.7;
             cursor: default;
           }
-      
+
           &:not(.disabled):hover {
             background-color: transparent;
             color: $primary-color;
@@ -170,7 +170,6 @@
           }
         }
       }
-      
     }
     .product:hover {
       box-shadow: 0 0 10px 1px #8888881c !important;
@@ -188,12 +187,13 @@
 
 /* dialog-modal-auth */
 .modal-content-auth {
-  background-color: #fff;
+  background: linear-gradient(to bottom, #ffcc00d8, #fe2d5add);
   border-radius: 5px;
-  width: 350px;
+  width: 450px;
+  box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.349);
   .auth-btn {
     height: 35px;
-    width: 60%;
+    width: 71%;
     background-color: $primary-color;
     color: #fff;
     border: 2px solid transparent;
@@ -202,12 +202,12 @@
     margin-bottom: 20px;
   }
   .content {
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding: 20px;
     width: 100%;
     letter-spacing: 1px;
     .auth-heading {
       text-transform: uppercase;
+      color: #545454;
     }
     .number-input {
       height: 30px;
@@ -218,11 +218,44 @@
       margin-top: 20px;
       input {
         height: 35px;
-        width: 60%;
+        width: 70%;
         outline: none;
         border: unset;
-        border-bottom: 1px solid black;
+        border-bottom: 1px solid $default-color;
+        background-color: transparent;
+        color: #ffffff;
+        letter-spacing: 1px;
       }
+      input::placeholder {
+        color: #fff; /* Placeholder color */
+      }
+    }
+    .request-otp-error {
+      color: #f00;
+      font-size: 12px;
+      margin-left: 60px;
+      position: relative;
+      top: 3px;
+    }
+    .request-register-error {
+      color: rgb(211, 4, 4);
+      font-size: 12px;
+      margin-left: 20px;
+      position: relative;
+      bottom: 20px;
+    }
+    .verify-ic {
+      font-size: 40px;
+      color: #2bb673;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    .otp-verified-quote {
+      font-size: 18px;
+      font-weight: 600;
+      color: #fff;
+      margin-top: 10px;
+      margin-bottom: 10px;
     }
     .external-link-sub-heading {
       font-size: 14px;
@@ -239,7 +272,7 @@
         background-color: rgba(128, 128, 128, 0.515);
       }
     }
-    .email-btn {
+    .mobile-no-btn {
       width: 100%;
       display: flex;
       align-items: center;
@@ -249,13 +282,35 @@
       button {
         height: 35px;
         width: 30%;
-        border: 1px solid #939393;
+        border: 1px solid #ffffff;
         font-size: 14px;
         font-weight: 1px;
         background-color: transparent;
         text-transform: uppercase;
         letter-spacing: 1px;
+        color: #fff;
       }
+    }
+    .otp-heading {
+      font-size: 16px;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-top: 10px;
+      margin-bottom: 30px;
+    }
+    .otp-input {
+      height: 40px;
+      width: 40px !important;
+      border: 1px solid #00000047;
+      outline: none;
+      box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.286);
+      font-weight: 600;
+    }
+    .resend-otp-button {
+      font-size: 12px;
+      color: #fff;
+      display: flex;
+      justify-content: flex-start;
     }
     .close-icon-container {
       height: 0;
