@@ -13,6 +13,7 @@ import "./styles/scss/Header.scss";
 import "./styles/scss/SiteSettings.scss";
 import "./styles/scss/Cart.scss";
 import "./styles/scss/WishList.scss";
+import "./styles/scss/Account.scss";
 import "./styles/scss/Footer.scss";
 import "react-toastify/dist/ReactToastify.css";
 import "aos/dist/aos.css";

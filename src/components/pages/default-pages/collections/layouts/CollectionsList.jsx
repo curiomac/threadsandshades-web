@@ -43,6 +43,7 @@ const CollectionsList = () => {
   };
   useEffect(() => {
     dispatch(getProducts());
+    console.log("Something triggered");
   }, [dispatch]);
   return (
     <div className="collection-list">

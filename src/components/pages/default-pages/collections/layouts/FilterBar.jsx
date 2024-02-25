@@ -3,14 +3,25 @@ import { IoFilter } from "react-icons/io5";
 import { FaMinus } from "react-icons/fa6";
 import { FaPlus } from "react-icons/fa6";
 import CustomCheckbox from "../../../../plugins/custom-checkbox/CustomCheckbox";
+import { useDispatch } from "react-redux";
+import { getProducts } from "../../../../../redux/actions/productsAction";
 
 const FilterBar = () => {
   const [filterGender, setFilterGender] = useState(true);
   const [filterSize, setFilterSize] = useState(true);
   const [filterColor, setFilterColor] = useState(true);
   const [filterPrice, setFilterPrice] = useState(true);
+  const [filterSizes, setFilterSizes] = useState([]);
   const [isChecked, setIsChecked] = useState(false);
-
+  const dispatch = useDispatch();
+  const handleSizeFilter = (e) => {
+    const filter_sizes = [...filterSizes, e];
+    setFilterSizes(filter_sizes);
+    const payload = {
+      available_sizes: filter_sizes,
+    };
+    dispatch(getProducts(payload));
+  };
   const toggleCheckbox = () => {
     setIsChecked(!isChecked);
   };
@@ -58,6 +69,7 @@ const FilterBar = () => {
                 <CustomCheckbox
                   isChecked={isChecked}
                   toggleCheckbox={toggleCheckbox}
+                  onClick={() => handleSizeFilter("S")}
                 >
                   {" "}
                   <div className="mt-1 mb-1 filter-value">S</div>
@@ -65,24 +77,28 @@ const FilterBar = () => {
                 <CustomCheckbox
                   isChecked={isChecked}
                   toggleCheckbox={toggleCheckbox}
+                  onClick={() => handleSizeFilter("M")}
                 >
                   <div className="mt-1 mb-1 filter-value">M</div>
                 </CustomCheckbox>
                 <CustomCheckbox
                   isChecked={isChecked}
                   toggleCheckbox={toggleCheckbox}
+                  onClick={() => handleSizeFilter("L")}
                 >
                   <div className="mt-1 mb-1 filter-value">L</div>
                 </CustomCheckbox>
                 <CustomCheckbox
                   isChecked={isChecked}
                   toggleCheckbox={toggleCheckbox}
+                  onClick={() => handleSizeFilter("XL")}
                 >
                   <div className="mt-1 mb-1 filter-value">XL</div>
                 </CustomCheckbox>
                 <CustomCheckbox
                   isChecked={isChecked}
                   toggleCheckbox={toggleCheckbox}
+                  onClick={() => handleSizeFilter("XXL")}
                 >
                   <div className="mt-1 mb-1 filter-value">XXL</div>
                 </CustomCheckbox>

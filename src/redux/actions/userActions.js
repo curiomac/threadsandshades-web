@@ -60,21 +60,11 @@ export const sendOtp = (payload) => async (dispatch) => {
 };
 export const login = (payload) => async (dispatch) => {
   try {
-    const user_token = localStorage.getItem("user-token");
     dispatch(loginRequest());
     const response = await axios.post(
       `${BASE_URL}/${endpoints.login.post}`,
-      { email: payload.email, password: payload.password },
-      {
-        headers: {
-          Authorization: `Bearer ${user_token}`,
-          "Content-Type": "application/json",
-        },
-        // withCredentials: true,
-      }
+      payload,
     );
-    localStorage.setItem("user-token", response?.data.token);
-    localStorage.setItem("user-id", response?.data.user._id);
     dispatch(loginSuccess(response?.data));
   } catch (error) {
     dispatch(loginFail(error?.response?.data?.message));
@@ -88,7 +78,7 @@ export const register = (payload) => async (dispatch) => {
         `${BASE_URL}/${endpoints.register.post}`,
         payload
       );
-    dispatch(registerSuccess(response.data));
+    dispatch(registerSuccess(response?.data));
   } catch (error) {
     dispatch(registerFail(error.response.data.message));
   }

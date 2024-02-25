@@ -368,9 +368,11 @@
 }
 
 @media screen and (max-width: 970px) {
-  .outlet {
-    min-width: calc(100% - 350px) !important;
-    max-width: calc(100% - 350px) !important;
+  .cart {
+    .outlet {
+      min-width: calc(100% - 350px) !important;
+      max-width: calc(100% - 350px) !important;
+    }
   }
   .checkout-box {
     min-width: 350px !important;

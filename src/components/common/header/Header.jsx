@@ -12,6 +12,8 @@ import {
   CART_PAGE,
   CART_ITEMS_PAGE,
   DELIVERY_ADDRESS_PAGE,
+  USER_ACCOUNT_PAGE,
+  USER_ACCOUNT_DETAILS_PAGE,
 } from "../../../helpers/route-paths/paths";
 import NavBar from "./layouts/NavBar";
 import TopBar from "./layouts/TopBar";
@@ -30,6 +32,8 @@ const Header = () => {
     CART_PAGE,
     CART_ITEMS_PAGE,
     DELIVERY_ADDRESS_PAGE,
+    USER_ACCOUNT_PAGE,
+    USER_ACCOUNT_DETAILS_PAGE
   ];
 
   const authPages = [LOGIN_PAGE, REGISTER_PAGE];

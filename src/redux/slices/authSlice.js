@@ -4,33 +4,35 @@ const authSlice = createSlice({
   name: "auth",
   initialState: {
     loading: true,
+    otp_loading: true,
     isAuthenticated: false,
   },
   reducers: {
     otpRequest(state, action) {
       return {
         ...state,
-        loading: true,
+        otp_loading: true,
       };
     },
     otpSuccess(state, action) {
       return {
-        loading: false,
+        otp_loading: false,
         isAuthenticated: false,
+        expires_on: action.payload.expires_on,
         code: action.payload.code
       };
     },
     otpFail(state, action) {
       return {
         ...state,
-        loading: false,
+        otp_loading: false,
         otp_error: action.payload,
       };
     },
     clearOtpError(state, action) {
         return {
           ...state,
-          loading: false,
+          otp_loading: false,
           otp_error: null,
         };
       },
@@ -52,14 +54,14 @@ const authSlice = createSlice({
         loading: false,
         isAuthenticated: true,
         user: action.payload.user,
-        success: action.payload.message,
+        code: action.payload.code,
       };
     },
     loginFail(state, action) {
       return {
         ...state,
         loading: false,
-        login_error: action.payload,
+        auth_error: action.payload,
       };
     },
     clearError(state, action) {
@@ -93,14 +95,14 @@ const authSlice = createSlice({
       return {
         ...state,
         loading: false,
-        register_error: action.payload,
+        auth_error: action.payload,
       };
     },
-    registerErrorClear(state, action) {
+    clearAuthErrorClear(state, action) {
       return {
         ...state,
         loading: false,
-        register_error: action.payload,
+        auth_error: action.payload,
       };
     },
     loadUserRequest(state, action) {
@@ -246,7 +248,7 @@ export const {
   registerRequest,
   registerSuccess,
   registerFail,
-  registerErrorClear,
+  clearAuthErrorClear,
   loadUserRequest,
   loadUserSuccess,
   loadUserFail,

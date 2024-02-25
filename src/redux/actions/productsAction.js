@@ -7,10 +7,8 @@ export const getProducts = (payload) => async (dispatch) => {
 
     try {
         dispatch(productsRequest())
-        console.log('<<<<<<<<<<<<<<<products')
         const response = await axios.get(`${BASE_URL}/${endpoints.products.get}`);
-        
-        console.log('<<<<<<<<<<<<<<<workinggg')
+        console.log("Workingggg", response);
         dispatch(productsSuccess(response?.data));
     } catch (error) {
         dispatch(productsFail(error?.response?.data?.message));

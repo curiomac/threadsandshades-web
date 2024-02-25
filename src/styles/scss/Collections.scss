@@ -312,6 +312,11 @@
       display: flex;
       justify-content: flex-start;
     }
+    .otp-expiry-time {
+      width: 112px;
+      font-size: 12px;
+      color: $default-color;
+    }
     .close-icon-container {
       height: 0;
       position: relative;

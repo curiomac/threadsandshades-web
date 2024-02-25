@@ -13,6 +13,7 @@ import {
   COLLECTIONS_PAGE,
   LOCKED_CLOTH_PAGE,
   CART_ITEMS_PAGE,
+  USER_ACCOUNT_DETAILS_PAGE,
 } from "../../../../helpers/route-paths/paths";
 import { useDispatch, useSelector } from "react-redux";
 import SideDrawer from "../../../plugins/side-drawer/SideDrawer";
@@ -119,7 +120,7 @@ const NavBar = () => {
                 <FaYoutube />
               </div>
             </Link> */}
-              <Link to={HOME_PAGE} className="links-decoration-unset">
+              <Link to={USER_ACCOUNT_DETAILS_PAGE} className="links-decoration-unset">
                 <div className="links icon">
                   <IoPersonOutline />
                 </div>

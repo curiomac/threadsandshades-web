@@ -12,6 +12,8 @@ import {
   LOGIN_PAGE,
   NOT_FOUND_404,
   REGISTER_PAGE,
+  USER_ACCOUNT_PAGE,
+  USER_ACCOUNT_DETAILS_PAGE,
 } from "../../../helpers/route-paths/paths";
 import Header from "../../common/header/Header";
 import Footer from "../../common/footer/Footer";
@@ -29,21 +31,25 @@ import CartItems from "../../pages/protected-pages/cart/layouts/CartItems";
 import DeliveryAddress from "../../pages/protected-pages/cart/layouts/DeliveryAddress";
 import Cart from "../../pages/protected-pages/cart/Cart";
 import { useSelector } from "react-redux";
+import Profile from "../../pages/protected-pages/profile/Profile";
+import ProfileInputs from "../../pages/protected-pages/profile/layouts/ProfileInputs";
 
 const Pages = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAuthenticatedVal, setIsAuthenticated] = useState(false);
   const { isAuthenticated } = useSelector((state) => state.authState);
   const closeModal = () => {
     setIsModalOpen(false);
   };
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setIsModalOpen(true);
-  //   }, 3000);
-  // }, []);
+  useEffect(() => {
+    if (isAuthenticated)
+      setTimeout(() => {
+        setIsAuthenticated(true);
+      }, 3000);
+  }, [isAuthenticated]);
   return (
     <Router>
-      {isAuthenticated ? "" : <SigninHeader />}
+      {isAuthenticatedVal ? "" : <SigninHeader />}
       <Header />
       <Routes>
         {/* Default Pages */}
@@ -57,6 +63,9 @@ const Pages = () => {
         <Route path={CART_PAGE} element={<Cart />}>
           <Route path={CART_ITEMS_PAGE} element={<CartItems />} />
           <Route path={DELIVERY_ADDRESS_PAGE} element={<DeliveryAddress />} />
+        </Route>
+        <Route path={USER_ACCOUNT_PAGE} element={<Profile />}>
+          <Route path={USER_ACCOUNT_DETAILS_PAGE} element={<ProfileInputs />} />
         </Route>
 
         {/* Auth Pages */}

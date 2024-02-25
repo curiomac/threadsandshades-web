@@ -11,6 +11,8 @@ export const LOCKED_CLOTH_PAGE = `/locked`;
 export const CART_PAGE = `/cart`;
 export const CART_ITEMS_PAGE = `${CART_PAGE}`;
 export const DELIVERY_ADDRESS_PAGE = `${CART_PAGE}/delivery-address`;
+export const USER_ACCOUNT_PAGE = `/user-profile`
+export const USER_ACCOUNT_DETAILS_PAGE = `/user-profile/details`
 
 /* Auth Pages */
 

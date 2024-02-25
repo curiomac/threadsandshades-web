@@ -7,6 +7,8 @@ import {
   DELIVERY_ADDRESS_PAGE,
   LOGIN_PAGE,
   REGISTER_PAGE,
+  USER_ACCOUNT_DETAILS_PAGE,
+  USER_ACCOUNT_PAGE,
 } from "../../../../helpers/route-paths/paths";
 import DialogModalAuth from "../../../plugins/dialog-modal-auth/DialogModalAuth";
 import { getQueryParam } from "../../../../helpers/search-query-params/getQueryParams";
@@ -16,6 +18,7 @@ const SigninHeader = () => {
   const location = useLocation();
   const authPages = [LOGIN_PAGE, REGISTER_PAGE];
   const defaultPages = [CART_PAGE, CART_ITEMS_PAGE, DELIVERY_ADDRESS_PAGE];
+  const protectedPages = [USER_ACCOUNT_PAGE, USER_ACCOUNT_DETAILS_PAGE];
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [auth, setAuth] = useState("");
   const closeModal = () => {
@@ -25,6 +28,9 @@ const SigninHeader = () => {
     if (authPages.find((page) => page === location.pathname)) {
       return false;
     } else if (defaultPages.find((page) => page === location.pathname)) {
+      return false;
+    } else if (wishList === true || wishList === "true") {
+    } else if (protectedPages.find((page) => page === location.pathname)) {
       return false;
     } else if (wishList === true || wishList === "true") {
       return false;

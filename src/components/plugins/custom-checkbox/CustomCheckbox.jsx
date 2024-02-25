@@ -1,12 +1,15 @@
 import React from "react";
 
-const CustomCheckbox = ({ isChecked, toggleCheckbox, children }) => {
+const CustomCheckbox = ({ isChecked, toggleCheckbox, children, onClick }) => {
   return (
     <label className="custom-checkbox">
-      <input type="checkbox" 
-    //   checked={isChecked} 
-    //   onChange={toggleCheckbox}
-       />
+      <input
+        type="checkbox"
+        //   checked={isChecked}
+        //   onChange={toggleCheckbox}
+        value={children}
+        onClick={onClick}
+      />
       <span className="checkmark"></span>
       {children}
     </label>

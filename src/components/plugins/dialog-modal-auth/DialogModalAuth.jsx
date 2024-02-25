@@ -3,24 +3,39 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import { IoClose } from "react-icons/io5";
 import { IoMailOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
-import { register, sendOtp } from "../../../redux/actions/userActions";
+import {
+  clearAuthError,
+  login,
+  register,
+  sendOtp,
+} from "../../../redux/actions/userActions";
 import OtpInput from "react-otp-input";
 import { MdEmail } from "react-icons/md";
 import { clearCode, clearOtpError } from "../../../redux/slices/authSlice";
 import { FaCircleCheck } from "react-icons/fa6";
-
+import moment from "moment";
 const DialogModalAuth = ({ isOpen, onClose, isAuth }) => {
-  const { code, otp_error, register_error } = useSelector(
+  const { code, otp_error, auth_error, expires_on, otp_loading } = useSelector(
     (state) => state.authState
   );
   const [email, setEmail] = useState("");
   const [otp, setOTP] = useState("");
   const [proceedOTP, setProceedOTP] = useState(false);
   const [verifySuccess, setVerifySuccess] = useState(false);
+  const [remainingTime, setRemainingTime] = useState(0);
   const dispatch = useDispatch();
   const handleSendOTP = () => {
     const payload = {
       email,
+      isAuth,
+    };
+    dispatch(sendOtp(payload));
+  };
+  const handleReSendOTP = () => {
+    const payload = {
+      email,
+      isAuth,
+      reSendOTP: true,
     };
     dispatch(sendOtp(payload));
   };
@@ -29,26 +44,47 @@ const DialogModalAuth = ({ isOpen, onClose, isAuth }) => {
       setProceedOTP(true);
       setVerifySuccess(false);
       dispatch(clearOtpError());
+      setRemainingTime(0);
     } else if (code === "proceed-verify-success") {
       setProceedOTP(false);
       setVerifySuccess(true);
       setEmail("");
+      setRemainingTime(0);
     } else {
       setOTP("");
       setProceedOTP(false);
       setVerifySuccess(false);
     }
   }, [code]);
-  console.log("code", code);
+  const calculateRemainingTime = () => {
+    const currentTime = moment();
+    const expirationTime = moment(expires_on);
+    const diff = expirationTime.diff(currentTime);
+    const remainingSeconds = Math.max(0, Math.floor(diff / 1000));
+    return remainingSeconds;
+  };
+
+  const formatTime = (seconds) => {
+    const duration = moment.duration(seconds, "seconds");
+    const minutes = Math.floor(duration.asMinutes());
+    const remainingSeconds = Math.floor(duration.asSeconds()) % 60;
+    return `${minutes < 10 ? "0" : ""}${minutes}:${
+      remainingSeconds < 10 ? "0" : ""
+    }${remainingSeconds}`;
+  };
   useEffect(() => {
-    if (otp.length === 6) {
+    setRemainingTime(calculateRemainingTime());
+  }, []);
+  useEffect(() => {
+    if (otp.length === 6 && remainingTime > 0) {
       const payload = {
         email,
         otp,
       };
-      dispatch(register(payload));
-    } else {
-      console.log("length: ", otp.length, "::");
+      isAuth === "Login"
+        ? dispatch(login(payload))
+        : dispatch(register(payload));
+      dispatch(clearAuthError());
     }
   }, [otp]);
   useEffect(() => {
@@ -58,9 +94,19 @@ const DialogModalAuth = ({ isOpen, onClose, isAuth }) => {
         setProceedOTP(false);
         setVerifySuccess(false);
         onClose();
-      }, 2500);
+      }, 3000);
     }
   }, [code]);
+
+  useEffect(() => {
+    if (!otp_loading) {
+      const interval = setInterval(() => {
+        setRemainingTime(calculateRemainingTime());
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [remainingTime, otp_loading]);
   if (!isOpen) {
     return null;
   }
@@ -72,7 +118,13 @@ const DialogModalAuth = ({ isOpen, onClose, isAuth }) => {
             {proceedOTP ? (
               <div className="content">
                 <div className="close-icon-container">
-                  <div className="close-icon" onClick={onClose}>
+                  <div
+                    className="close-icon"
+                    onClick={() => {
+                      onClose();
+                      dispatch(clearCode());
+                    }}
+                  >
                     <IoClose />
                   </div>
                 </div>
@@ -87,8 +139,8 @@ const DialogModalAuth = ({ isOpen, onClose, isAuth }) => {
                   </div>
                 </div>
                 <div className="h-0">
-                  {register_error && (
-                    <div className="request-register-error">*{register_error}</div>
+                  {auth_error && (
+                    <div className="request-register-error">*{auth_error}</div>
                   )}
                 </div>
                 <div className="d-flex align-items-center justify-content-center gap-2 mb-2">
@@ -106,7 +158,20 @@ const DialogModalAuth = ({ isOpen, onClose, isAuth }) => {
                     )}
                   />
                 </div>
-                <div className="resend-otp-button">Resend OTP?</div>
+                <div className="d-flex align-items-center justify-content-space-between">
+                  <div className="resend-otp-button">
+                    <div
+                      className="cursor-pointer"
+                      onClick={() => handleReSendOTP()}
+                    >
+                      Resend OTP?
+                    </div>
+                  </div>
+                  <div className="otp-expiry-time">
+                    Expires In:{" "}
+                    {remainingTime > 0 ? formatTime(remainingTime) : "00:00"}
+                  </div>
+                </div>
               </div>
             ) : verifySuccess ? (
               <div className="content">
@@ -147,7 +212,7 @@ const DialogModalAuth = ({ isOpen, onClose, isAuth }) => {
                 </div>
                 <div className="d-flex align-items-center justify-content-center">
                   <button
-                    className="auth-btn d-flex align-items-center justify-content-center gap-2"
+                    className="auth-btn d-flex align-items-center justify-content-center gap-2 cursor-pointer"
                     onClick={() => handleSendOTP()}
                   >
                     <div>Request OTP</div>
