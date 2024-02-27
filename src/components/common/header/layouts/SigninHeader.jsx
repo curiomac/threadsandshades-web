@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { RxSlash } from "react-icons/rx";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   CART_ITEMS_PAGE,
   CART_PAGE,
@@ -14,14 +14,18 @@ import DialogModalAuth from "../../../plugins/dialog-modal-auth/DialogModalAuth"
 import { getQueryParam } from "../../../../helpers/search-query-params/getQueryParams";
 
 const SigninHeader = () => {
-  const wishList = getQueryParam('wishlist');
+  const wishList = getQueryParam("wishlist");
+  const isAuth = getQueryParam("isAuth");
   const location = useLocation();
+  const navigate = useNavigate();
   const authPages = [LOGIN_PAGE, REGISTER_PAGE];
   const defaultPages = [CART_PAGE, CART_ITEMS_PAGE, DELIVERY_ADDRESS_PAGE];
   const protectedPages = [USER_ACCOUNT_PAGE, USER_ACCOUNT_DETAILS_PAGE];
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [auth, setAuth] = useState("");
   const closeModal = () => {
+    console.log("Woking: ss");
+    navigate(`${location.pathname}?isAuth=null`);
     setIsModalOpen(false);
   };
   const isNotRestrictedPage = () => {
@@ -38,6 +42,13 @@ const SigninHeader = () => {
       return true;
     }
   };
+  useEffect(() => {
+    console.log("isAuth: ", isAuth);
+    if (isAuth === 'false') {
+      setIsModalOpen(true);
+      setAuth("Login");
+    }
+  }, [isAuth]);
   if (isNotRestrictedPage()) {
     return (
       <div className="signin-header">

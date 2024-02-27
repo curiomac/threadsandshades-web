@@ -399,7 +399,7 @@
         position: relative;
         bottom: 0px;
         transition: 0.5s;
-      
+
         .add-to-cart-btn {
           height: 40px;
           width: 100%;
@@ -410,12 +410,12 @@
           text-transform: uppercase;
           cursor: pointer;
           font-size: 12px;
-      
+
           &.disabled {
             opacity: 0.7;
             cursor: default;
           }
-      
+
           &:not(.disabled):hover {
             background-color: transparent;
             color: $primary-color;
@@ -423,7 +423,6 @@
           }
         }
       }
-      
     }
     .product:hover {
       box-shadow: 0 0 10px 1px #8888881c !important;
@@ -472,6 +471,20 @@
     height: 40vh !important;
     .contents-container {
       height: 40vh !important;
+      .contents {
+        .heading {
+          font-size: 12px;
+        }
+        .shop-for {
+          font-size: 28px;
+        }
+        .discover-btn {
+          .btn {
+            font-size: 12px !important;
+            width: 150px !important;
+          }
+        }
+      }
     }
     .contents-container:hover {
       background-color: #00000039;
@@ -483,6 +496,20 @@
 
     .contents-container {
       height: 40vh !important;
+      .contents {
+        .heading {
+          font-size: 12px;
+        }
+        .shop-for {
+          font-size: 28px;
+        }
+        .discover-btn {
+          .btn {
+            font-size: 12px !important;
+            width: 150px !important;
+          }
+        }
+      }
     }
   }
   .add-to-cart-container {

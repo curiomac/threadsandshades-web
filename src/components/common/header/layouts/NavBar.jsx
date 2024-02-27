@@ -5,7 +5,7 @@ import { FaRegHeart } from "react-icons/fa";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { IoClose, IoPersonOutline } from "react-icons/io5";
 import { RiSearch2Line } from "react-icons/ri";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import {
   HOME_PAGE,
   ABOUT_PAGE,
@@ -26,9 +26,10 @@ const NavBar = () => {
   const { theme } = useSelector((state) => state.themeState);
   const { pathname } = useLocation();
   const { cartCount } = useSelector((state) => state.cartState);
+  const { isAuthenticated } = useSelector((state) => state.authState);
   const { wishListCount } = useSelector((state) => state.wishListState);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const closeModal = () => {
@@ -120,15 +121,25 @@ const NavBar = () => {
                 <FaYoutube />
               </div>
             </Link> */}
-              <Link to={USER_ACCOUNT_DETAILS_PAGE} className="links-decoration-unset">
-                <div className="links icon">
-                  <IoPersonOutline />
-                </div>
-              </Link>
+              {isAuthenticated && (
+                <Link
+                  to={USER_ACCOUNT_DETAILS_PAGE}
+                  className="links-decoration-unset"
+                >
+                  <div className="links icon">
+                    <IoPersonOutline />
+                  </div>
+                </Link>
+              )}
               <div
                 onClick={() => {
-                  setIsModalOpen(true);
-                  navigate(`${pathname}?wishlist=true`)
+                  if (isAuthenticated) {
+                    setIsModalOpen(true);
+                    navigate(`${pathname}?wishlist=true`);
+                  } else {
+                    setIsModalOpen(false);
+                    navigate(`${pathname}?isAuth=false`);
+                  }
                 }}
                 className="links-decoration-unset"
               >
@@ -141,7 +152,12 @@ const NavBar = () => {
                   </div>
                 </div>
               </div>
-              <Link className="links-decoration-unset" to={CART_ITEMS_PAGE}>
+              <Link
+                className="links-decoration-unset"
+                to={
+                  isAuthenticated ? CART_ITEMS_PAGE : `${pathname}?isAuth=false`
+                }
+              >
                 <div className="links icon">
                   <HiOutlineShoppingBag />
                   <div className="shopping-cart-count-container">

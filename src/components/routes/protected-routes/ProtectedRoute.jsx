@@ -1,18 +1,20 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { Navigate } from 'react-router-dom';
-import { LOGIN_PAGE } from '../../../helpers/route-paths/paths';
+import React from "react";
+import { useSelector } from "react-redux";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { HOME_PAGE, LOGIN_PAGE } from "../../../helpers/route-paths/paths";
 
 const ProtectedRoute = ({ role, children }) => {
-
-  const { isAuthenticated } = useSelector(state => state.authState);
+  const { isAuthenticated } = useSelector((state) => state.authState);
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   if (!isAuthenticated) {
-    return <Navigate to={LOGIN_PAGE} />
+    console.log("isAuthenticated: ", isAuthenticated);
+    return <Navigate to={`${HOME_PAGE}?isAuth=false`} />;
   }
   if (isAuthenticated) {
     return children;
   }
-}
+};
 
 export default ProtectedRoute;

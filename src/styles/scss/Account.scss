@@ -39,10 +39,67 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    img {
-      height: 300px;
-      width: 300px;
+    .profile-img-src {
+      height: 150px;
+      width: 150px;
       object-fit: cover;
+      &.dummy {
+        height: 300px;
+        width: 300px;
+      }
+    }
+    .edit-img-container {
+      height: 0;
+      width: 0;
+      .edit-img-content {
+        height: 50px;
+        width: 210px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        top: 80px;
+        color: #fff;
+        background-color: rgba(0, 0, 0, 0.423);
+        overflow: hidden;
+        font-size: 12px;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: top 0.3s ease;
+        &.img {
+          right: 174px;
+        }
+        &.dummy {
+          right: 250px;
+        }
+      }
+    }
+  }
+  .profile-img:hover {
+    .edit-img-container {
+      height: 0;
+      width: 0;
+      .edit-img-content {
+        height: 50px;
+        width: 210px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        top: 30px;
+        color: #fff;
+        background-color: rgba(0, 0, 0, 0.423);
+        overflow: hidden;
+        font-size: 12px;
+        text-transform: uppercase;
+        cursor: pointer;
+        &.img {
+          right: 174px;
+        }
+        &.dummy {
+          right: 250px;
+        }
+      }
     }
   }
   .user-email {
@@ -206,16 +263,16 @@
       display: block;
       justify-content: center;
       .outlet {
-        min-height: calc(100vh - 370px);
-        max-height: calc(100vh - 370px);
+        min-height: calc(100vh - 340px);
+        max-height: calc(100vh - 340px);
         min-width: -webkit-fill-available;
         max-width: -webkit-fill-available;
         overflow: auto;
       }
       .user-profile-sidebar {
         display: flex;
-        min-height: calc(100vh - 660px);
-        max-height: calc(100vh - 660px);
+        min-height: 100px;
+        max-height: 30vh;
         min-width: -webkit-fill-available;
         max-width: -webkit-fill-available;
         padding-bottom: 0.8rem;

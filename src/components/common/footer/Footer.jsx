@@ -101,7 +101,7 @@ const Footer = () => {
                 </Link>
                 <Link
                   className="link ic-instagram"
-                  to="https://www.instagram.com"
+                  to="https://www.instagram.com/threadsandshades_"
                   target="_blank"
                 >
                   <GrInstagram />

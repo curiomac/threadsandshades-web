@@ -17,9 +17,9 @@ const Logo = ({ height }) => {
     return (
         <div>
             {isTheme() === 'dark' ? (
-                <img src={logo} height={40} width={150}/>
+                <img src={logo} height={60} width={155} className='logo-img'/>
             ) : isTheme() === 'light' && (
-                <img src={logo} height={53} width={140} className='logo-img'/>
+                <img src={logo} height={60} width={155} className='logo-img'/>
             )}
 
         </div>

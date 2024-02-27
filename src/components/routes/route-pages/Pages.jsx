@@ -33,6 +33,7 @@ import Cart from "../../pages/protected-pages/cart/Cart";
 import { useSelector } from "react-redux";
 import Profile from "../../pages/protected-pages/profile/Profile";
 import ProfileInputs from "../../pages/protected-pages/profile/layouts/ProfileInputs";
+import ProtectedRoute from "../protected-routes/ProtectedRoute";
 
 const Pages = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,11 +42,15 @@ const Pages = () => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
+  console.log("isAuthenticated: ", isAuthenticated);
   useEffect(() => {
-    if (isAuthenticated)
+    if (isAuthenticated) {
       setTimeout(() => {
         setIsAuthenticated(true);
       }, 3000);
+    } else {
+      setIsAuthenticated(false);
+    }
   }, [isAuthenticated]);
   return (
     <Router>
@@ -60,12 +65,40 @@ const Pages = () => {
         <Route path={LOCKED_CLOTH_PAGE} element={<LockedCloth />} />
 
         {/* Protected Pages */}
-        <Route path={CART_PAGE} element={<Cart />}>
-          <Route path={CART_ITEMS_PAGE} element={<CartItems />} />
+        <Route
+          path={CART_PAGE}
+          element={
+            <ProtectedRoute>
+              <Cart />
+            </ProtectedRoute>
+          }
+        >
+          <Route
+            path={CART_ITEMS_PAGE}
+            element={
+              <ProtectedRoute>
+                <CartItems />
+              </ProtectedRoute>
+            }
+          />
           <Route path={DELIVERY_ADDRESS_PAGE} element={<DeliveryAddress />} />
         </Route>
-        <Route path={USER_ACCOUNT_PAGE} element={<Profile />}>
-          <Route path={USER_ACCOUNT_DETAILS_PAGE} element={<ProfileInputs />} />
+        <Route
+          path={USER_ACCOUNT_PAGE}
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        >
+          <Route
+            path={USER_ACCOUNT_DETAILS_PAGE}
+            element={
+              <ProtectedRoute>
+                <ProfileInputs />
+              </ProtectedRoute>
+            }
+          />
         </Route>
 
         {/* Auth Pages */}

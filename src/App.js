@@ -15,11 +15,13 @@ import "./styles/scss/Cart.scss";
 import "./styles/scss/WishList.scss";
 import "./styles/scss/Account.scss";
 import "./styles/scss/Footer.scss";
+import "./styles/scss/OpeningLoadingPage.scss";
 import "react-toastify/dist/ReactToastify.css";
 import "aos/dist/aos.css";
 import { useDispatch, useSelector } from "react-redux";
 import { getTheme } from "./redux/actions/themeAction";
 import logo from "./assets/imgs/store-room/logo-loader.png";
+import OpeningLoadingPage from "./components/common/opening-loading-page/OpeningLoadingPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -77,17 +79,7 @@ function App() {
   return (
     <div>
       {themeLoading ? (
-        <div className="logo-loading-container">
-          <div>
-            <div className="logo-img d-flex align-items-center justify-content-center">
-              <img src={logo} height={50} width={50} />
-            </div>
-            <div style={{ width: "110px" }}>
-              Please wait.{loadingPointA && "."}
-              {loadingPointB && "."}
-            </div>
-          </div>
-        </div>
+        <OpeningLoadingPage />
       ) : (
         <Pages />
       )}

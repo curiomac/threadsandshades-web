@@ -125,6 +125,48 @@ const authSlice = createSlice({
         loading: false,
       };
     },
+    userProfileRequest(state, action) {
+      return {
+        ...state,
+        isAuthenticated: true,
+        loading: true,
+      };
+    },
+    userProfileSuccess(state, action) {
+      return {
+        loading: false,
+        isAuthenticated: true,
+        user: action.payload.user,
+      };
+    },
+    userProfileFail(state, action) {
+      return {
+        ...state,
+        isAuthenticated: true,
+        loading: false,
+      };
+    },
+    userProfileImageRequest(state, action) {
+      return {
+        ...state,
+        isAuthenticated: true,
+        loading: true,
+      };
+    },
+    userProfileImageSuccess(state, action) {
+      return {
+        loading: false,
+        isAuthenticated: true,
+        user_image: action.payload.avatar,
+      };
+    },
+    userProfileImageFail(state, action) {
+      return {
+        ...state,
+        isAuthenticated: true,
+        loading: false,
+      };
+    },
     logoutSuccess(state, action) {
       return {
         loading: false,
@@ -154,6 +196,29 @@ const authSlice = createSlice({
       };
     },
     updateProfileFail(state, action) {
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+    },
+    updateProfileImageRequest(state, action) {
+      return {
+        ...state,
+        loading: true,
+        isUpdated: false,
+      };
+    },
+    updateProfileImageSuccess(state, action) {
+      return {
+        ...state,
+        loading: false,
+        isAuthenticated: true,
+        user_image: action.payload.avatar,
+        isUpdated: true,
+      };
+    },
+    updateProfileImageFail(state, action) {
       return {
         ...state,
         loading: false,
@@ -252,11 +317,20 @@ export const {
   loadUserRequest,
   loadUserSuccess,
   loadUserFail,
+  userProfileRequest,
+  userProfileSuccess,
+  userProfileFail,
+  userProfileImageRequest,
+  userProfileImageSuccess,
+  userProfileImageFail,
   logoutSuccess,
   logoutFail,
   updateProfileFail,
   updateProfileRequest,
   updateProfileSuccess,
+  updateProfileImageFail,
+  updateProfileImageRequest,
+  updateProfileImageSuccess,
   clearUpdateProfile,
   updatePasswordFail,
   updatePasswordRequest,
