@@ -5,9 +5,8 @@ const CustomCheckbox = ({ isChecked, toggleCheckbox, children, onClick }) => {
     <label className="custom-checkbox">
       <input
         type="checkbox"
-        //   checked={isChecked}
-        //   onChange={toggleCheckbox}
-        value={children}
+        checked={isChecked}
+        onChange={toggleCheckbox}
         onClick={onClick}
       />
       <span className="checkmark"></span>

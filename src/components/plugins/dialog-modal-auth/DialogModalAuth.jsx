@@ -91,6 +91,8 @@ const DialogModalAuth = ({ isOpen, onClose, isAuth }) => {
     if (code === "proceed-verify-success") {
       setTimeout(() => {
         dispatch(clearCode());
+        dispatch(clearOtpError());
+        dispatch(clearAuthError());
         setProceedOTP(false);
         setVerifySuccess(false);
         onClose();
@@ -111,7 +113,16 @@ const DialogModalAuth = ({ isOpen, onClose, isAuth }) => {
     return null;
   }
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div
+      className="modal-overlay"
+      onClick={() => {
+        onClose();
+        dispatch(clearCode());
+        dispatch(clearOtpError());
+        dispatch(clearAuthError());
+        dispatch(clearCode());
+      }}
+    >
       <div className="modal-content-auth" onClick={(e) => e.stopPropagation()}>
         <div>
           <div className="d-flex">
@@ -122,6 +133,9 @@ const DialogModalAuth = ({ isOpen, onClose, isAuth }) => {
                     className="close-icon"
                     onClick={() => {
                       onClose();
+                      dispatch(clearCode());
+                      dispatch(clearOtpError());
+                      dispatch(clearAuthError());
                       dispatch(clearCode());
                     }}
                   >
@@ -189,7 +203,15 @@ const DialogModalAuth = ({ isOpen, onClose, isAuth }) => {
             ) : (
               <div className="content">
                 <div className="close-icon-container">
-                  <div className="close-icon" onClick={onClose}>
+                  <div
+                    className="close-icon"
+                    onClick={() => {
+                      onClose();
+                      dispatch(clearCode());
+                      dispatch(clearOtpError());
+                      dispatch(clearAuthError());
+                    }}
+                  >
                     <IoClose />
                   </div>
                 </div>

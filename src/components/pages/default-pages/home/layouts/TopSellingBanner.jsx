@@ -22,7 +22,7 @@ const TopSellingBanner = () => {
   const [selectedProductId, setSelectedProductId] = useState("");
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getProducts());
+    dispatch(getProducts([]));
   }, [dispatch]);
   const handleAddToCart = (product) => {
     const payload = {

@@ -21,7 +21,9 @@ const productsSlice = createSlice({
                 products: action.payload.products,
                 totalCounts: action.payload.totalCounts,
                 totalPages: action.payload.totalPages,
-                currentPage: action.payload.currentPage
+                currentPage: action.payload.currentPage,
+                filters_applied: action.payload.filters_applied,
+                filters_available: action.payload.filters_available,
             }
         },
         productsFail(state, action){

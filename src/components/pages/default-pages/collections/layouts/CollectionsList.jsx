@@ -5,7 +5,6 @@ import { TiTick } from "react-icons/ti";
 import { LOCKED_CLOTH_PAGE } from "../../../../../helpers/route-paths/paths";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getProducts } from "../../../../../redux/actions/productsAction";
 import { addCart } from "../../../../../redux/actions/cartAction";
 import SpinnerLoader from "../../../../plugins/loaders/spinner-loader/SpinnerLoader";
 import { moveWishList } from "../../../../../redux/actions/wishListAction";
@@ -41,10 +40,6 @@ const CollectionsList = () => {
     };
     dispatch(moveWishList(payload));
   };
-  useEffect(() => {
-    dispatch(getProducts());
-    console.log("Something triggered");
-  }, [dispatch]);
   return (
     <div className="collection-list">
       <div>
