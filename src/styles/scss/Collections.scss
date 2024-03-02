@@ -53,6 +53,9 @@
     background-color: $ternary-color;
     border-radius: 10px;
   }
+  .filter-action-btns { 
+  display: none;
+  }
 }
 
 /* collection-list */
@@ -458,8 +461,8 @@
           margin-top: 50px;
           display: unset !important;
           .filter-scroll {
-            max-height: calc(100vh - 230px);
-            min-height: calc(100vh - 230px);
+            max-height: calc(100vh - 300px);
+            min-height: calc(100vh - 300px);
             overflow: auto;
             padding-right: 10px;
           }
