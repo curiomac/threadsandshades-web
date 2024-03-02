@@ -34,7 +34,7 @@ const FilterBarRes = () => {
             <div className="filter-close-ic">
               <IoClose onClick={() => setIsOpen(false)} />
             </div>
-            <FilterBar />
+            <FilterBar toggleDrawer={toggleDrawer}/>
           </div>
           </div>
         </div>

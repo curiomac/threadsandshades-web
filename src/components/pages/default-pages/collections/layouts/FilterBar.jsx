@@ -6,8 +6,9 @@ import CustomCheckbox from "../../../../plugins/custom-checkbox/CustomCheckbox";
 import { useDispatch, useSelector } from "react-redux";
 import { getProducts } from "../../../../../redux/actions/productsAction";
 import { getQueryParam } from "../../../../../helpers/search-query-params/getQueryParams";
+import { getScreenResolution } from "../../../../../helpers/screen-resolution/getScreenResolution";
 
-const FilterBar = () => {
+const FilterBar = ({ toggleDrawer }) => {
   const type = getQueryParam("type");
   const [filterGender, setFilterGender] = useState(true);
   const [filterSize, setFilterSize] = useState(true);
@@ -31,7 +32,11 @@ const FilterBar = () => {
       filter_sizes = [...filterSizes, e];
       setFilterSizes(filter_sizes);
     }
-    dispatch(getProducts(filter_sizes, filterColors));
+    getScreenResolution().then((res) => {
+      if (res.width >= 897) {
+        dispatch(getProducts(filter_sizes, filterColors));
+      }
+    });
   };
   const handleColorFilter = (e) => {
     let filter_colors = [];
@@ -42,7 +47,19 @@ const FilterBar = () => {
       filter_colors = [...filterColors, e];
       setFilterColors(filter_colors);
     }
-    dispatch(getProducts(filterSizes, filter_colors));
+    getScreenResolution().then((res) => {
+      if (res.width >= 897) {
+        dispatch(getProducts(filterSizes, filter_colors));
+      }
+    });
+  };
+  const handleApplyFilter = () => {
+    toggleDrawer(false);
+    dispatch(getProducts(filterSizes, filterColors));
+  };
+  const handleClearFilter = () => {
+    setFilterSizes([]);
+    setFilterColors([]);
   };
   const toggleCheckbox = () => {
     setIsChecked(!isChecked);
@@ -59,7 +76,9 @@ const FilterBar = () => {
       console.log("formated_filter_color_array: ", formated_filter_color_array);
       setFilterColors(formated_filter_color_array);
 
-      dispatch(getProducts(formated_filter_size_array, formated_filter_color_array));
+      dispatch(
+        getProducts(formated_filter_size_array, formated_filter_color_array)
+      );
     } else {
       dispatch(getProducts([], []));
     }
@@ -273,6 +292,14 @@ const FilterBar = () => {
                 </CustomCheckbox>
               </div>
             )}
+          </div>
+        </div>
+        <div className="filter-action-btns">
+          <div className="clear-btn" onClick={() => handleClearFilter()}>
+            Clear
+          </div>
+          <div className="apply-btn" onClick={() => handleApplyFilter()}>
+            Apply
           </div>
         </div>
       </div>
