@@ -114,7 +114,26 @@ $items-card-width: 300px;
         gap: 20px;
         margin: 0;
         padding: 0;
-
+        .search-bar-container {
+          .search-bar {
+            opacity: 0;
+            transition: opacity 1s ease;
+            &.search-bar-visible {
+              opacity: 1;
+              transition: opacity 1s ease-in;
+            }
+            input {
+              height: 40px;
+              width: 280px;
+              border: unset !important;
+              border-bottom: 1px solid $primary-color !important;
+              outline: none;
+              font-size: 14px;
+              letter-spacing: 1px;
+              background-color: transparent;
+            }
+          }
+        }
         .links-decoration-unset {
           text-decoration: unset;
 
@@ -146,6 +165,53 @@ $items-card-width: 300px;
           }
         }
       }
+    }
+  }
+}
+.search-bar-box {
+  height: 0px;
+  z-index: 1000;
+  background-color: rgba(255, 255, 255, 0.939) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: height 1s ease;
+  &.search-triggered-box {
+    height: 60px;
+  }
+  .search-input-container {
+    width: -webkit-fill-available;
+    position: relative;
+    right: 10000px;
+    transition: right 1s ease;
+    .search-icon {
+      height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      position: relative;
+      top: 20px;
+      right: 25px;
+      font-size: 25px;
+      color: #626262;
+    }
+    input {
+      height: 40px;
+      width: -webkit-fill-available;
+      margin-left: 0.8rem;
+      margin-right: 0.8rem;
+      padding-left: 0.8rem;
+      padding-right: 0.8rem;
+      border: 1px solid rgba(128, 128, 128, 0.317);
+      border-radius: 50px;
+      background-color: #b8b8b817;
+      outline: none;
+    }
+    input:focus {
+      border: 1px solid #fe2d5a4f;
+    }
+    &.search-triggered {
+      right: 0;
     }
   }
 }
@@ -213,9 +279,6 @@ $items-card-width: 300px;
     }
   }
 }
-
-
-
 
 /* Top Bar */
 

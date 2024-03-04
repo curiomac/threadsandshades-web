@@ -21,17 +21,23 @@ import { getCart } from "../../../../redux/actions/cartAction";
 import CartDrawer from "./CartDrawer";
 import { getWishList } from "../../../../redux/actions/wishListAction";
 import DialogModalWishList from "../../../plugins/dialog-modal-wishlist/DialogModalWishList";
+import { getQueryParam } from "../../../../helpers/search-query-params/getQueryParams";
+import { getProducts } from "../../../../redux/actions/productsAction";
 
 const NavBar = () => {
+  const input = getQueryParam("input");
   const { theme } = useSelector((state) => state.themeState);
   const { pathname } = useLocation();
   const { cartCount } = useSelector((state) => state.cartState);
   const { isAuthenticated } = useSelector((state) => state.authState);
   const { wishListCount } = useSelector((state) => state.wishListState);
-  const [isCartOpen, setIsCartOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [searchTab, setSearchTab] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searching, setSearching] = useState(false);
+  const [inputText, setInputText] = useState("");
   const closeModal = () => {
     setIsModalOpen(false);
   };
@@ -52,6 +58,18 @@ const NavBar = () => {
     dispatch(getCart(cartPayload));
     dispatch(getWishList(wishListPayload));
   }, []);
+  useEffect(() => {
+    if (searching) {
+      setTimeout(() => {
+        setSearching(false);
+        navigate(
+          `${COLLECTIONS_PAGE}?type=men${
+            inputText ? `&input=${inputText}&searching=${false}` : ""
+          }`
+        );
+      }, 500);
+    }
+  }, [inputText]);
   return (
     <>
       <div
@@ -106,11 +124,38 @@ const NavBar = () => {
           </div>
           <div className="more-links">
             <div className="links-container">
-              <Link to={HOME_PAGE} className="links-decoration-unset">
-                <div className="links icon">
-                  <RiSearch2Line />
+              <div className={`search-bar-container res-992px-d-none`}>
+                <div
+                  className={`search-bar ${
+                    searchTab ? "search-bar-visible" : ""
+                  }`}
+                >
+                  <input
+                    placeholder="Search for products 🛒"
+                    onChange={(e) => {
+                      const search_input = e.target.value.split(" ").join("+");
+                      console.log("search_input: ", search_input);
+                      setSearching(true);
+                      setInputText(search_input);
+                      if (e.target.value === "") {
+                        dispatch(getProducts([], [], []));
+                      }
+                      navigate(
+                        `${COLLECTIONS_PAGE}?type=men${
+                          search_input
+                            ? `&input=${search_input}&searching=${true}`
+                            : ""
+                        }`
+                      );
+                    }}
+                  />
                 </div>
-              </Link>
+              </div>
+              <div className="links-decoration-unset">
+                <div className="links icon">
+                  <RiSearch2Line onClick={() => setSearchTab(!searchTab)} />
+                </div>
+              </div>
               {/* <Link to={HOME_PAGE} className="links-decoration-unset">
               <div className="links icon">
                 <FaDiscord />
@@ -180,6 +225,42 @@ const NavBar = () => {
                 <CartDrawer />
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+      <div className="res-992px-d-unset">
+        <div
+          className={`search-bar-box ${
+            searchTab ? "search-triggered-box" : ""
+          }`}
+        >
+          <div
+            className={`search-input-container ${
+              searchTab ? "search-triggered" : ""
+            }`}
+          >
+            <div className="search-icon">
+              <RiSearch2Line />
+            </div>
+            <input
+              placeholder="Search for products 🛒"
+              onChange={(e) => {
+                const search_input = e.target.value.split(" ").join("+");
+                console.log("search_input: ", search_input);
+                setSearching(true);
+                setInputText(search_input);
+                if (e.target.value === "") {
+                  dispatch(getProducts([], [], []));
+                }
+                navigate(
+                  `${COLLECTIONS_PAGE}?type=men${
+                    search_input
+                      ? `&input=${search_input}&searching=${true}`
+                      : ""
+                  }`
+                );
+              }}
+            />
           </div>
         </div>
       </div>

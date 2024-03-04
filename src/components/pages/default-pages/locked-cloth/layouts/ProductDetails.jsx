@@ -84,7 +84,7 @@ const ProductDetails = () => {
     dispatch(clearProduct());
   }, []);
   useEffect(() => {
-    dispatch(getProducts());
+    dispatch(getProducts([], [], []));
   }, [dispatch]);
   useEffect(() => {
     const payload = {

@@ -9,9 +9,13 @@ import { addCart } from "../../../../../redux/actions/cartAction";
 import SpinnerLoader from "../../../../plugins/loaders/spinner-loader/SpinnerLoader";
 import { moveWishList } from "../../../../../redux/actions/wishListAction";
 import { getLocalStorageItem } from "../../../../../helpers/local-storage-item/getLocalStorageItem";
+import { getQueryParam } from "../../../../../helpers/search-query-params/getQueryParams";
+import { getProducts } from "../../../../../redux/actions/productsAction";
 
 const CollectionsList = () => {
   const navigate = useNavigate();
+  const search_input = getQueryParam("input");
+  const searching = getQueryParam("searching");
   const { products } = useSelector((state) => state.productsState);
   const { isAuthenticated } = useSelector((state) => state.authState);
   const { cartItems, loading: cartLoading } = useSelector(
@@ -21,6 +25,7 @@ const CollectionsList = () => {
     (state) => state.wishListState
   );
   const [selectedProductId, setSelectedProductId] = useState("");
+  const [initialSearchInput, setInitialSearchInput] = useState("");
   const dispatch = useDispatch();
 
   const handleAddToCart = (product) => {
@@ -35,30 +40,30 @@ const CollectionsList = () => {
     if (isAuthenticated) {
       dispatch(addCart(payload));
     } else {
-        getLocalStorageItem('cart-items').then(res => {
-          console.log("resss: ", res);
-          const localStoragePayload = {
-            product_id: product._id,
-            selected_product_details: {
-              selected_color: product.target_color,
-              selected_color_code: product.target_color_code,
-              selected_size: product.available_sizes[0],
-              selected_quantity: 1,
-            },
-          };
-          console.log("dddaaa:", res, localStoragePayload.product_id);
-          if (
-            res.some(
-              (data) => data?.product_id !== localStoragePayload.product_id
-            ) ||
-            res?.length === 0
-          ) {
-            localStorage.setItem(
-              "cart-items",
-              JSON.stringify([...res, localStoragePayload])
-            );
-          }
-        })
+      getLocalStorageItem("cart-items").then((res) => {
+        console.log("resss: ", res);
+        const localStoragePayload = {
+          product_id: product._id,
+          selected_product_details: {
+            selected_color: product.target_color,
+            selected_color_code: product.target_color_code,
+            selected_size: product.available_sizes[0],
+            selected_quantity: 1,
+          },
+        };
+        console.log("dddaaa:", res, localStoragePayload.product_id);
+        if (
+          res.some(
+            (data) => data?.product_id !== localStoragePayload.product_id
+          ) ||
+          res?.length === 0
+        ) {
+          localStorage.setItem(
+            "cart-items",
+            JSON.stringify([...res, localStoragePayload])
+          );
+        }
+      });
     }
   };
   const handleMoveToWishList = (product) => {
@@ -69,6 +74,14 @@ const CollectionsList = () => {
     };
     dispatch(moveWishList(payload));
   };
+  useEffect(() => {
+    if (searching === "true") {
+    setInitialSearchInput(search_input)
+    }
+    if (searching === "false" && initialSearchInput === search_input) {
+      dispatch(getProducts(search_input.split(" "), [], []));
+    }
+  }, [search_input, searching]);
   return (
     <div className="collection-list">
       <div>

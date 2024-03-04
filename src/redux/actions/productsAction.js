@@ -8,12 +8,15 @@ import {
   productsSuccess,
 } from "../slices/productsSlice";
 
-export const getProducts = (filter_sizes, filter_colors) => async (dispatch) => {
+export const getProducts = (search_key, filter_sizes, filter_colors) => async (dispatch) => {
   try {
     dispatch(productsRequest());
     let link = `${BASE_URL}/${endpoints.products.get}`;
-    if(filter_sizes.length > 0 || filter_colors.length > 0) {
+    if(filter_sizes.length > 0 || filter_colors.length > 0 || search_key.length > 0) {
       link += `?filter_applied=true`;
+    }
+    if (search_key.length > 0) {
+      link += `&keyword=${search_key}`;
     }
     if (filter_sizes.length > 0) {
       link += `&available_sizes=${filter_sizes}`;

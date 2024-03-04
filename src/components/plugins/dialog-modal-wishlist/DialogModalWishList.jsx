@@ -23,7 +23,7 @@ const DialogModalWishList = ({ isOpen, onClose }) => {
     useState("");
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getProducts());
+    dispatch(getProducts([], [], []));
   }, [dispatch]);
   const handleAddToCart = (product) => {
     const payload = {

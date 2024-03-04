@@ -22,7 +22,7 @@ const TopSellingBanner = () => {
   const [selectedProductId, setSelectedProductId] = useState("");
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getProducts([], []));
+    dispatch(getProducts([], [], []));
   }, [dispatch]);
   const handleAddToCart = (product) => {
     const payload = {
@@ -166,7 +166,7 @@ const TopSellingBanner = () => {
                       {/* <div>
                       <BsCurrencyRupee className="d-flex align-items-center"/>
                     </div> */}
-                      <div className="d-flex align-items-center gap-2 mt-1 mb-1 res-849px-d-none">
+                      <div className="d-flex align-items-center gap-2 mt-1 mb-1 res-max-849px-d-none">
                         {product?.is_discounted_product && (
                           <span className="price">
                             ₹ {product.sale_price - product.discount_price}

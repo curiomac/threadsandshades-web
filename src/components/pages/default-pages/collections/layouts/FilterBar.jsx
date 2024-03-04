@@ -10,6 +10,7 @@ import { getScreenResolution } from "../../../../../helpers/screen-resolution/ge
 
 const FilterBar = ({ toggleDrawer }) => {
   const type = getQueryParam("type");
+  const search_input = getQueryParam("input");
   const [filterGender, setFilterGender] = useState(true);
   const [filterSize, setFilterSize] = useState(true);
   const [filterColor, setFilterColor] = useState(true);
@@ -33,8 +34,11 @@ const FilterBar = ({ toggleDrawer }) => {
       setFilterSizes(filter_sizes);
     }
     getScreenResolution().then((res) => {
-      if (res.width >= 897) {
-        dispatch(getProducts(filter_sizes, filterColors));
+      if (res.width >= 897) { if (search_input) {
+        dispatch(getProducts(search_input.split(" "), filter_sizes, filterColors));
+      } else {
+        dispatch(getProducts([], filter_sizes, filterColors));
+      }
       }
     });
   };
@@ -49,13 +53,17 @@ const FilterBar = ({ toggleDrawer }) => {
     }
     getScreenResolution().then((res) => {
       if (res.width >= 897) {
-        dispatch(getProducts(filterSizes, filter_colors));
+        if (search_input) {
+          dispatch(getProducts(search_input.split(" "), filterSizes, filter_colors));
+        } else {
+        dispatch(getProducts([], filterSizes, filter_colors));
+        }
       }
     });
   };
   const handleApplyFilter = () => {
     toggleDrawer(false);
-    dispatch(getProducts(filterSizes, filterColors));
+    dispatch(getProducts([], filterSizes, filterColors));
   };
   const handleClearFilter = () => {
     setFilterSizes([]);
@@ -75,12 +83,15 @@ const FilterBar = ({ toggleDrawer }) => {
         filters_applied.target_color?.split(",") || [];
       console.log("formated_filter_color_array: ", formated_filter_color_array);
       setFilterColors(formated_filter_color_array);
-
+      if (search_input) {
+        dispatch(getProducts(search_input.split(" "), formated_filter_size_array, formated_filter_color_array));
+      } else {
       dispatch(
-        getProducts(formated_filter_size_array, formated_filter_color_array)
+        getProducts([], formated_filter_size_array, formated_filter_color_array)
       );
+      }
     } else {
-      dispatch(getProducts([], []));
+      dispatch(getProducts([], [], []));
     }
   }, []);
   useEffect(() => {
