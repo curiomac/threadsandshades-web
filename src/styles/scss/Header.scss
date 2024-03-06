@@ -12,7 +12,7 @@ $items-card-width: 300px;
   height: 35px;
   width: -webkit-fill-available;
   background-color: #fff;
-  z-index: 10000;
+  z-index: 0;
   position: relative;
   display: flex;
   align-items: center;
@@ -20,6 +20,7 @@ $items-card-width: 300px;
   border-bottom: 2px solid rgba(0, 0, 0, 0.084);
   padding-left: 0.8rem;
   padding-right: 0.8rem;
+  z-index: 10;
   .signin-header-links {
     display: flex;
     align-items: center;
@@ -58,10 +59,10 @@ $items-card-width: 300px;
   // background-color: rgb(255, 255, 255) !important;
   // }
   &.box-shadow-dark {
-    box-shadow: 0 0 10px 1px #00000048 !important;
+    box-shadow: 0 10px 10px 1px #00000048 !important;
   }
   &.box-shadow-light {
-    box-shadow: 0 0 10px 1px #00000048 !important;
+    box-shadow: 0 10px 10px 1px #0000001a !important;
   }
 
   .nav-bar-links {

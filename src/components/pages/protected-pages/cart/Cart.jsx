@@ -1,10 +1,22 @@
 import React, { useEffect } from "react";
 import NestedCartPage from "./layouts/NestedCartPage";
-import { getCart } from "../../../../redux/actions/cartAction";
-import { useDispatch } from "react-redux";
+import {
+  getCart,
+  getTemporaryCart,
+} from "../../../../redux/actions/cartAction";
+import { useDispatch, useSelector } from "react-redux";
 
 const Cart = () => {
-  const dispatch = useDispatch()
+  const { isAuthenticated, user } = useSelector((state) => state.authState);
+  const dispatch = useDispatch();
+  const handleGetTemporaryCartItems = () => {
+    const cartLocalStorageItem =
+      JSON.parse(localStorage.getItem("cart-items")) || [];
+    const payload = {
+      cart_details: cartLocalStorageItem,
+    };
+    dispatch(getTemporaryCart(payload));
+  };
   useEffect(() => {
     window.scrollTo({
       top: 0,
@@ -12,12 +24,15 @@ const Cart = () => {
     });
   }, []);
   useEffect(() => {
-    const payload = {
-      user_id: "65a7eef1a7e2b0eda9f545e8",
+    if (isAuthenticated) {
+      const payload = {
+        user_id: user?._id,
+      };
+      dispatch(getCart(payload));
+    } else {
+      handleGetTemporaryCartItems();
     }
-    dispatch(getCart(payload));
-    console.log('Working: as expected');
-  }, [dispatch])
+  }, [dispatch]);
   return (
     <div className="cart">
       <div className="container-fluid">

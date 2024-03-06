@@ -9,11 +9,14 @@ import {
   cartAddFail,
   cartAddRequest,
   cartAddSuccess,
+  cartUpdateFail,
+  cartUpdateRequest,
+  cartUpdateSuccess,
   cartRemoveFail,
   cartRemoveRequest,
   cartRemoveSuccess,
 } from "../slices/cartSlice";
-import { getCheckoutDetails } from "./checkoutDetailsAction";
+import { getCheckoutDetails, getTemporaryCheckoutDetails } from "./checkoutDetailsAction";
 
 export const getCart = (payload) => async (dispatch) => {
   try {
@@ -26,6 +29,25 @@ export const getCart = (payload) => async (dispatch) => {
     }
     dispatch(getCheckoutDetails(checkout_details_payload))
     dispatch(cartSuccess(response?.data?.cart));
+  } catch (error) {
+    dispatch(cartFail(error?.response?.data?.message));
+  }
+};
+export const getTemporaryCart = (payload, action) => async (dispatch) => {
+  try {
+    dispatch(cartRequest());
+    const response = await axios.post(
+      `${BASE_URL}/${endpoints.cart.temp_get}`, payload
+    );
+    dispatch(getTemporaryCheckoutDetails(payload))
+    dispatch(cartSuccess(response?.data?.cart));
+    const localStorageTarget = response?.data?.cart?.cart_items?.map(item => {
+      return {
+        product_id:item?.product?._id,
+        selected_product_details: item?.selected_product_details
+      }
+    })
+    localStorage.setItem('cart-items', JSON.stringify(localStorageTarget))
   } catch (error) {
     dispatch(cartFail(error?.response?.data?.message));
   }
@@ -44,6 +66,22 @@ export const addCart = (payload) => async (dispatch) => {
     dispatch(cartAddSuccess(response?.data?.cart));
   } catch (error) {
     dispatch(cartAddFail(error?.response?.data?.message));
+  }
+};
+export const updateCart = (payload) => async (dispatch) => {
+  try {
+    dispatch(cartUpdateRequest());
+    const response = await axios.post(
+      `${BASE_URL}/${endpoints.cart.update}`, payload
+    );
+    const checkout_details_payload = {
+      user_id: payload?.user_id
+    }
+    dispatch(getCheckoutDetails(checkout_details_payload))
+    dispatch(cartUpdateSuccess(response?.data?.cart));
+    localStorage.removeItem('cart-items')
+  } catch (error) {
+    dispatch(cartUpdateFail(error?.response?.data?.message));
   }
 };
 export const removeCart = (payload) => async (dispatch) => {

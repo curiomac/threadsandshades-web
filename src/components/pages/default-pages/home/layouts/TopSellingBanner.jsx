@@ -6,13 +6,17 @@ import { LOCKED_CLOTH_PAGE } from "../../../../../helpers/route-paths/paths";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getProducts } from "../../../../../redux/actions/productsAction";
-import { addCart } from "../../../../../redux/actions/cartAction";
+import {
+  addCart,
+  getTemporaryCart,
+} from "../../../../../redux/actions/cartAction";
 import SpinnerLoader from "../../../../plugins/loaders/spinner-loader/SpinnerLoader";
 import { moveWishList } from "../../../../../redux/actions/wishListAction";
 
 const TopSellingBanner = () => {
   const navigate = useNavigate();
   const { products } = useSelector((state) => state.productsState);
+  const { isAuthenticated, user } = useSelector((state) => state.authState);
   const { cartItems, loading: cartLoading } = useSelector(
     (state) => state.cartState
   );
@@ -20,6 +24,9 @@ const TopSellingBanner = () => {
     (state) => state.wishListState
   );
   const [selectedProductId, setSelectedProductId] = useState("");
+  const [localStorageItems, setLocalStorageItems] = useState(() => {
+    return JSON.parse(localStorage.getItem("cart-items")) || [];
+  });
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getProducts([], [], []));
@@ -27,13 +34,41 @@ const TopSellingBanner = () => {
   const handleAddToCart = (product) => {
     const payload = {
       product_id: product._id,
-      user_id: "65a7eef1a7e2b0eda9f545e8",
+      user_id: user?._id,
       selected_color: product.target_color,
       selected_color_code: product.target_color_code,
       selected_size: product.available_sizes[0],
       selected_quantity: 1,
     };
-    dispatch(addCart(payload));
+    if (isAuthenticated) {
+      dispatch(addCart(payload));
+    } else {
+      const local_cart_items =
+        JSON.parse(localStorage.getItem("cart-items")) || [];
+      const localStoragePayload = {
+        product_id: product._id,
+        selected_product_details: {
+          selected_color: product.target_color,
+          selected_color_code: product.target_color_code,
+          selected_size: product.available_sizes[0],
+          selected_quantity: 1,
+        },
+      };
+      const product_found = localStorageItems.find(
+        (data) => data?.product_id === product._id
+      );
+      if (!product_found || localStorageItems?.length === 0) {
+        localStorage.setItem(
+          "cart-items",
+          JSON.stringify([...local_cart_items, localStoragePayload])
+        );
+        setLocalStorageItems([...localStorageItems, localStoragePayload]);
+        const payload = {
+          cart_details: [...localStorageItems, localStoragePayload],
+        };
+        dispatch(getTemporaryCart(payload));
+      }
+    }
   };
   const handleMoveToWishList = (product) => {
     const payload = {
@@ -52,7 +87,7 @@ const TopSellingBanner = () => {
         <div className="products-grid-home">
           {products?.map((product, index) => {
             console.log("product: ", product);
-            if (index <= 3)
+            if (index <= 3) {
               return (
                 <div
                   className="product"
@@ -222,6 +257,7 @@ const TopSellingBanner = () => {
                   </div>
                 </div>
               );
+            }
           })}
         </div>
       </div>

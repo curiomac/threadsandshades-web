@@ -7,13 +7,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { getProducts } from "../../../redux/actions/productsAction";
 import { moveWishList } from "../../../redux/actions/wishListAction";
 import SpinnerLoader from "../loaders/spinner-loader/SpinnerLoader";
-import { addCart } from "../../../redux/actions/cartAction";
+import { addCart, getTemporaryCart } from "../../../redux/actions/cartAction";
 import { useLocation, useNavigate } from "react-router-dom";
+import { COLLECTIONS_PAGE } from "../../../helpers/route-paths/paths";
 
 const DialogModalWishList = ({ isOpen, onClose }) => {
   const { wishListItems, loading: wishListLoading } = useSelector(
     (state) => state.wishListState
   );
+  const { isAuthenticated, user } = useSelector((state) => state.authState);
   const { cartItems, loading: cartLoading } = useSelector(
     (state) => state.cartState
   );
@@ -21,6 +23,9 @@ const DialogModalWishList = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
   const [selectedWishListProductId, setSelectedWishListProductId] =
     useState("");
+    const [localStorageItems, setLocalStorageItems] = useState(() => {
+      return JSON.parse(localStorage.getItem("cart-items")) || [];
+    });
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getProducts([], [], []));
@@ -28,13 +33,41 @@ const DialogModalWishList = ({ isOpen, onClose }) => {
   const handleAddToCart = (product) => {
     const payload = {
       product_id: product._id,
-      user_id: "65a7eef1a7e2b0eda9f545e8",
+      user_id: user?._id,
       selected_color: product.target_color,
       selected_color_code: product.target_color_code,
       selected_size: product.available_sizes[0],
       selected_quantity: 1,
     };
-    dispatch(addCart(payload));
+    if (isAuthenticated) {
+      dispatch(addCart(payload));
+    } else {
+      const local_cart_items =
+        JSON.parse(localStorage.getItem("cart-items")) || [];
+      const localStoragePayload = {
+        product_id: product._id,
+        selected_product_details: {
+          selected_color: product.target_color,
+          selected_color_code: product.target_color_code,
+          selected_size: product.available_sizes[0],
+          selected_quantity: 1,
+        },
+      };
+      const product_found = localStorageItems.find(
+        (data) => data?.product_id === product._id
+      );
+      if (!product_found || localStorageItems?.length === 0) {
+        localStorage.setItem(
+          "cart-items",
+          JSON.stringify([...local_cart_items, localStoragePayload])
+        );
+        setLocalStorageItems([...localStorageItems, localStoragePayload]);
+        const payload = {
+          cart_details: [...localStorageItems, localStoragePayload],
+        };
+        dispatch(getTemporaryCart(payload));
+      }
+    }
   };
   const handleReMoveFromWishList = (product) => {
     console.log("product-data: ", product);
@@ -61,7 +94,11 @@ const DialogModalWishList = ({ isOpen, onClose }) => {
                 className="close-icon"
                 onClick={() => {
                   onClose();
+                  if(pathname === COLLECTIONS_PAGE) {
+                    navigate(`${pathname}?type=men&wishlist=false`);
+                  } else {                    
                   navigate(`${pathname}?wishlist=false`);
+                  }
                 }}
               >
                 <IoClose />

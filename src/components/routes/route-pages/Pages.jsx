@@ -68,17 +68,13 @@ const Pages = () => {
         <Route
           path={CART_PAGE}
           element={
-            <ProtectedRoute>
               <Cart />
-            </ProtectedRoute>
           }
         >
           <Route
             path={CART_ITEMS_PAGE}
             element={
-              <ProtectedRoute>
                 <CartItems />
-              </ProtectedRoute>
             }
           />
           <Route path={DELIVERY_ADDRESS_PAGE} element={<DeliveryAddress />} />

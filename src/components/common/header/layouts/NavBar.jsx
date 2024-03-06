@@ -17,7 +17,7 @@ import {
 } from "../../../../helpers/route-paths/paths";
 import { useDispatch, useSelector } from "react-redux";
 import SideDrawer from "../../../plugins/side-drawer/SideDrawer";
-import { getCart } from "../../../../redux/actions/cartAction";
+import { getCart, getTemporaryCart } from "../../../../redux/actions/cartAction";
 import CartDrawer from "./CartDrawer";
 import { getWishList } from "../../../../redux/actions/wishListAction";
 import DialogModalWishList from "../../../plugins/dialog-modal-wishlist/DialogModalWishList";
@@ -25,11 +25,10 @@ import { getQueryParam } from "../../../../helpers/search-query-params/getQueryP
 import { getProducts } from "../../../../redux/actions/productsAction";
 
 const NavBar = () => {
-  const input = getQueryParam("input");
   const { theme } = useSelector((state) => state.themeState);
   const { pathname } = useLocation();
   const { cartCount } = useSelector((state) => state.cartState);
-  const { isAuthenticated } = useSelector((state) => state.authState);
+  const { isAuthenticated, user } = useSelector((state) => state.authState);
   const { wishListCount } = useSelector((state) => state.wishListState);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -38,6 +37,7 @@ const NavBar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searching, setSearching] = useState(false);
   const [inputText, setInputText] = useState("");
+  const [defaultSearchinput, setDefaultSearchInput] = useState("");
   const closeModal = () => {
     setIsModalOpen(false);
   };
@@ -48,15 +48,26 @@ const NavBar = () => {
       return false;
     }
   };
+  const handleGetTemporaryCartItems = () => {
+    const cartLocalStorageItem = JSON.parse(localStorage.getItem("cart-items")) || [];
+    const payload = {
+      cart_details: cartLocalStorageItem
+    }
+    dispatch(getTemporaryCart(payload))
+  }
   useEffect(() => {
-    const cartPayload = {
-      user_id: "65a7eef1a7e2b0eda9f545e8",
-    };
     const wishListPayload = {
       user_id: "65a7eef1a7e2b0eda9f545e8",
     };
-    dispatch(getCart(cartPayload));
     dispatch(getWishList(wishListPayload));
+    if(isAuthenticated) {
+      const cartPayload = {
+        user_id: user?._id,
+      };
+      dispatch(getCart(cartPayload));
+    } else {
+      handleGetTemporaryCartItems()
+    }
   }, []);
   useEffect(() => {
     if (searching) {
@@ -67,7 +78,7 @@ const NavBar = () => {
             inputText ? `&input=${inputText}&searching=${false}` : ""
           }`
         );
-      }, 500);
+      }, 1000);
     }
   }, [inputText]);
   return (
@@ -131,10 +142,11 @@ const NavBar = () => {
                   }`}
                 >
                   <input
+                    value={defaultSearchinput}
                     placeholder="Search for products 🛒"
                     onChange={(e) => {
+                      setDefaultSearchInput(e.target.value);
                       const search_input = e.target.value.split(" ").join("+");
-                      console.log("search_input: ", search_input);
                       setSearching(true);
                       setInputText(search_input);
                       if (e.target.value === "") {
@@ -178,13 +190,12 @@ const NavBar = () => {
               )}
               <div
                 onClick={() => {
-                  if (isAuthenticated) {
                     setIsModalOpen(true);
-                    navigate(`${pathname}?wishlist=true`);
-                  } else {
-                    setIsModalOpen(false);
-                    navigate(`${pathname}?isAuth=false`);
-                  }
+                    if(pathname === COLLECTIONS_PAGE) {
+                      navigate(`${pathname}?type=men&wishlist=true`);
+                    } else {
+                      navigate(`${pathname}?wishlist=true`);
+                    }
                 }}
                 className="links-decoration-unset"
               >
@@ -199,9 +210,7 @@ const NavBar = () => {
               </div>
               <Link
                 className="links-decoration-unset"
-                to={
-                  isAuthenticated ? CART_ITEMS_PAGE : `${pathname}?isAuth=false`
-                }
+                to={CART_ITEMS_PAGE}
               >
                 <div className="links icon">
                   <HiOutlineShoppingBag />
@@ -243,10 +252,11 @@ const NavBar = () => {
               <RiSearch2Line />
             </div>
             <input
+              value={defaultSearchinput}
               placeholder="Search for products 🛒"
               onChange={(e) => {
                 const search_input = e.target.value.split(" ").join("+");
-                console.log("search_input: ", search_input);
+                setDefaultSearchInput(e.target.value);
                 setSearching(true);
                 setInputText(search_input);
                 if (e.target.value === "") {

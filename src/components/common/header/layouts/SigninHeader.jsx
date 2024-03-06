@@ -14,12 +14,11 @@ import DialogModalAuth from "../../../plugins/dialog-modal-auth/DialogModalAuth"
 import { getQueryParam } from "../../../../helpers/search-query-params/getQueryParams";
 
 const SigninHeader = () => {
-  const wishList = getQueryParam("wishlist");
   const isAuth = getQueryParam("isAuth");
   const location = useLocation();
   const navigate = useNavigate();
   const authPages = [LOGIN_PAGE, REGISTER_PAGE];
-  const defaultPages = [CART_PAGE, CART_ITEMS_PAGE, DELIVERY_ADDRESS_PAGE];
+  const defaultPages = [DELIVERY_ADDRESS_PAGE];
   const protectedPages = [USER_ACCOUNT_PAGE, USER_ACCOUNT_DETAILS_PAGE];
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [auth, setAuth] = useState("");
@@ -33,10 +32,7 @@ const SigninHeader = () => {
       return false;
     } else if (defaultPages.find((page) => page === location.pathname)) {
       return false;
-    } else if (wishList === true || wishList === "true") {
     } else if (protectedPages.find((page) => page === location.pathname)) {
-      return false;
-    } else if (wishList === true || wishList === "true") {
       return false;
     } else {
       return true;
@@ -44,14 +40,14 @@ const SigninHeader = () => {
   };
   useEffect(() => {
     console.log("isAuth: ", isAuth);
-    if (isAuth === 'false') {
+    if (isAuth === "false") {
       setIsModalOpen(true);
       setAuth("Login");
     }
   }, [isAuth]);
   if (isNotRestrictedPage()) {
     return (
-      <div className="signin-header">
+      <div className="signin-header" style={{ zIndex: isModalOpen ? 100 : 10 }}>
         <div className="container-fluid">
           <div className="signin-header-links">
             <div className="d-flex align-items-center">

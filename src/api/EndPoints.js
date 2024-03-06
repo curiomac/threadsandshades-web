@@ -25,11 +25,14 @@ export const endpoints = {
   },
   cart: {
     get: "cart",
+    temp_get: "temp/cart",
     add: "cart/add",
+    update: "cart/update",
     remove: "cart/remove",
   },
   checkout_details: {
     get: "checkoutdetails",
+    temp_get: "temp/checkoutdetails",
   },
   wish_list: {
     get: "wishlist",

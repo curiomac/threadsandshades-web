@@ -14,10 +14,10 @@ import { MdEmail } from "react-icons/md";
 import { clearCode, clearOtpError } from "../../../redux/slices/authSlice";
 import { FaCircleCheck } from "react-icons/fa6";
 import moment from "moment";
+import { getCart, updateCart } from "../../../redux/actions/cartAction";
 const DialogModalAuth = ({ isOpen, onClose, isAuth }) => {
-  const { code, otp_error, auth_error, expires_on, otp_loading } = useSelector(
-    (state) => state.authState
-  );
+  const { user, code, otp_error, auth_error, expires_on, otp_loading } =
+    useSelector((state) => state.authState);
   const [email, setEmail] = useState("");
   const [otp, setOTP] = useState("");
   const [proceedOTP, setProceedOTP] = useState(false);
@@ -89,6 +89,20 @@ const DialogModalAuth = ({ isOpen, onClose, isAuth }) => {
   }, [otp]);
   useEffect(() => {
     if (code === "proceed-verify-success") {
+      const payload = {
+        user_id: user?._id,
+      };
+      const local_cart_items =
+        JSON.parse(localStorage.getItem("cart-items")) || [];
+      if (local_cart_items?.length > 0) {
+        const payload = {
+          user_id: user?._id,
+          cart_details: local_cart_items,
+        };
+        dispatch(updateCart(payload));
+      } else {
+        dispatch(getCart(payload));
+      }
       setTimeout(() => {
         dispatch(clearCode());
         dispatch(clearOtpError());

@@ -50,6 +50,27 @@ const cartSlice = createSlice({
         error: action.payload,
       };
     },
+    cartUpdateRequest(state, action) {
+      return {
+        ...state,
+        loading: true,
+      };
+    },
+    cartUpdateSuccess(state, action) {
+      return {
+        ...state,
+        loading: false,
+        cartItems: action.payload.cart_items,
+        cartCount: action.payload.cart_count,
+      };
+    },
+    cartUpdateFail(state, action) {
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+    },
     cartRemoveRequest(state, action) {
       return {
         ...state,
@@ -89,6 +110,9 @@ export const {
   cartAddRequest,
   cartAddFail,
   cartAddSuccess,
+  cartUpdateRequest,
+  cartUpdateFail,
+  cartUpdateSuccess,
   cartRemoveRequest,
   cartRemoveFail,
   cartRemoveSuccess,

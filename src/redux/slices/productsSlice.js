@@ -18,7 +18,7 @@ const productsSlice = createSlice({
             return{
                 ...state,
                 loading: false,
-                products: action.payload.products,
+                products: action.payload.products || [],
                 totalCounts: action.payload.totalCounts,
                 totalPages: action.payload.totalPages,
                 currentPage: action.payload.currentPage,

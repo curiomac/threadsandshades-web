@@ -6,7 +6,10 @@ import { HiOutlineShoppingBag } from "react-icons/hi";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getQueryParam } from "../../../../../helpers/search-query-params/getQueryParams";
 import { proceedTrigger } from "../../../../../redux/slices/resCartSlice";
-import { removeCart } from "../../../../../redux/actions/cartAction";
+import {
+  getTemporaryCart,
+  removeCart,
+} from "../../../../../redux/actions/cartAction";
 import SpinnerLoaderBrand from "../../../../plugins/loaders/spinner-loader-brand/SpinnerLoaderBrand";
 import { LOCKED_CLOTH_PAGE } from "../../../../../helpers/route-paths/paths";
 
@@ -14,6 +17,7 @@ const CartItems = () => {
   const { cartItems, loading: cartItemsLoading } = useSelector(
     (state) => state.cartState
   );
+  const { isAuthenticated, user } = useSelector((state) => state.authState);
   const { loading: wishListLoading } = useSelector(
     (state) => state.wishListState
   );
@@ -27,9 +31,6 @@ const CartItems = () => {
   const { proceed } = useSelector((state) => state.resCartState);
   const dispatch = useDispatch();
   const [cartItemsSelectedId, setCartItemSelectedId] = useState("");
-  useEffect(() => {
-    dispatch(proceedTrigger(trigger));
-  }, [trigger]);
   const handleMoveToWishList = (cartItem) => {
     const payload = {
       product_id: cartItem?.product?._id,
@@ -39,13 +40,35 @@ const CartItems = () => {
     dispatch(moveWishList(payload));
   };
   const handleRemoveCart = (cartItem) => {
-    console.log("cartItem: ", cartItem);
+    if (isAuthenticated) {
+      const payload = {
+        product_id: cartItem?.product?._id,
+        user_id: user?._id,
+      };
+      dispatch(removeCart(payload));
+    } else {
+      const local_cart_items =
+      JSON.parse(localStorage.getItem("cart-items")) || [];
+    const product_found = local_cart_items.filter(
+      (data) => data?.product_id !== cartItem?.product?._id
+    );
     const payload = {
-      product_id: cartItem?.product?._id,
-      user_id: "65a7eef1a7e2b0eda9f545e8",
-    };
-    dispatch(removeCart(payload));
+      cart_details: product_found
+    }
+    dispatch(getTemporaryCart(payload));
+    }
   };
+  const handleGetTemporaryCartItems = () => {
+    const cartLocalStorageItem =
+      JSON.parse(localStorage.getItem("cart-items")) || [];
+    const payload = {
+      cart_details: cartLocalStorageItem,
+    };
+    dispatch(getTemporaryCart(payload));
+  };
+  useEffect(() => {
+    dispatch(proceedTrigger(trigger));
+  }, [trigger]);
   return (
     <div
       className={`cart-items ${
@@ -83,7 +106,8 @@ const CartItems = () => {
                 >
                   {(cartItemsLoading || wishListLoading) &&
                     cartItemsSelectedId === cartItem?.product?._id &&
-                    (wishlist_params === false || wishlist_params === 'false') && (
+                    (wishlist_params === false ||
+                      wishlist_params === "false") && (
                       <div className="loader-container">
                         <div className="spinner-brand">
                           <SpinnerLoaderBrand />
@@ -94,7 +118,7 @@ const CartItems = () => {
                     className={`${
                       (cartItemsLoading || wishListLoading) &&
                       cartItemsSelectedId === cartItem.product?._id &&
-                      (wishlist_params === false || wishlist_params === 'false')
+                      (wishlist_params === false || wishlist_params === "false")
                         ? "cart-loader"
                         : "cart-default"
                     }`}

@@ -676,7 +676,7 @@
 .position-sticky-0 {
   position: sticky;
   top: 0;
-  z-index: 4;
+  z-index: 10;
 }
 
 /* content-box */
@@ -699,9 +699,15 @@
 .res-849px-d-unset {
   display: none;
 }
+.res-992px-d-unset {
+  display: none;
+}
 @media screen and (max-width: 992px) {
   .res-992px-d-none {
     display: none !important;
+  }
+  .res-992px-d-unset  {
+    display: unset !important;
   }
 }
 @media screen and (max-width: 849px) {

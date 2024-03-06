@@ -21,3 +21,15 @@ export const getCheckoutDetails = (payload) => async (dispatch) => {
     dispatch(checkoutDetailsFail(error?.response?.data?.message));
   }
 };
+export const getTemporaryCheckoutDetails = (payload) => async (dispatch) => {
+  try {
+    dispatch(checkoutDetailsRequest());
+    const response = await axios.post(
+      `${BASE_URL}/${endpoints.checkout_details.temp_get}`, payload
+    );
+    dispatch(checkoutDetailsSuccess(response?.data));
+  } catch (error) {
+    console.log("error: ", error?.response?.data?.message);
+    dispatch(checkoutDetailsFail(error?.response?.data?.message));
+  }
+};

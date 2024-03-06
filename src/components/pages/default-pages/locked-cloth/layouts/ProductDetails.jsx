@@ -8,7 +8,7 @@ import { COLLECTIONS_PAGE, LOCKED_CLOTH_PAGE } from "../../../../../helpers/rout
 import { useNavigate } from "react-router-dom";
 import { TiShoppingCart, TiTick } from "react-icons/ti";
 import { getProducts } from "../../../../../redux/actions/productsAction";
-import { addCart } from "../../../../../redux/actions/cartAction";
+import { addCart, getTemporaryCart } from "../../../../../redux/actions/cartAction";
 import SpinnerLoader from "../../../../plugins/loaders/spinner-loader/SpinnerLoader";
 import BackdropLoader from "../../../../plugins/loaders/backdrop-loader/BackdropLoader";
 import { clearProduct } from "../../../../../redux/slices/productSlice";
@@ -29,6 +29,7 @@ const ProductDetails = () => {
   const { cartItems, loading: cartLoading } = useSelector(
     (state) => state.cartState
   );
+  const { isAuthenticated, user } = useSelector((state) => state.authState);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isVisible, setIsVisible] = useState(false);
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
@@ -38,6 +39,9 @@ const ProductDetails = () => {
   const [selectedProductId, setSelectedProductId] = useState("");
   const [targetProductSize, setTargetProductSize] = useState("");
   const [targetProductQuantity, setTargetProductQuantity] = useState("");
+  const [localStorageItems, setLocalStorageItems] = useState(() => {
+    return JSON.parse(localStorage.getItem("cart-items")) || [];
+  });
   const [targetProductCustomQuantity, setTargetProductCustomQuantity] =
     useState(1);
 
@@ -68,8 +72,8 @@ const ProductDetails = () => {
   );
   const handleAddToCart = (product) => {
     const payload = {
-      product_id: product._id,
-      user_id: "65a7eef1a7e2b0eda9f545e8",
+      product_id: product?._id,
+      user_id: user?._id,
       selected_color: product.target_color,
       selected_color_code: product.target_color_code,
       selected_size: targetProductSize,
@@ -78,7 +82,35 @@ const ProductDetails = () => {
           ? targetProductCustomQuantity
           : targetProductQuantity,
     };
-    dispatch(addCart(payload));
+    if (isAuthenticated) {
+      dispatch(addCart(payload));
+    } else {
+      const local_cart_items =
+        JSON.parse(localStorage.getItem("cart-items")) || [];
+      const localStoragePayload = {
+        product_id: product._id,
+        selected_product_details: {
+          selected_color: product.target_color,
+          selected_color_code: product.target_color_code,
+          selected_size: product.available_sizes[0],
+          selected_quantity: 1,
+        },
+      };
+      const product_found = localStorageItems.find(
+        (data) => data?.product_id === product._id
+      );
+      if (!product_found || localStorageItems?.length === 0) {
+        localStorage.setItem(
+          "cart-items",
+          JSON.stringify([...local_cart_items, localStoragePayload])
+        );
+        setLocalStorageItems([...localStorageItems, localStoragePayload]);
+        const payload = {
+          cart_details: [...localStorageItems, localStoragePayload],
+        };
+        dispatch(getTemporaryCart(payload));
+      }
+    }
   };
   useEffect(() => {
     dispatch(clearProduct());
