@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import {
   CART_ITEMS_PAGE,
   CART_PAGE,
-  DELIVERY_ADDRESS_PAGE,
+  BILLING_ADDRESS_PAGE,
   LOGIN_PAGE,
   REGISTER_PAGE,
   USER_ACCOUNT_DETAILS_PAGE,
@@ -18,7 +18,7 @@ const SigninHeader = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const authPages = [LOGIN_PAGE, REGISTER_PAGE];
-  const defaultPages = [DELIVERY_ADDRESS_PAGE];
+  const defaultPages = [BILLING_ADDRESS_PAGE];
   const protectedPages = [USER_ACCOUNT_PAGE, USER_ACCOUNT_DETAILS_PAGE];
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [auth, setAuth] = useState("");

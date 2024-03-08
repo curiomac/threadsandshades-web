@@ -6,7 +6,7 @@ import {
   CART_ITEMS_PAGE,
   COLLECTIONS_PAGE,
   CONTACT_PAGE,
-  DELIVERY_ADDRESS_PAGE,
+  BILLING_ADDRESS_PAGE,
   HOME_PAGE,
   LOCKED_CLOTH_PAGE,
   LOGIN_PAGE,
@@ -28,7 +28,7 @@ import Register from "../../pages/auth-pages/register/Register";
 import Collections from "../../pages/default-pages/collections/Collections";
 import LockedCloth from "../../pages/default-pages/locked-cloth/LockedCloth";
 import CartItems from "../../pages/protected-pages/cart/layouts/CartItems";
-import DeliveryAddress from "../../pages/protected-pages/cart/layouts/DeliveryAddress";
+import BillingAddress from "../../pages/protected-pages/cart/layouts/BillingAddress";
 import Cart from "../../pages/protected-pages/cart/Cart";
 import { useSelector } from "react-redux";
 import Profile from "../../pages/protected-pages/profile/Profile";
@@ -77,7 +77,7 @@ const Pages = () => {
                 <CartItems />
             }
           />
-          <Route path={DELIVERY_ADDRESS_PAGE} element={<DeliveryAddress />} />
+          <Route path={BILLING_ADDRESS_PAGE} element={<BillingAddress />} />
         </Route>
         <Route
           path={USER_ACCOUNT_PAGE}

@@ -208,6 +208,99 @@
             background-color: rgba(42, 42, 42, 0.189);
             border-radius: 5px;
           }
+          .billing-address-container {
+            width: -webkit-fill-available;
+            background-color: #fff;
+            padding: 1.6rem;
+            max-height: calc(100vh - 152px);
+            min-height: calc(100vh - 152px);
+            overflow: auto;
+            // letter-spacing: 2px;
+            .billing-address {
+              border: 1px solid rgba(0, 0, 0, 0.233);
+              box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.089);
+              padding: 2rem;
+              .billing-address-content {
+                .billing-address-heading {
+                  font-size: 20px;
+                  font-weight: 600;
+                  text-transform: uppercase;
+                  padding: 0.8rem;
+                  border: 1px solid #0000003a;
+                  padding-left: 20px;
+                  padding-right: 20px;
+                  color: #00000055;
+                }
+                .billing-inputs {
+                  margin-top: 20px;
+                  margin-bottom: 20px;
+                  .label {
+                    text-transform: uppercase;
+                    font-weight: 600;
+                    font-size: 14px;
+                    position: relative;
+                    left: 5px;
+                    margin-bottom: 5px;
+                  }
+                  input {
+                    height: 40px;
+                    width: -webkit-fill-available;
+                    // letter-spacing: 1px;
+                    padding-left: 15px;
+                    padding-right: 15px;
+                    outline: none;
+                    border: 1px solid rgba(0, 0, 0, 0.201);
+                    border: 1px solid #0000003a;
+                    background-color: #ffffff7a;
+                  }
+                  .input-msg {
+                    height: 20px;
+                    width: -webkit-fill-available;
+                  }
+                }
+              }
+            }
+            .payment {
+              margin-top: 2rem;
+              border: 1px solid rgba(0, 0, 0, 0.233);
+              box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.089);
+              padding: 2rem;
+              .payment-content {
+                .payment-heading {
+                  font-size: 20px;
+                  font-weight: 600;
+                  text-transform: uppercase;
+                  padding: 0.8rem;
+                  border: 1px solid #0000003a;
+                  padding-left: 20px;
+                  padding-right: 20px;
+                  color: #00000055;
+                }
+                .payment-types {
+                  margin-top: 2rem;
+                  border: 1px solid #0000003a;
+                  padding: 2rem;
+                  input[type="radio"] {
+                    height: 20px;
+                    width: 20px;
+                  }
+                  .payment-type {
+                    letter-spacing: 0.5px;
+                    font-size: 14px;
+                    position: relative;
+                    top: 2px;
+                  }
+                }
+              }
+            }
+          }
+          .billing-address-container::-webkit-scrollbar {
+            width: 5px;
+          }
+          .billing-address-container::-webkit-scrollbar-thumb {
+            background-color: rgba(42, 42, 42, 0.189);
+            border-radius: 5px;
+          }
         }
       }
       .checkout-box {

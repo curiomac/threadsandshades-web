@@ -58,14 +58,6 @@ const CartItems = () => {
     dispatch(getTemporaryCart(payload));
     }
   };
-  const handleGetTemporaryCartItems = () => {
-    const cartLocalStorageItem =
-      JSON.parse(localStorage.getItem("cart-items")) || [];
-    const payload = {
-      cart_details: cartLocalStorageItem,
-    };
-    dispatch(getTemporaryCart(payload));
-  };
   useEffect(() => {
     dispatch(proceedTrigger(trigger));
   }, [trigger]);

@@ -10,7 +10,10 @@ import SpinnerLoader from "../../../../plugins/loaders/spinner-loader/SpinnerLoa
 import { clearError } from "../../../../../redux/slices/checkoutDetailsSlice";
 import CustomTooltip from "../../../../plugins/custom-tooltip/CustomTooltip";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
+import { BILLING_ADDRESS_PAGE } from "../../../../../helpers/route-paths/paths";
 const CheckoutBox = () => {
+  const navigate = useNavigate()
   const [couponValue, setCouponValue] = useState("");
   const [textCopied, setTextCopied] = useState(false);
   const [couponTriggered, setCouponTriggered] = useState(false);
@@ -64,11 +67,10 @@ const CheckoutBox = () => {
   }, [trigger]);
   return (
     <div
-      className={`checkout-box ${
-        proceed === true || proceed === "true"
-          ? "show-checkout-box"
-          : "hide-checkout-box"
-      }`}
+      className={`checkout-box ${proceed === true || proceed === "true"
+        ? "show-checkout-box"
+        : "hide-checkout-box"
+        }`}
     >
       {cartItems?.length > 0 ? (
         <div>
@@ -142,8 +144,8 @@ const CheckoutBox = () => {
                       onClick={() => handleRemoveCoupon()}
                     >
                       {checkoutDetails.coupon_applied === true &&
-                      checkoutDetailsLoading &&
-                      !couponTriggered ? (
+                        checkoutDetailsLoading &&
+                        !couponTriggered ? (
                         <SpinnerLoader dark />
                       ) : (
                         "REMOVE"
@@ -232,7 +234,7 @@ const CheckoutBox = () => {
               <div>₹{checkoutDetails?.cart_total}</div>
             </div>
             <div className="custom-hr mt-2 mb-2"></div>
-            <button className="checkout-button d-flex align-items-center gap-2 justify-content-center">
+            <button className="checkout-button d-flex align-items-center gap-2 justify-content-center" onClick={() => navigate(BILLING_ADDRESS_PAGE)}>
               <div>
                 <MdShoppingCartCheckout className="font-size-3 d-flex align-items-center" />
               </div>
