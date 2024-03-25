@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import logo from '../../../assets/imgs/home/logo.png';
 
 
-const Logo = ({ height }) => {
+const Logo = ({ height, onClick }) => {
 
     const { theme } = useSelector(state => state.themeState);
     const isTheme = () => {
@@ -15,7 +15,7 @@ const Logo = ({ height }) => {
     }
 
     return (
-        <div>
+        <div onClick={() => onClick && onClick()}>
             {isTheme() === 'dark' ? (
                 <img src={logo} height={60} width={155} className='logo-img'/>
             ) : isTheme() === 'light' && (

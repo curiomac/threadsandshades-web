@@ -11,8 +11,10 @@ export const LOCKED_CLOTH_PAGE = `/locked`;
 export const CART_PAGE = `/cart`;
 export const CART_ITEMS_PAGE = `${CART_PAGE}`;
 export const BILLING_ADDRESS_PAGE = `${CART_PAGE}/billing-address`;
+export const ORDER_STATUS_PAGE = `/order-status`;
 export const USER_ACCOUNT_PAGE = `/user-profile`
 export const USER_ACCOUNT_DETAILS_PAGE = `/user-profile/details`
+export const ORDER_LIST_PAGE = `/user-profile/order-list`
 
 /* Auth Pages */
 

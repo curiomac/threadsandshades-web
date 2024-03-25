@@ -7,8 +7,8 @@
 /* filter-bar */
 
 .filter-bar {
-  max-height: calc(100vh - 80px);
-  min-height: calc(100vh - 80px);
+  max-height: calc($height-cover - 80px);
+  min-height: calc($height-cover - 80px);
   max-width: 350px;
   min-width: 350px;
   overflow: hidden;
@@ -29,8 +29,8 @@
     letter-spacing: 1px;
   }
   .filter-scroll {
-    max-height: calc(100vh - 150px);
-    min-height: calc(100vh - 150px);
+    max-height: calc($height-cover - 150px);
+    min-height: calc($height-cover - 150px);
     overflow: auto;
     padding-right: 10px;
     .filter-heading {
@@ -62,8 +62,8 @@
 /* collection-list */
 
 .collection-list {
-  // max-height: calc(100vh - 80px);
-  // min-height: calc(100vh - 80px);
+  // max-height: calc($height-cover - 80px);
+  // min-height: calc($height-cover - 80px);
   max-width: calc(100% - 350px);
   min-width: calc(100% - 350px);
   overflow: hidden;
@@ -488,8 +488,8 @@
           display: unset !important;
           
           .filter-scroll {
-            max-height: calc(100vh - 300px);
-            min-height: calc(100vh - 300px);
+            max-height: calc($height-cover - 300px);
+            min-height: calc($height-cover - 300px);
             overflow: auto;
             padding-right: 10px;
           }

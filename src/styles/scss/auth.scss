@@ -3,13 +3,13 @@
 /* login */
 
 .login {
-  height: 100vh;
+  height: $height-cover;
   background-image: url(.././../assets/imgs/login/login-bg.jpg);
   background-position: center;
   background-size: cover;
   background-attachment: scroll;
   .login-dark-bg {
-    height: 100vh;
+    height: $height-cover;
     background-color: rgba(0, 0, 0, 0.601);
     .login-custom-width {
       width: 30%;
@@ -89,13 +89,13 @@
 /* Register */
 
 .register {
-  height: 100vh;
+  height: $height-cover;
   background-image: url(.././../assets/imgs/login/login-bg.jpg);
   background-position: center;
   background-size: cover;
   background-attachment: scroll;
   .register-dark-bg {
-    height: 100vh;
+    height: $height-cover;
     background-color: rgba(0, 0, 0, 0.601);
     overflow: auto;
     .register-custom-width {

@@ -96,7 +96,7 @@ const NavBar = () => {
           </div>
           <div className="nav-links">
             <div className="nav-bar-logo">
-              <Logo height={50} />
+              <Logo height={50} onClick={() => navigate(HOME_PAGE)}/>
             </div>
             <div className="default-links res-849px-d-none">
               <div className="links-container">

@@ -162,7 +162,10 @@
   max-width: 87.5%;
 }
 .max-w-full {
-  max-width: 100%;
+  max-width: 100% !important;
+}
+.min-w-full {
+  min-width: 100% !important;
 }
 
 /* display */
@@ -636,6 +639,9 @@
 
 .text-decoration-none {
   text-decoration: none !important;
+}
+.text-decoration-underline {
+  text-decoration: underline;
 }
 
 /* text-transform */

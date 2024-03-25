@@ -10,7 +10,7 @@
 /* fashion-banner */
 
 .fashion-banner {
-  height: calc(100vh - 100px);
+  height: calc($height-cover - 100px);
   width: 100%;
   background-image: url(../../assets/imgs/home/latest-card-bg.jpg);
   background-position: center;
@@ -19,13 +19,13 @@
   background-repeat: no-repeat;
   box-shadow: 0 0 5px 1px #aeaeae;
   .banner-dark {
-    height: calc(100vh - 100px);
+    height: calc($height-cover - 100px);
     width: 100%;
     background: linear-gradient(to right, #00000047, #00000000);
     .fashion-offer-contents {
       text-transform: uppercase;
       color: $default-color;
-      height: calc(100vh - 100px);
+      height: calc($height-cover - 100px);
       font-weight: 600;
       .grab-now-btn {
         height: 45px;

@@ -38,4 +38,14 @@ export const endpoints = {
     get: "wishlist",
     move: "wishlist/move",
   },
+  address: {
+    getPostalAddress: "postaladdress/get"
+  },
+  order: {
+    create: "order/create",
+    get: "order"
+  },
+  orders: {
+    get: "orders"
+  }
 };

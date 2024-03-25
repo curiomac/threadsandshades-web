@@ -12,8 +12,8 @@
     align-items: center;
     gap: 0.8rem;
     .outlet {
-      min-height: calc(100vh - (40px + 5.6rem));
-      max-height: calc(100vh - (40px + 5.6rem));
+      min-height: calc($height-cover - (40px + 5.6rem));
+      max-height: calc($height-cover - (40px + 5.6rem));
       min-width: calc(100% - 300px);
       max-width: calc(100% - 300px);
       box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.125);
@@ -23,10 +23,12 @@
 }
 
 /* Profile Sidebar */
-
+.sidebar-opener-container {
+  display: none;
+}
 .user-profile-sidebar {
-  min-height: calc(100vh - (40px + 3.8rem));
-  max-height: calc(100vh - (40px + 3.8rem));
+  min-height: calc($height-cover - (40px + 3.8rem));
+  max-height: calc($height-cover - (40px + 3.8rem));
   min-width: calc(300px - 2.4rem);
   max-width: calc(300px - 2.4rem);
   box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.125);
@@ -120,6 +122,7 @@
       background-color: rgba(219, 48, 88, 0.244);
       margin-top: 0.4rem;
       margin-bottom: 0.4rem;
+      gap: 10px;
       cursor: pointer;
       border-radius: 50px;
       color: rgb(61, 0, 14);
@@ -260,41 +263,98 @@
 @media screen and (max-width: 849px) {
   .nested-user-profile-page {
     .content {
-      display: block;
-      justify-content: center;
+      gap: unset !important;
+      align-items: unset !important;
       .outlet {
-        min-height: calc(100vh - 340px);
-        max-height: calc(100vh - 340px);
-        min-width: -webkit-fill-available;
-        max-width: -webkit-fill-available;
+        min-height: unset !important;
+        max-height: unset !important;
+        min-width: -webkit-fill-available !important;
+        max-width: -webkit-fill-available !important;
         overflow: auto;
       }
+      .sidebar-opener-container {
+        display: flex !important;
+        height: 0;
+        width: 0;
+        .sidebar-opener {
+          display: flex !important;
+          align-items: center;
+          justify-content: center;
+          height: 40px;
+          min-width: 40px;
+          position: relative;
+          z-index: 1;
+          background-color: #db3059;
+          color: #fff;
+          border-radius: 100%;
+          transform: rotate(270deg);
+          bottom: 8px;
+          left: -35px;
+          transition: transform 0.5s ease, left 0.5s ease, height 0.5s ease, min-width 0.5s ease;
+          .angle-ic {
+            position: relative;
+            top: 8px;
+            transition: top 0.5s ease;
+          }
+        }
+        
+        .sidebar-opener.open {
+          height: 20px;
+          min-width: 20px;
+          left: 56px;
+          transform: rotate(90deg);
+          .angle-ic {
+            position: relative;
+            top: 0px;
+            transition: top 0.5s ease;
+          }
+        }
+      }
       .user-profile-sidebar {
-        display: flex;
-        min-height: 100px;
-        max-height: 30vh;
-        min-width: -webkit-fill-available;
-        max-width: -webkit-fill-available;
-        padding-bottom: 0.8rem;
-        margin-bottom: 0.8rem;
+        min-height: calc($height-cover - 75px) !important;
+        max-height: calc($height-cover - 75px) !important;
+        min-width: 80px !important;
+        max-width: 80px !important;
+        position: absolute;
+        background-color: #fff;
+        left: -100px;
+        top: 75px;
+        transition: left 0.5s ease;
+        &.open {
+          left: 0px;
+          transition: left 0.5s ease;
+        }
         .res-side {
-          min-width: calc(100% - 130px);
-          max-width: calc(100% - 130px);
+          .profile-img {
+            height: 60px;
+            width: 60px;
+            img {
+              height: 60px;
+              width: 60px;
+            }
+          }
+          .profile-img:hover {
+            .edit-img-container {
+              display: none;
+            }
+          }
           .user-email {
-            width: 100%;
-            text-overflow: ellipsis;
-            overflow: hidden;
+            display: none;
           }
         }
         .res-center {
           display: flex;
           align-items: center;
           justify-content: center;
-          width: 30%;
           .links {
-            width: 100px;
+            margin-top: 0;
+            margin-bottom: 0;
+            width: unset !important;
             .link {
-              width: -webkit-fill-available;
+              height: 50px;
+              width: 50px;
+              border-radius: 100%;
+              font-size: 16px;
             }
           }
         }

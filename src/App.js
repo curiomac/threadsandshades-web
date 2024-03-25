@@ -12,6 +12,7 @@ import "./styles/scss/plugins.scss";
 import "./styles/scss/Header.scss";
 import "./styles/scss/SiteSettings.scss";
 import "./styles/scss/Cart.scss";
+import "./styles/scss/Order.scss";
 import "./styles/scss/WishList.scss";
 import "./styles/scss/Account.scss";
 import "./styles/scss/Footer.scss";
@@ -36,6 +37,12 @@ function App() {
       localStorage.setItem("theme-id", process.env.REACT_APP_DEFAULT_THEME_ID);
     }
   };
+  const documentHeight = () => {
+    const doc = document.documentElement
+    doc.style.setProperty('--doc-height', `${window.innerHeight}px`)
+   }
+   window.addEventListener('resize', documentHeight)
+   documentHeight()
 
   useEffect(() => {
     getThemeId();

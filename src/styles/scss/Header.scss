@@ -265,8 +265,8 @@ $items-card-width: 300px;
       display: unset !important;
 
       .cart-scroll {
-        max-height: calc(100vh - 230px);
-        min-height: calc(100vh - 230px);
+        max-height: calc($height-cover - 230px);
+        min-height: calc($height-cover - 230px);
         overflow: auto;
         padding-right: 10px;
       }

@@ -6,6 +6,7 @@ const authSlice = createSlice({
     loading: true,
     otp_loading: true,
     isAuthenticated: false,
+    user: {},
   },
   reducers: {
     otpRequest(state, action) {
@@ -19,7 +20,7 @@ const authSlice = createSlice({
         otp_loading: false,
         isAuthenticated: false,
         expires_on: action.payload.expires_on,
-        code: action.payload.code
+        code: action.payload.code,
       };
     },
     otpFail(state, action) {
@@ -30,19 +31,19 @@ const authSlice = createSlice({
       };
     },
     clearOtpError(state, action) {
-        return {
-          ...state,
-          otp_loading: false,
-          otp_error: null,
-        };
-      },
-      clearCode(state, action) {
-        return {
-          ...state,
-          loading: false,
-          code: null,
-        };
-      },
+      return {
+        ...state,
+        otp_loading: false,
+        otp_error: null,
+      };
+    },
+    clearCode(state, action) {
+      return {
+        ...state,
+        loading: false,
+        code: null,
+      };
+    },
     loginRequest(state, action) {
       return {
         ...state,
@@ -155,6 +156,7 @@ const authSlice = createSlice({
     },
     userProfileImageSuccess(state, action) {
       return {
+        ...state,
         loading: false,
         isAuthenticated: true,
         user_image: action.payload.avatar,

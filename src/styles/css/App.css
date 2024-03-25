@@ -1,5 +1,13 @@
 @import url("https://fonts.googleapis.com/css?family=Poppins");
+:root {
+  --doc-height: 100%;
+}
 
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
 body {
   margin: 0;
   padding: 0;

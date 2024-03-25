@@ -14,6 +14,8 @@ import {
   REGISTER_PAGE,
   USER_ACCOUNT_PAGE,
   USER_ACCOUNT_DETAILS_PAGE,
+  ORDER_STATUS_PAGE,
+  ORDER_LIST_PAGE,
 } from "../../../helpers/route-paths/paths";
 import Header from "../../common/header/Header";
 import Footer from "../../common/footer/Footer";
@@ -34,6 +36,9 @@ import { useSelector } from "react-redux";
 import Profile from "../../pages/protected-pages/profile/Profile";
 import ProfileInputs from "../../pages/protected-pages/profile/layouts/ProfileInputs";
 import ProtectedRoute from "../protected-routes/ProtectedRoute";
+import Order from "../../pages/protected-pages/order/Order";
+import OrderList from "../../pages/protected-pages/profile/layouts/OrderList";
+import TestCartPage from "../../pages/protected-pages/cart/layouts/TestCartPage";
 
 const Pages = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -65,20 +70,26 @@ const Pages = () => {
         <Route path={LOCKED_CLOTH_PAGE} element={<LockedCloth />} />
 
         {/* Protected Pages */}
-        <Route
-          path={CART_PAGE}
-          element={
-              <Cart />
-          }
-        >
+        <Route path={CART_PAGE} element={<Cart />}>
+          {/* <Route path={CART_ITEMS_PAGE} element={<CartItems />} /> */}
+          <Route path={CART_ITEMS_PAGE} element={<TestCartPage />} />
           <Route
-            path={CART_ITEMS_PAGE}
+            path={BILLING_ADDRESS_PAGE}
             element={
-                <CartItems />
+              // <ProtectedRoute>
+                <BillingAddress />
+              // </ProtectedRoute>
             }
           />
-          <Route path={BILLING_ADDRESS_PAGE} element={<BillingAddress />} />
         </Route>
+        <Route
+            path={ORDER_STATUS_PAGE}
+            element={
+              // <ProtectedRoute>
+                <Order />
+              // </ProtectedRoute>
+            }
+          />
         <Route
           path={USER_ACCOUNT_PAGE}
           element={
@@ -92,6 +103,14 @@ const Pages = () => {
             element={
               <ProtectedRoute>
                 <ProfileInputs />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={ORDER_LIST_PAGE}
+            element={
+              <ProtectedRoute>
+                <OrderList />
               </ProtectedRoute>
             }
           />

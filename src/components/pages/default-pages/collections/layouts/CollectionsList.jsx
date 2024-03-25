@@ -30,15 +30,19 @@ const CollectionsList = () => {
   );
   const [selectedProductId, setSelectedProductId] = useState("");
   const [initialSearchInput, setInitialSearchInput] = useState("");
+  const [addingCart, setAddingCart] = useState(false);
   const [localStorageCartItems, setLocalStorageCartItems] = useState(() => {
     return JSON.parse(localStorage.getItem("cart-items")) || [];
   });
-  const [localStorageWishListItems, setLocalStorageWishListItems] = useState(() => {
-    return JSON.parse(localStorage.getItem("wish-list-items")) || [];
-  });
+  const [localStorageWishListItems, setLocalStorageWishListItems] = useState(
+    () => {
+      return JSON.parse(localStorage.getItem("wish-list-items")) || [];
+    }
+  );
   const dispatch = useDispatch();
-
+  console.log("user: ", user);
   const handleAddToCart = (product) => {
+    setAddingCart(true);
     const payload = {
       product_id: product._id,
       user_id: user?._id,
@@ -69,7 +73,10 @@ const CollectionsList = () => {
           "cart-items",
           JSON.stringify([...local_cart_items, localStoragePayload])
         );
-        setLocalStorageCartItems([...localStorageCartItems, localStoragePayload]);
+        setLocalStorageCartItems([
+          ...localStorageCartItems,
+          localStoragePayload,
+        ]);
         const payload = {
           cart_details: [...localStorageCartItems, localStoragePayload],
         };
@@ -99,9 +106,15 @@ const CollectionsList = () => {
           "wish-list-items",
           JSON.stringify([...local_wish_list_items, localStoragePayload])
         );
-        setLocalStorageWishListItems([...localStorageWishListItems, localStoragePayload]);
+        setLocalStorageWishListItems([
+          ...localStorageWishListItems,
+          localStoragePayload,
+        ]);
         const payload = {
-          wish_list_details: [...localStorageWishListItems, localStoragePayload],
+          wish_list_details: [
+            ...localStorageWishListItems,
+            localStoragePayload,
+          ],
         };
         dispatch(getTemporaryCart(payload));
       }
@@ -115,6 +128,13 @@ const CollectionsList = () => {
       dispatch(getProducts(search_input.split(" "), [], []));
     }
   }, [search_input, searching]);
+  useEffect(() => {
+    if (addingCart) {
+      setTimeout(() => {
+        setAddingCart(false);
+      }, 3000);
+    }
+  }, [addingCart]);
   if (products.length > 0) {
     return (
       <div className="collection-list">
@@ -170,28 +190,20 @@ const CollectionsList = () => {
                       <div className="add-to-cart-container">
                         <button
                           className={`add-to-cart-btn d-flex align-items-center justify-content-center gap-3 ${
-                            (cartItems?.some(
+                            ((cartItems?.some(
                               (cartProduct) =>
                                 cartProduct?.product?._id === product?._id
-                            ) ||
+                            ) &&
+                              addingCart) ||
                               (cartLoading &&
-                                selectedProductId === product._id)) &&
+                                selectedProductId === product._id &&
+                                addingCart)) &&
                             "disabled"
                           }`}
                           onClick={(e) => {
                             e.stopPropagation();
                             setSelectedProductId(product._id);
-                            if (
-                              cartItems?.some(
-                                (cartProduct) =>
-                                  cartProduct?.product?._id === product?._id
-                              ) ||
-                              cartLoading
-                            ) {
-                              return;
-                            } else {
-                              handleAddToCart(product);
-                            }
+                            handleAddToCart(product);
                           }}
                         >
                           {cartLoading && selectedProductId === product._id ? (
@@ -203,7 +215,7 @@ const CollectionsList = () => {
                               {cartItems?.some(
                                 (cartProduct) =>
                                   cartProduct?.product?._id === product?._id
-                              ) ? (
+                              ) && addingCart ? (
                                 <TiTick className="font-size-3 d-flex align-items-center" />
                               ) : (
                                 <TiShoppingCart className="font-size-3 d-flex align-items-center" />
@@ -214,7 +226,7 @@ const CollectionsList = () => {
                             {cartItems?.some(
                               (cartProduct) =>
                                 cartProduct?.product?._id === product?._id
-                            )
+                            ) && addingCart
                               ? "Added to Cart"
                               : cartLoading && selectedProductId === product._id
                               ? "Adding to Cart"

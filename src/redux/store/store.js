@@ -9,6 +9,8 @@ import cartReducer from "../slices/cartSlice";
 import checkoutDetailsReducer from "../slices/checkoutDetailsSlice";
 import wishListReducer from "../slices/wishListSlice";
 import resCartReducer from "../slices/resCartSlice";
+import addressReducer from "../slices/addressSlice";
+import orderReducer from "../slices/orderSlice";
 
 const reducer = combineReducers({
     authState: authReducer,
@@ -21,6 +23,8 @@ const reducer = combineReducers({
     wishListState: wishListReducer,
     checkoutDetailsState: checkoutDetailsReducer,
     resCartState: resCartReducer,
+    addressState: addressReducer,
+    orderState: orderReducer,
 })
 
 const store = configureStore({

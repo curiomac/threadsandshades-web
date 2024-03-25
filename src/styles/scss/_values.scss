@@ -1,5 +1,9 @@
 /* Values */
 
+/* Height */
+
+$height-cover: var(--doc-height);
+
 /* Colors */
 
 $primary-color: var(--primary-color);
@@ -8,5 +12,5 @@ $ternary-color: var(--ternary-color);
 $default-color: var(--default-color);
 $default-inner-color: var(--default-inner-color);
 
-$primary-font-color:var(--ternary-color);
+$primary-font-color: var(--ternary-color);
 $secondary-font-color: var(--secondary-color);

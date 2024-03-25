@@ -9,10 +9,10 @@ const SupportBanner = () => {
         <div className="contents">
           <div className="content">
             <div>
-              <TbTruckDelivery className="font-size-5 d-flex align-items-center" />
+              <TbTruckDelivery className="ic font-size-5 d-flex align-items-center" />
             </div>
             <div>
-              <div className="heading">Fast and Safe Delivery</div>
+              <div className="heading">Fast and safe delivery</div>
               <div className="sub-heading">
                 Free delivery for orders above ₹999
               </div>
@@ -20,10 +20,10 @@ const SupportBanner = () => {
           </div>
           <div className="content">
             <div>
-              <IoIosTimer className="font-size-5 d-flex align-items-center" />
+              <IoIosTimer className="ic font-size-5 d-flex align-items-center" />
             </div>
             <div>
-              <div className="heading">On Time Delivery</div>
+              <div className="heading">On time delivery</div>
               <div className="sub-heading">
                 Efficient shipping, on your schedule
               </div>
@@ -31,10 +31,10 @@ const SupportBanner = () => {
           </div>
           <div className="content">
             <div>
-              <LiaHeadsetSolid className="font-size-5 d-flex align-items-center" />
+              <LiaHeadsetSolid className="ic font-size-5 d-flex align-items-center" />
             </div>
             <div>
-              <div className="heading">Need Support?</div>
+              <div className="heading">Need support?</div>
               <div className="sub-heading">
                 For any inquiries, our support team is ready to assist you
               </div>

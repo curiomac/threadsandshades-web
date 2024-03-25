@@ -10,12 +10,15 @@ import {
   HOME_PAGE,
   ABOUT_PAGE,
   CONTACT_PAGE,
+  ORDER_STATUS_PAGE,
+  CART_ITEMS_PAGE,
+  BILLING_ADDRESS_PAGE,
 } from "../../../helpers/route-paths/paths";
 
 const Footer = () => {
   const location = useLocation();
 
-  const defaultPages = [HOME_PAGE, ABOUT_PAGE, CONTACT_PAGE];
+  const defaultPages = [HOME_PAGE, ABOUT_PAGE, CONTACT_PAGE, ORDER_STATUS_PAGE, CART_ITEMS_PAGE, BILLING_ADDRESS_PAGE];
 
   const isDefaultPage = () => {
     if (defaultPages.find((page) => page === location.pathname)) {
@@ -117,7 +120,7 @@ const Footer = () => {
             </div>
           </div>
           <div className="copy-rights">
-            © 2024 Threads and Shades. All rights reserved
+            © 2024 Threads & Shades. All rights reserved
           </div>
         </div>
       )}
