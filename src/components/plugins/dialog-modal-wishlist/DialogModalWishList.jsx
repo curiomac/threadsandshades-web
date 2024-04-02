@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { FaArrowRightLong } from "react-icons/fa6";
+import { FaArrowRightLong, FaRegHeart } from "react-icons/fa6";
+import { FaHeartBroken } from "react-icons/fa"
 import { IoClose } from "react-icons/io5";
 import { IoMailOutline } from "react-icons/io5";
 import { TiShoppingCart, TiTick } from "react-icons/ti";
@@ -106,10 +107,10 @@ const DialogModalWishList = ({ isOpen, onClose }) => {
             </div>
             <div>
               <div className="wish-list-heading">MY WISHLIST</div>
-              <input
+              {/* <input
                 className="search-input"
                 placeholder="Search for product"
-              />
+              /> */}
               <div className="wish-list-container">
                 {wishListItems?.map((wishList) => {
                   return (
@@ -244,6 +245,14 @@ const DialogModalWishList = ({ isOpen, onClose }) => {
                     </div>
                   );
                 })}
+                {wishListItems?.length === 0 && (
+                  <div className="d-flex align-items-center justify-content-center" style={{height: "40vh"}}>
+                    <div className="text-align-center" style={{color: "#00000082"}}>
+                      <div><FaHeartBroken className="font-size-5"/></div>
+                      <div className="text-transform-uc font-weight-1 mt-2">Wishlist Not Found</div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

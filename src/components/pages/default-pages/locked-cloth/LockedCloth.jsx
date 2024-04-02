@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
-import ProductDetails from './layouts/ProductDetails'
+import ProductDetails from './layouts/ProductDetails';
+import TopSellingBanner from '../home/layouts/TopSellingBanner';
 
 const LockedCloth = () => {
   useEffect(() => {
@@ -11,6 +12,7 @@ const LockedCloth = () => {
   return (
     <div>
         <ProductDetails />
+        <TopSellingBanner />
     </div>
   )
 }

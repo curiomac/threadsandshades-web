@@ -102,6 +102,62 @@ const TestCheckoutBox = ({ triggerPlaceOrder }) => {
           <div>Summary</div>
           <div className="summary-custom-hr" />
         </div>
+        {location.pathname === BILLING_ADDRESS_PAGE && (
+          <div className="checkout-cart-items">
+            {cartItems?.map((cartItem) => {
+              console.log("cartItem:", cartItem);
+              return (
+                <div className="checkout-cart-item">
+                  <div className="d-flex gap-3">
+                    <div className="img-box">
+                      <div className="item-qty-container">
+                        <div className="item-qty">
+                          {
+                            cartItem?.selected_product_details
+                              ?.selected_quantity
+                          }
+                        </div>
+                      </div>
+                      <img
+                        src={
+                          cartItem?.product?.product_images?.length > 0 &&
+                          cartItem?.product?.product_images[0]
+                        }
+                        alt={cartItem?.product?._id}
+                      />
+                    </div>
+                    <div className="item-info">
+                      <div className="item-title">
+                        {cartItem?.product?.product_title}
+                      </div>
+                      <div className="item-features">
+                        <div className="item-size">
+                          {cartItem?.selected_product_details?.selected_size}
+                        </div>
+                        <div className="custom-vr" />
+                        <div
+                          className="item-target-color"
+                          style={{
+                            background:
+                              cartItem?.selected_product_details
+                                ?.selected_color_code,
+                          }}
+                        ></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="d-flex align-items-center price">
+                    <div className="d-flex align-items-center">
+                      <MdCurrencyRupee />
+                    </div>
+                    <div>{cartItem?.product?.fixed_price}.00</div>
+                  </div>
+                </div>
+              );
+            })}
+            <div className="sec-custom-hr" />
+          </div>
+        )}
         <div className="shipping-info">
           <div className="d-flex align-items-center justify-content-space-between">
             <div className="key">Product Total (2)</div>
@@ -129,24 +185,24 @@ const TestCheckoutBox = ({ triggerPlaceOrder }) => {
             </div>
           </div>
           <div className="d-flex align-items-center justify-content-space-between mt-1">
-            <div className="key">Total without GST</div>
+            <div className="key">GST 18%</div>
             <div className="value d-flex align-items-center">
               <div className="d-flex align-items-center">
                 <MdCurrencyRupee />
               </div>
               <div>
-                {checkoutDetailsValue?.cart_total -
-                  (18 / 100) * checkoutDetailsValue?.cart_total}
+                {(18 / 100) * checkoutDetailsValue?.cart_total}
               </div>
             </div>
           </div>
           <div className="d-flex align-items-center justify-content-space-between mt-1">
-            <div className="key">Including GST 18%</div>
+            <div className="key">Total</div>
             <div className="value d-flex align-items-center">
               <div className="d-flex align-items-center">
                 <MdCurrencyRupee />
               </div>
-              <div>{checkoutDetailsValue?.cart_total}.00</div>
+              <div>{checkoutDetailsValue?.cart_total +
+                  (18 / 100) * checkoutDetailsValue?.cart_total}.00</div>
             </div>
           </div>
           <div className="sec-custom-hr" />
@@ -162,59 +218,66 @@ const TestCheckoutBox = ({ triggerPlaceOrder }) => {
             </div>
           </div>
         </div>
-        <div className="delivery-notes">
-          <div className="d-flex align-items-center gap-2">
-            <div className="d-flex align-items-center plus-ic">
-              <FaPlus />
-            </div>
-            <div>Click here to add delivery notes</div>
-          </div>
-        </div>
-        <div className="apply-coupon">
-          <div className="d-flex align-items-center gap-1">
-            <div className="d-flex align-items-center">
-              <BiSolidCoupon className="coupon-ic" />
-            </div>
-            <div>Apply Coupon</div>
-          </div>
-          <div className="d-flex align-items-center justify-content-space-between gap-2 mt-1">
-            <div className="input-container w-fill">
-              <input
-                placeholder="Enter coupon code"
-                value={couponValue}
-                onChange={(e) =>
-                  setCouponValue(e.target.value.toLocaleUpperCase())
-                }
-              />
-            </div>
-            <div className="btn">
-              <button
-                className="cursor-pointer font-family-poppins"
-                onClick={() => {
-                  if (couponValue) {
-                    handleApplyCoupon();
-                  }
-                }}
-                disabled={couponValue ? false : true}
-              >
-                {checkoutDetailsLoading && couponTriggered ? (
-                  <SpinnerLoader />
-                ) : (
-                  "Apply"
-                )}
-              </button>
-            </div>
-          </div>
-          {checkoutDetailsError && couponTriggered ? (
-            <div className="h-0">
-              <div className="font-10 font-eight-1" style={{ color: "red" }}>
-                *{checkoutDetailsError}
+        {location.pathname === CART_ITEMS_PAGE && (
+          <div>
+            <div className="delivery-notes">
+              <div className="d-flex align-items-center gap-2">
+                <div className="d-flex align-items-center plus-ic">
+                  <FaPlus />
+                </div>
+                <div>Click here to add delivery notes</div>
               </div>
             </div>
-          ) : (
-            ""
-          )}
-        </div>
+            <div className="apply-coupon">
+              <div className="d-flex align-items-center gap-1">
+                <div className="d-flex align-items-center">
+                  <BiSolidCoupon className="coupon-ic" />
+                </div>
+                <div>Apply Coupon</div>
+              </div>
+              <div className="d-flex align-items-center justify-content-space-between gap-2 mt-1">
+                <div className="input-container w-fill">
+                  <input
+                    placeholder="Enter coupon code"
+                    value={couponValue}
+                    onChange={(e) =>
+                      setCouponValue(e.target.value.toLocaleUpperCase())
+                    }
+                  />
+                </div>
+                <div className="btn">
+                  <button
+                    className="cursor-pointer font-family-poppins"
+                    onClick={() => {
+                      if (couponValue) {
+                        handleApplyCoupon();
+                      }
+                    }}
+                    disabled={couponValue ? false : true}
+                  >
+                    {checkoutDetailsLoading && couponTriggered ? (
+                      <SpinnerLoader />
+                    ) : (
+                      "Apply"
+                    )}
+                  </button>
+                </div>
+              </div>
+              {checkoutDetailsError && couponTriggered ? (
+                <div className="h-0">
+                  <div
+                    className="font-10 font-eight-1"
+                    style={{ color: "red" }}
+                  >
+                    *{checkoutDetailsError}
+                  </div>
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
+          </div>
+        )}
         <div className="checkout-button">
           <button
             className="d-flex align-items-center gap-2 justify-content-center cursor-pointer"
@@ -254,17 +317,19 @@ const TestCheckoutBox = ({ triggerPlaceOrder }) => {
         <div className="pay-using">
           <div>Pay Using</div>
           <div className="d-flex align-items-center gap-4">
-            <div>
+            <div className="method">
               <PhonePeIc height={40} width={60} />
             </div>
-            <div>
+            <div className="method">
               <PayPalIc height={40} width={60} />
             </div>
           </div>
         </div>
         <div className="support-banner-container">
-          <div className="heading">Efficient shipping made easy</div>
-          <SupportBanner />
+          <div className="bg">
+            <div className="heading">Efficient shipping made easy</div>
+            <SupportBanner />
+          </div>
         </div>
       </div>
     </div>

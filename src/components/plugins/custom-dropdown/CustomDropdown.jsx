@@ -51,7 +51,7 @@ const CustomDropdown = ({
   };
   const addOption = () => {
     const trimmedOption = optionInput.trim();
-    if (trimmedOption && !options.includes(trimmedOption) && addOptionValue) {
+    if (trimmedOption && !options?.includes(trimmedOption) && addOptionValue) {
       onAddOption([...options, trimmedOption]);
       setFilteredOptions([...options, trimmedOption]);
       setOptionInput("");

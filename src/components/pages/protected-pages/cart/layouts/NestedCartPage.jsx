@@ -4,7 +4,7 @@ import CheckoutBox from "./CheckoutBox";
 import { getQueryParam } from "../../../../../helpers/search-query-params/getQueryParams";
 import { useDispatch, useSelector } from "react-redux";
 import { proceedTrigger } from "../../../../../redux/slices/resCartSlice";
-import TestCheckoutBox from "./TestCheckoutBox";
+import TestCheckoutBox from "./CheckoutBox_T";
 
 const NestedCartPage = () => {
   const trigger = getQueryParam("proceed");

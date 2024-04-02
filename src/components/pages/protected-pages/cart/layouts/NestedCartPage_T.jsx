@@ -268,7 +268,7 @@ const TestCartPage = () => {
               </div>
             </div>
             <div className="alredy-client gap-2">
-              <div className="target">Alredy a client?</div>
+              <div className="target">Alredy a customer?</div>
               <div className="event">Sign in</div>
             </div>
           </div>

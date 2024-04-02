@@ -488,8 +488,8 @@
           display: unset !important;
           
           .filter-scroll {
-            max-height: calc($height-cover - 300px);
-            min-height: calc($height-cover - 300px);
+            max-height: calc($height-cover - 250px);
+            min-height: calc($height-cover - 250px);
             overflow: auto;
             padding-right: 10px;
           }

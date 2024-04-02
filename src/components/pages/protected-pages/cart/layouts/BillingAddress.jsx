@@ -9,8 +9,10 @@ import { useNavigate, useOutletContext } from "react-router-dom";
 import { createOrder } from "../../../../../redux/actions/orderAction";
 import { ORDER_STATUS_PAGE } from "../../../../../helpers/route-paths/paths";
 import { clearCode } from "../../../../../redux/slices/orderSlice";
-import { MdShoppingCartCheckout } from "react-icons/md";
+import { MdCurrencyRupee, MdShoppingCartCheckout } from "react-icons/md";
 import { BsBoxSeamFill } from "react-icons/bs";
+import { MdOutlineKeyboardDoubleArrowUp } from "react-icons/md";
+import { MdOutlineKeyboardDoubleArrowDown } from "react-icons/md";
 
 const BillingAddress = () => {
   const dispatch = useDispatch();
@@ -34,7 +36,7 @@ const BillingAddress = () => {
   const [mobileNo, setMobileNo] = useState("");
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
-  const [alternateAddress, setAlternateAddress] = useState("");
+  const [alternateMobileNo, setAlternateMobileNo] = useState("");
   const [state, setState] = useState();
   const [district, setDistrict] = useState();
   const [locationSelectedOption, setLocationSelectedOption] = useState("");
@@ -44,12 +46,13 @@ const BillingAddress = () => {
   const [mobileNoError, setMobileNoError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [addressError, setAddressError] = useState("");
-  const [alternateAddressError, setAlternateAddressError] = useState("");
+  const [alternateMobileNoError, setAlternateMobileNoError] = useState("");
   const [stateError, setStateError] = useState("");
   const [districtError, setDistrictError] = useState("");
   const [locationSelectedOptionError, setLocationSelectedOptionError] =
     useState("");
   const [postalCodeError, setPostalCodeError] = useState("");
+  const [showCartItems, setShowCartItems] = useState(false);
   const handlePostalAddress = (e) => {
     const postal_code = e?.target?.value;
     if (postal_code.length > 0) {
@@ -90,7 +93,7 @@ const BillingAddress = () => {
       isValid = false;
     } else {
       setMobileNoError("");
-    } 
+    }
     if (!email) {
       setEmailError("Please enter your email");
       isValid = false;
@@ -148,7 +151,7 @@ const BillingAddress = () => {
           mobile_no: mobileNo,
           email: email,
           address: address,
-          alternate_address: alternateAddress,
+          alternate_address: alternateMobileNo,
           state: state,
           district: district,
           location: locationSelectedOption,
@@ -176,7 +179,7 @@ const BillingAddress = () => {
             const product_id = cart_item?.product?._id;
             return {
               product_id,
-              ...cart_item.selected_product_details
+              ...cart_item.selected_product_details,
             };
           });
         };
@@ -190,7 +193,7 @@ const BillingAddress = () => {
             mobile_no: mobileNo,
             email: email,
             address: address,
-            alternate_address: alternateAddress,
+            alternate_address: alternateMobileNo,
             state: state,
             district: district,
             location: locationSelectedOption,
@@ -231,6 +234,12 @@ const BillingAddress = () => {
   useEffect(() => {
     dispatch(proceedTrigger(trigger));
   }, [trigger]);
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
   return (
     <div
       className={`cart-items ${
@@ -244,7 +253,9 @@ const BillingAddress = () => {
             <div className="billing-inputs">
               <div className="flex-inputs d-flex align-items-center gap-3 w-fill">
                 <div className="w-fill">
-                  <div className="label">First Name <span className="manditory">*</span></div>
+                  <div className="label">
+                    First Name <span className="manditory">*</span>
+                  </div>
                   <input
                     className={`${firstNameError ? "active" : ""}`}
                     placeholder="First Name"
@@ -260,7 +271,9 @@ const BillingAddress = () => {
                   <div className="input-msg">{firstNameError}</div>
                 </div>
                 <div className="w-fill">
-                  <div className="label">Last Name <span className="manditory">*</span></div>
+                  <div className="label">
+                    Last Name <span className="manditory">*</span>
+                  </div>
                   <input
                     className={`${lastNameError ? "active" : ""}`}
                     placeholder="Last Name"
@@ -277,7 +290,9 @@ const BillingAddress = () => {
               </div>
               <div className="flex-inputs d-flex align-items-center gap-3 w-fill">
                 <div className="w-fill">
-                  <div className="label">Mobile Number <span className="manditory">*</span></div>
+                  <div className="label">
+                    Mobile Number <span className="manditory">*</span>
+                  </div>
                   <input
                     className={`${mobileNoError ? "active" : ""}`}
                     placeholder="Mobile Number"
@@ -285,10 +300,13 @@ const BillingAddress = () => {
                     onChange={(e) => {
                       let mobile_number_regex = /^(\+\d{1,3}[- ]?)?\d{10}$/;
                       setMobileNo(e.target.value);
-                      if (mobileNoError && !mobile_number_regex.test(mobileNo)) {
+                      if (
+                        mobileNoError &&
+                        !mobile_number_regex.test(mobileNo)
+                      ) {
                         setMobileNoError("Please enter a valid mobile number");
                       } else if (e.target.value.length > 0) {
-                        setMobileNoError("")
+                        setMobileNoError("");
                       }
                     }}
                     type="number"
@@ -296,24 +314,46 @@ const BillingAddress = () => {
                   <div className="input-msg">{mobileNoError}</div>
                 </div>
                 <div className="w-fill">
-                  <div className="label">Email <span className="manditory">*</span></div>
+                  <div className="label">
+                    Alternate Mobile Number (Optional)
+                  </div>
                   <input
-                    className={`${emailError ? "active" : ""}`}
-                    placeholder="Email"
-                    value={email}
+                    className={`${alternateMobileNoError ? "active" : ""}`}
+                    placeholder="Alternate Mobile Number (Optional)"
+                    value={alternateMobileNo}
                     onChange={(e) => {
-                      setEmail(e.target.value);
+                      setAlternateMobileNo(e.target.value);
                       if (e.target.value.length > 0) {
-                        setEmailError("");
+                        setAlternateMobileNoError("");
                       }
                     }}
-                    type="email"
+                    type="number"
                   />
-                  <div className="input-msg">{emailError}</div>
+                  <div className="input-msg">{alternateMobileNoError}</div>
                 </div>
               </div>
               <div>
-                <div className="label">Address <span className="manditory">*</span></div>
+                <div className="label">
+                  Email <span className="manditory">*</span>
+                </div>
+                <input
+                  className={`${emailError ? "active" : ""}`}
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (e.target.value.length > 0) {
+                      setEmailError("");
+                    }
+                  }}
+                  type="email"
+                />
+                <div className="input-msg">{emailError}</div>
+              </div>
+              <div>
+                <div className="label">
+                  Address <span className="manditory">*</span>
+                </div>
                 <input
                   className={`${addressError ? "active" : ""}`}
                   placeholder="Address"
@@ -327,24 +367,12 @@ const BillingAddress = () => {
                 />
                 <div className="input-msg">{addressError}</div>
               </div>
-              <div>
-                <div className="label">Alternate Address (Optional)</div>
-                <input
-                  className={`${alternateAddressError ? "active" : ""}`}
-                  placeholder="Alternate Address (Optional)"
-                  value={alternateAddress}
-                  onChange={(e) => {
-                    setAlternateAddress(e.target.value);
-                    if (e.target.value.length > 0) {
-                      setAlternateAddressError("");
-                    }
-                  }}
-                />
-                <div className="input-msg">{alternateAddressError}</div>
-              </div>
+
               <div className="flex-inputs d-flex align-items-center gap-3 w-fill">
                 <div className="w-fill">
-                  <div className="label">Postal Code <span className="manditory">*</span></div>
+                  <div className="label">
+                    Postal Code <span className="manditory">*</span>
+                  </div>
                   <input
                     className={`${postalCodeError ? "active" : ""}`}
                     value={postalCode}
@@ -377,7 +405,9 @@ const BillingAddress = () => {
                   <div className="input-msg">{districtError}</div>
                 </div>
                 <div className="w-fill">
-                  <div className="label">Location <span className="manditory">*</span></div>
+                  <div className="label">
+                    Location <span className="manditory">*</span>
+                  </div>
                   <CustomDropdown
                     value={locationSelectedOption}
                     placeholder={"Location"}
@@ -418,16 +448,92 @@ const BillingAddress = () => {
           </div>
         </div>
       </div>
-      <div className="place-order-container">
-        <button
-          className="place-order-btn d-flex align-items-center gap-2 justify-content-center cursor-pointer"
-          onClick={handlePlaceOrder}
-        >
-          <div>
-            <BsBoxSeamFill className="font-size-3 d-flex align-items-center" />
+      <div
+        className="place-order-container"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="w-fill">
+          <div className={`d-flex justify-content-space-between`}>
+            <div className="total-items-heading">
+              Total Items ({cartItems?.length})
+            </div>
+            <div
+              className="d-flex"
+              onClick={() => setShowCartItems(!showCartItems)}
+            >
+              {showCartItems ? (
+                <MdOutlineKeyboardDoubleArrowDown />
+              ) : (
+                <MdOutlineKeyboardDoubleArrowUp />
+              )}
+            </div>
           </div>
-          <div>PLACE ORDER</div>
-        </button>
+          <div className={`total-cart-items ${showCartItems ? "show" : ""}`}>
+            <div className="checkout-cart-items">
+              {cartItems?.map((cartItem) => {
+                console.log("cartItem:", cartItem);
+                return (
+                  <div className="checkout-cart-item">
+                    <div className="d-flex gap-3">
+                      <div className="img-box">
+                        <div className="item-qty-container">
+                          <div className="item-qty">
+                            {
+                              cartItem?.selected_product_details
+                                ?.selected_quantity
+                            }
+                          </div>
+                        </div>
+                        <img
+                          src={
+                            cartItem?.product?.product_images?.length > 0 &&
+                            cartItem?.product?.product_images[0]
+                          }
+                          alt={cartItem?.product?._id}
+                        />
+                      </div>
+                      <div className="item-info">
+                        <div className="item-title">
+                          {cartItem?.product?.product_title}
+                        </div>
+                        <div className="item-features">
+                          <div className="item-size">
+                            {cartItem?.selected_product_details?.selected_size}
+                          </div>
+                          <div className="custom-vr" />
+                          <div
+                            className="item-target-color"
+                            style={{
+                              background:
+                                cartItem?.selected_product_details
+                                  ?.selected_color_code,
+                            }}
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="d-flex align-items-center price">
+                      <div className="d-flex align-items-center">
+                        <MdCurrencyRupee />
+                      </div>
+                      <div>{cartItem?.product?.fixed_price}.00</div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="sec-custom-hr" />
+          </div>
+          <button
+            className="place-order-btn d-flex align-items-center mt-2 gap-2 justify-content-center cursor-pointer"
+            onClick={handlePlaceOrder}
+          >
+            <div>
+              <BsBoxSeamFill className="font-size-3 d-flex align-items-center" />
+            </div>
+            <div>PLACE ORDER</div>
+          </button>
+        </div>
       </div>
     </div>
   );

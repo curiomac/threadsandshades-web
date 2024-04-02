@@ -1,18 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { getQueryParam } from "../../../../../helpers/search-query-params/getQueryParams";
 import { RxSlash } from "react-icons/rx";
-import { FaRegStar, FaStar } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { getProduct } from "../../../../../redux/actions/productAction";
-import { COLLECTIONS_PAGE, LOCKED_CLOTH_PAGE } from "../../../../../helpers/route-paths/paths";
+import {
+  COLLECTIONS_PAGE,
+  LOCKED_CLOTH_PAGE,
+} from "../../../../../helpers/route-paths/paths";
 import { useNavigate } from "react-router-dom";
 import { TiShoppingCart, TiTick } from "react-icons/ti";
 import { getProducts } from "../../../../../redux/actions/productsAction";
-import { addCart, getTemporaryCart } from "../../../../../redux/actions/cartAction";
+import {
+  addCart,
+  getTemporaryCart,
+} from "../../../../../redux/actions/cartAction";
 import SpinnerLoader from "../../../../plugins/loaders/spinner-loader/SpinnerLoader";
 import BackdropLoader from "../../../../plugins/loaders/backdrop-loader/BackdropLoader";
 import { clearProduct } from "../../../../../redux/slices/productSlice";
 import { IoIosClose } from "react-icons/io";
+import CustomModal from "../../../../plugins/custom-modal/CustomModal";
+import { GrClose } from "react-icons/gr";
+import { IoIosStar } from "react-icons/io";
+import { IoIosStarOutline } from "react-icons/io";
 
 const rating = 4.5;
 
@@ -39,6 +48,7 @@ const ProductDetails = () => {
   const [selectedProductId, setSelectedProductId] = useState("");
   const [targetProductSize, setTargetProductSize] = useState("");
   const [targetProductQuantity, setTargetProductQuantity] = useState("");
+  const [ratingsModalOpen, setRatingsModalOpen] = useState(false);
   const [localStorageItems, setLocalStorageItems] = useState(() => {
     return JSON.parse(localStorage.getItem("cart-items")) || [];
   });
@@ -46,7 +56,7 @@ const ProductDetails = () => {
     useState(1);
 
   const filledStars = Array.from({ length: Math.floor(rating) }, (_, index) => (
-    <FaStar key={index} className="filled d-flex align-items-center" />
+    <IoIosStar key={index} className="filled d-flex align-items-center" />
   ));
 
   const handleMouseMove = (e) => {
@@ -68,7 +78,7 @@ const ProductDetails = () => {
   };
   const remainingStars = Array.from(
     { length: 5 - Math.floor(rating) },
-    (_, index) => <FaRegStar key={index} />
+    (_, index) => <IoIosStarOutline key={index} />
   );
   const handleAddToCart = (product) => {
     const payload = {
@@ -141,7 +151,14 @@ const ProductDetails = () => {
       {Object.keys(productData).length !== 0 && (
         <div className="container-fluid">
           <div className="d-flex align-items-center gap-2 bread-crumbs">
-            <div className="border-bottom brand" onClick={() => navigate(`${COLLECTIONS_PAGE}?type=${productType}`)}>Threads and Shades</div>
+            <div
+              className="border-bottom brand"
+              onClick={() =>
+                navigate(`${COLLECTIONS_PAGE}?type=${productType}`)
+              }
+            >
+              Threads and Shades
+            </div>
             <div>
               <RxSlash className="d-flex align-items-center" />
             </div>
@@ -238,7 +255,10 @@ const ProductDetails = () => {
               )}
               <div className="product-title">{product?.product_title}</div>
               <div className="rating-container">
-                <div className="rating">
+                <div
+                  className="rating"
+                  onClick={() => setRatingsModalOpen(true)}
+                >
                   {filledStars}
                   {remainingStars}
                   <span className="rating-value">{`(${rating})`}</span>
@@ -402,8 +422,6 @@ const ProductDetails = () => {
                     }
                   }}
                 >
-                  {console.log(cartLoading)}
-                  {console.log(selectedProductId, "<<<<<<<<<<<<<<")}
                   {cartLoading && selectedProductId === product._id ? (
                     <div>
                       <SpinnerLoader />
@@ -437,6 +455,96 @@ const ProductDetails = () => {
           </div>
         </div>
       )}
+      <CustomModal
+        isOpen={ratingsModalOpen}
+        onClose={() => setRatingsModalOpen(false)}
+        size="L"
+      >
+        <div className="ratings-modal container">
+          <div className="close-ic-container">
+            <div className="d-flex align-items-center justify-content-flex-end w-fill mt-2">
+              <div
+                className="close-ic-content"
+                onClick={() => setRatingsModalOpen(false)}
+              >
+                <GrClose className="close-ic" />
+              </div>
+            </div>
+          </div>
+          <div className="mt-1 mb-2">
+            <div>
+              <div className="font-size-3 font-weight-2 text-transorm-uc">
+                Overall Rating
+              </div>
+            </div>
+            <div className="rating-star-container">
+              <div className="rating-star-content">
+                <div className="rating-star">
+                  <IoIosStar />
+                </div>
+                <div className="rating-star">
+                  <IoIosStar />
+                </div>
+                <div className="rating-star">
+                  <IoIosStar />
+                </div>
+                <div className="rating-star unfilled">
+                  <IoIosStarOutline />
+                </div>
+                <div className="rating-star unfilled">
+                  <IoIosStarOutline />
+                </div>
+              <div className="product-review-result">🙂 Good</div>
+              </div>
+            </div>
+            <div className="review-title mt-3">
+              <div className="font-weight-1 font-14 review-title-heading">
+                Review title
+              </div>
+              <input placeholder="Example: Comfort Fit" />
+            </div>
+            <div className="recomend-product-res-container mt-2">
+              <div className="font-weight-1">
+                Would you recomend this product to a friend?
+              </div>
+              <div className="recomend-product-res w-fill">
+                <div className="d-flex align-items-center gap-1">
+                  <input type="radio" />
+                  <div className="res">Yes</div>
+                </div>
+                <div className="d-flex align-items-center gap-1">
+                  <input type="radio" />
+                  <div className="res">No</div>
+                </div>
+              </div>
+            </div>
+            <div className="product-review mt-3">
+              <div className="font-weight-1 font-14 product-review-heading">
+                Product review
+              </div>
+              <textarea
+                rows={5}
+                placeholder="Example: The fabric is incredibly soft and breathable, making it a joy to wear all day long. What really sets this dress apart is the attention to detail in the fit."
+              />
+            </div>
+            <div>
+              <div className="terms d-flex align-items-center gap-1">
+                <input type="radio" />
+                <div className="res">I accept terms and conditions</div>
+              </div>
+            </div>
+            <div className="terms-sentence">
+              You agree to allow us to send you periodic communications related
+              to product reviews, promotions, and other relevant information.
+              You also consent to our privacy policy, which outlines how your
+              personal information will be collected, used, and protected.
+            </div>
+            <div className="submit-btn">
+              <button>Submit product review</button>
+            </div>
+          </div>
+        </div>
+      </CustomModal>
     </div>
   );
 };

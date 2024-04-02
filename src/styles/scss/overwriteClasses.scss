@@ -1,0 +1,36 @@
+/* Values */
+
+@import "_values";
+
+/* Home */
+
+/* Top Selling Banner */
+
+.top-selling-banner {
+  /* react slicker overwrited classes */
+  .slick-slider {
+    .slick-track {
+      display: flex;
+      gap: 1rem;
+    }
+    .slick-prev {
+      left: -5px !important;
+    }
+    .slick-next {
+      right: -5px !important;
+    }
+    .slick-next,
+    .slick-prev {
+      background: rgba(172, 255, 47, 0);
+      z-index: 1;
+    }
+    .slick-prev:before,
+    .slick-next:before {
+      color: $primary-color;
+      opacity: 0;
+    }
+    .slick-dots {
+        display: none !important;
+    }
+  }
+}

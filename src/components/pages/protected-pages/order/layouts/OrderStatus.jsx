@@ -163,7 +163,8 @@ const OrderStatus = () => {
             <div
               className={`status-bar ${getOrderStatus(
                 "i-t"
-              )} in-progress res-992px-d-none`}
+              )} in-progress 
+              `}
             ></div>
             <div className="status ">
               <div className="d-flex align-items-center justify-content-center">
@@ -179,7 +180,8 @@ const OrderStatus = () => {
             <div
               className={`status-bar ${getOrderStatus(
                 "o-f-d"
-              )} in-progress res-992px-d-none`}
+              )} in-progress 
+              `}
             ></div>
             <div className="status ">
               <div className="d-flex align-items-center justify-content-center">
@@ -213,7 +215,7 @@ const OrderStatus = () => {
                     </div>
                   </div>
                   <div className="d-flex align-items-center gap-2">
-                    <div className="font-14 res-font font-weight-1">Order Number:</div>
+                    <div className="font-14 res-font font-weight-1">Order Id:</div>
                     <div className="font-14 res-font">{orderResponse?._id}</div>
                   </div>
                 </div>

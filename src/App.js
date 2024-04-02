@@ -4,6 +4,7 @@ import "./styles/css/App.css";
 import "./styles/css/common.css";
 import "./styles/css/style.css";
 import "./styles/scss/error.scss";
+import "./styles/scss/overwriteClasses.scss";
 import "./styles/scss/Home.scss";
 import "./styles/scss/Collections.scss";
 import "./styles/scss/LockedCloth.scss";

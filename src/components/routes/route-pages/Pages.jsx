@@ -38,7 +38,7 @@ import ProfileInputs from "../../pages/protected-pages/profile/layouts/ProfileIn
 import ProtectedRoute from "../protected-routes/ProtectedRoute";
 import Order from "../../pages/protected-pages/order/Order";
 import OrderList from "../../pages/protected-pages/profile/layouts/OrderList";
-import TestCartPage from "../../pages/protected-pages/cart/layouts/TestCartPage";
+import TestCartPage from "../../pages/protected-pages/cart/layouts/NestedCartPage_T";
 
 const Pages = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
