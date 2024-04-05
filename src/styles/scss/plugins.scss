@@ -461,10 +461,11 @@
   width: 15px;
   background-color: #eee;
   border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 .custom-checkbox input:checked ~ .checkmark {
-  background-color: $primary-color; /* Change this to your desired checkbox color */
+  background-color: $primary-color;
 }
 
 .checkmark:after {

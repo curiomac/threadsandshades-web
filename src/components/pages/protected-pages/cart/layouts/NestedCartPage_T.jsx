@@ -11,9 +11,10 @@ import {
 } from "../../../../../redux/actions/cartAction";
 import { LOCKED_CLOTH_PAGE } from "../../../../../helpers/route-paths/paths";
 import { RxCross2 } from "react-icons/rx";
-import { MdCurrencyRupee, MdVerified } from "react-icons/md";
+import { MdVerified } from "react-icons/md";
 import { FaMinus, FaPlus } from "react-icons/fa6";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
+import { PiCurrencyInrBold } from "react-icons/pi";
 
 const TestCartPage = () => {
   const { cartItems, loading: cartItemsLoading } = useSelector(
@@ -192,7 +193,7 @@ const TestCartPage = () => {
                                     </div>
                                   </div>
                                   <div className="d-flex align-items-center">
-                                    <MdCurrencyRupee />
+                                    <PiCurrencyInrBold />
                                     <div>
                                       {cartItem?.selected_product_details
                                         ?.selected_quantity *
@@ -253,7 +254,7 @@ const TestCartPage = () => {
                           </div>
                         </div>
                         <div className="d-flex align-items-center mt-3">
-                          <MdCurrencyRupee />
+                          <PiCurrencyInrBold />
                           <div>
                             {cartItem?.selected_product_details
                               ?.selected_quantity *
@@ -288,7 +289,7 @@ const TestCartPage = () => {
           <div className="sub-total d-flex align-items-center justify-content-space-between">
             <div className="heading">Subtotal</div>
             <div className="d-flex align-items-center price">
-              <MdCurrencyRupee />
+              <PiCurrencyInrBold />
               <div>{checkoutDetails?.cart_total}.00</div>
             </div>
           </div>

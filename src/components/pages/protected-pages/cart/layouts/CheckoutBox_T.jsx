@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BiSolidCoupon } from "react-icons/bi";
 import { IoIosArrowForward, IoIosWallet } from "react-icons/io";
-import { MdCurrencyRupee, MdShoppingCartCheckout } from "react-icons/md";
+import { MdShoppingCartCheckout } from "react-icons/md";
 import { getQueryParam } from "../../../../../helpers/search-query-params/getQueryParams";
 import { useDispatch, useSelector } from "react-redux";
 import { proceedTrigger } from "../../../../../redux/slices/resCartSlice";
@@ -22,6 +22,7 @@ import { BsShieldLock } from "react-icons/bs";
 import { PhonePeIc } from "../../../../../assets/icons/PhonePeIc";
 import { PayPalIc } from "../../../../../assets/icons/PayPalIc";
 import SupportBanner from "../../../default-pages/home/layouts/SupportBanner";
+import { PiCurrencyInrBold } from "react-icons/pi";
 
 const TestCheckoutBox = ({ triggerPlaceOrder }) => {
   const navigate = useNavigate();
@@ -148,7 +149,7 @@ const TestCheckoutBox = ({ triggerPlaceOrder }) => {
                   </div>
                   <div className="d-flex align-items-center price">
                     <div className="d-flex align-items-center">
-                      <MdCurrencyRupee />
+                      <PiCurrencyInrBold />
                     </div>
                     <div>{cartItem?.product?.fixed_price}.00</div>
                   </div>
@@ -163,7 +164,7 @@ const TestCheckoutBox = ({ triggerPlaceOrder }) => {
             <div className="key">Product Total (2)</div>
             <div className="value d-flex align-items-center">
               <div className="d-flex align-items-center">
-                <MdCurrencyRupee />
+                <PiCurrencyInrBold />
               </div>
               <div>{checkoutDetailsValue?.total_mrp}.00</div>
             </div>
@@ -179,7 +180,7 @@ const TestCheckoutBox = ({ triggerPlaceOrder }) => {
             <div className="key">Shipping Cost</div>
             <div className="value d-flex align-items-center">
               <div className="d-flex align-items-center">
-                <MdCurrencyRupee />
+                <PiCurrencyInrBold />
               </div>
               <div>{checkoutDetailsValue?.discounted_delivery_charge}.00</div>
             </div>
@@ -188,7 +189,7 @@ const TestCheckoutBox = ({ triggerPlaceOrder }) => {
             <div className="key">GST 18%</div>
             <div className="value d-flex align-items-center">
               <div className="d-flex align-items-center">
-                <MdCurrencyRupee />
+                <PiCurrencyInrBold />
               </div>
               <div>
                 {(18 / 100) * checkoutDetailsValue?.cart_total}
@@ -199,7 +200,7 @@ const TestCheckoutBox = ({ triggerPlaceOrder }) => {
             <div className="key">Total</div>
             <div className="value d-flex align-items-center">
               <div className="d-flex align-items-center">
-                <MdCurrencyRupee />
+                <PiCurrencyInrBold />
               </div>
               <div>{checkoutDetailsValue?.cart_total +
                   (18 / 100) * checkoutDetailsValue?.cart_total}.00</div>
@@ -212,7 +213,7 @@ const TestCheckoutBox = ({ triggerPlaceOrder }) => {
             <div className="key">Order Total</div>
             <div className="value d-flex align-items-center">
               <div className="d-flex align-items-center">
-                <MdCurrencyRupee />
+                <PiCurrencyInrBold />
               </div>
               <div>{checkoutDetailsValue?.total_mrp}.00</div>
             </div>

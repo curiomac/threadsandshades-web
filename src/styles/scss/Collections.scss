@@ -69,20 +69,30 @@
   overflow: hidden;
   letter-spacing: 2px;
   background-color: $default-inner-color;
+  margin-left: 0.8rem;
   .products-grid {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 0.8rem;
     .product {
-      height: 380px;
-      background-color: rgb(255, 255, 255);
+      height: 413px;
+      background-color: rgba(69, 55, 55, 0);
+      border-radius: 20px;
       cursor: pointer;
       transition: 0.5s;
-      img {
+      .product-img-container {
         height: 250px;
-        width: 100%;
+        width: -webkit-fill-available;
         object-fit: contain;
+        background: #ededed;
+        padding: 20px;
+        border-radius: 30px;
+        img {
+          height: 250px;
+          width: -webkit-fill-available;
+          object-fit: contain;
+        }
       }
       .add-to-fav-icon-container {
         height: 0;
@@ -95,12 +105,12 @@
           min-width: 30px;
           background-color: #fff;
           border-radius: 100%;
-          box-shadow: 0 0 5px 1px #d9d9d9 !important;
+          border: 1px solid rgb(214, 214, 214);
           display: flex;
           align-items: center;
           justify-content: center;
           position: relative;
-          top: 3px;
+          top: -28px;
           cursor: pointer;
         }
       }
@@ -109,24 +119,59 @@
         max-height: 80px;
         .product-title {
           display: -webkit-box;
-          -webkit-line-clamp: 2;
+          -webkit-line-clamp: 1;
           -webkit-box-orient: vertical;
           overflow: hidden;
-          color: #404040;
-          font-size: 12px;
+          color: #000000;
+          font-size: 14px;
+          font-weight: 600;
           letter-spacing: 1px !important;
+          margin-top: 10px;
+        }
+        .product-ratings {
+          letter-spacing: 0.5px;
+          font-weight: 600;
+          .rate {
+            position: relative;
+            top: 0.6px;
+          }
+          .dot-ic {
+            color: #c2c2c2;
+          }
+          .sold {
+            color: #c2c2c2;
+            text-wrap: nowrap;
+          }
+        }
+        .bag-ic {
+          display: none;
         }
         .price {
-          font-size: 14px;
+          font-size: 18px;
+          display: flex;
+          align-items: center;
+          letter-spacing: 0.5px;
+          color: #2a2a2a;
+          // gap: 5px;
         }
         .offered {
-          text-decoration: line-through;
+          position: relative;
           color: #939393;
-          font-size: 14px;
-        }
-        .discount {
           font-size: 12px;
-          color: $primary-color;
+          overflow: hidden;
+          top: 1px;
+          letter-spacing: 0.5px;
+        }
+
+        .offered::after {
+          content: "";
+          position: absolute;
+          top: 51%;
+          left: 0;
+          width: 100%;
+          height: 1px;
+          background-color: #bcbcbc;
+          transform: translateY(-50%) rotate(-0deg);
         }
       }
       .avail-colors-container {
@@ -177,8 +222,6 @@
       }
     }
     .product:hover {
-      box-shadow: 0 0 10px 1px #8888881c !important;
-      transition: 0.5s;
       .add-to-cart-container {
         visibility: visible !important;
         position: relative;
@@ -400,6 +443,7 @@
   .collection-list {
     max-width: 100% !important;
     min-width: 100% !important;
+    margin-left: unset !important;
     .add-to-cart-container {
       visibility: visible !important;
       position: relative !important;
@@ -532,6 +576,56 @@
       }
     }
   }
+  .product {
+    height: 350px !important;
+    .product-img-container {
+      height: 180px !important;
+      img {
+        height: 180px !important;
+      }
+    }
+    .base-container {
+      &.p-none {
+        padding-left: unset !important;
+        padding-right: unset !important;
+        margin-left: unset !important;
+        margin-right: unset !important;
+      }
+      .price-container {
+        display: block !important;
+      }
+      .offered {
+        width: fit-content;
+      }
+      .bag-ic {
+        height: 40px;
+        width: 40px;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        background-color: #f1f1f1;
+        border-radius: 100%;
+        border: 1px solid rgb(220, 220, 220);
+        .ic {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+    }
+    .add-to-fav-icon-container {
+      bottom: 180px !important;
+      right: 10px;
+    }
+  }
+  .product:hover {
+    .add-to-cart-container {
+      display: none !important;
+    }
+  }
+  .add-to-cart-container {
+    display: none !important;
+  }
 }
 
 @media screen and (max-width: 539px) {
@@ -541,9 +635,6 @@
   .products-grid {
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important;
     margin-bottom: 100px;
-    .product {
-      height: 376px !important;
-    }
   }
   .products-empty-container {
     img {

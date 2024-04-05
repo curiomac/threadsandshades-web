@@ -9,7 +9,7 @@ import { IoChatbubbles } from "react-icons/io5";
 import { getOrder } from "../../../../../redux/actions/orderAction";
 import moment from "moment";
 import { RxCross2 } from "react-icons/rx";
-import { MdCurrencyRupee } from "react-icons/md";
+import { PiCurrencyInrBold } from "react-icons/pi";
 import { useNavigate } from "react-router-dom";
 import { LOCKED_CLOTH_PAGE } from "../../../../../helpers/route-paths/paths";
 
@@ -299,12 +299,12 @@ const OrderStatus = () => {
                                   <div>{order_item?.selected_quantity}</div>
                                   <RxCross2 />
                                   <div className="d-flex align-items-center">
-                                    <MdCurrencyRupee />
+                                    <PiCurrencyInrBold />
                                     <div>{order_item?.fixed_price}</div>
                                   </div>
                                 </div>
                                 <div className="d-flex align-items-center price">
-                                  <MdCurrencyRupee />
+                                  <PiCurrencyInrBold />
                                   <div>
                                     {order_item?.selected_quantity *
                                       order_item?.fixed_price}
@@ -318,12 +318,12 @@ const OrderStatus = () => {
                             <div>{order_item?.selected_quantity}</div>
                             <RxCross2 />
                             <div className="d-flex align-items-center">
-                              <MdCurrencyRupee />
+                              <PiCurrencyInrBold />
                               <div>{order_item?.fixed_price}</div>
                             </div>
                           </div>
                           <div className="d-flex align-items-center">
-                            <MdCurrencyRupee />
+                            <PiCurrencyInrBold />
                             <div>
                               {order_item?.selected_quantity *
                                 order_item?.fixed_price}
@@ -345,7 +345,7 @@ const OrderStatus = () => {
                   <div className="d-flex align-items-center justify-content-space-between">
                     <div className="font-14">Subtotal</div>
                     <div className="d-flex align-items-center font-14">
-                      <MdCurrencyRupee />
+                      <PiCurrencyInrBold />
                       <div>{orderResponse?.order_summary?.total_mrp}</div>
                     </div>
                   </div>
@@ -361,7 +361,7 @@ const OrderStatus = () => {
                   <div className="d-flex align-items-center justify-content-space-between mt-2">
                     <div className="font-14 font-weight-1">Total</div>
                     <div className="d-flex align-items-center font-14">
-                      <MdCurrencyRupee />
+                      <PiCurrencyInrBold />
                       <div>{orderResponse?.order_summary?.cart_total}</div>
                     </div>
                   </div>

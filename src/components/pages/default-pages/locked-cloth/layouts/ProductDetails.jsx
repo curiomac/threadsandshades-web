@@ -22,6 +22,11 @@ import CustomModal from "../../../../plugins/custom-modal/CustomModal";
 import { GrClose } from "react-icons/gr";
 import { IoIosStar } from "react-icons/io";
 import { IoIosStarOutline } from "react-icons/io";
+import { PiCurrencyInrBold } from "react-icons/pi";
+import { getCurrencyFormat } from "../../../../../helpers/currency-formatter/getCurrencyFormat";
+import { GoDotFill } from "react-icons/go";
+import ProductInfo from "./ProductInfo";
+import ProductRatings from "./ProductRatings";
 
 const rating = 4.5;
 
@@ -162,7 +167,7 @@ const ProductDetails = () => {
             <div>
               <RxSlash className="d-flex align-items-center" />
             </div>
-            <div className="border-bottom product">
+            <div className="border-bottom product-title">
               {product?.product_title}
             </div>
           </div>
@@ -254,32 +259,59 @@ const ProductDetails = () => {
                 </div>
               )}
               <div className="product-title">{product?.product_title}</div>
-              <div className="rating-container">
-                <div
-                  className="rating"
-                  onClick={() => setRatingsModalOpen(true)}
-                >
-                  {filledStars}
-                  {remainingStars}
-                  <span className="rating-value">{`(${rating})`}</span>
+              <div className="product-ratings d-flex align-items-center gap-2 mt-1">
+                <div className="d-flex align-items-center gap-1">
+                  <div className="d-flex align-items-center">
+                    <IoIosStar
+                      color="#feaa02"
+                      className="d-flex align-items-center"
+                    />
+                  </div>
+                  <div className="font-12 font-weight-1 rate">4.5</div>
+                  <div className="font-12 reviews">(41 Reviews)</div>
                 </div>
+                <div className="d-flex align-items-center dot-ic">
+                  <GoDotFill size={10} />
+                </div>
+                <div className="font-12 sold">125 Items Sold</div>
               </div>
               <div className="d-flex align-items-center font-weight-1">
-                <div className="d-flex align-items-center gap-2">
+                <div>
+                  <div className="d-flex align-items-center gap-2">
+                    <div
+                      className={`${
+                        product?.discount_price && "offered"
+                      } price`}
+                    >
+                      <div className="d-flex align-items-center">
+                        <PiCurrencyInrBold />
+                      </div>
+                      <div className="value">
+                        {getCurrencyFormat(product?.sale_price)}
+                      </div>
+                    </div>
+                    {product?.discount_percentage && (
+                      <div className="tag-ic">
+                        <GoDotFill />
+                      </div>
+                    )}
+                    {product?.discount_percentage && (
+                      <div className="discount price">
+                        {product?.discount_percentage}% offer
+                      </div>
+                    )}
+                  </div>
                   {product?.discount_price && (
-                    <span className="price">
-                      ₹ {product?.sale_price - product?.discount_price}
-                    </span>
-                  )}
-                  <span
-                    className={`${product?.discount_price && "offered"} price`}
-                  >
-                    ₹ {product?.sale_price}
-                  </span>{" "}
-                  {product?.discount_percentage && (
-                    <span className="discount price">
-                      ({product?.discount_percentage}% offer)
-                    </span>
+                    <div className="price">
+                      <div className="d-flex align-items-center">
+                        <PiCurrencyInrBold />
+                      </div>
+                      <div className="value">
+                        {getCurrencyFormat(
+                          product?.sale_price - product?.discount_price
+                        )}
+                      </div>
+                    </div>
                   )}
                 </div>
               </div>
@@ -455,6 +487,14 @@ const ProductDetails = () => {
           </div>
         </div>
       )}
+      {/* Product Info and Ratings */}
+      <div className="container-fluid">
+        <div className="product-info-ratings">
+          <ProductInfo product={product}/>
+          <ProductRatings />
+        </div>
+      </div>
+      {/* Ratings Modal */}
       <CustomModal
         isOpen={ratingsModalOpen}
         onClose={() => setRatingsModalOpen(false)}
@@ -494,7 +534,7 @@ const ProductDetails = () => {
                 <div className="rating-star unfilled">
                   <IoIosStarOutline />
                 </div>
-              <div className="product-review-result">🙂 Good</div>
+                <div className="product-review-result">🙂 Good</div>
               </div>
             </div>
             <div className="review-title mt-3">

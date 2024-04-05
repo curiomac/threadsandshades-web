@@ -5,6 +5,7 @@ import { TiTick } from "react-icons/ti";
 import { LOCKED_CLOTH_PAGE } from "../../../../../helpers/route-paths/paths";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { BsHandbagFill } from "react-icons/bs";
 import { getProducts } from "../../../../../redux/actions/productsAction";
 import {
   addCart,
@@ -15,6 +16,11 @@ import { moveWishList } from "../../../../../redux/actions/wishListAction";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { PiCurrencyInrBold } from "react-icons/pi";
+import { getCurrencyFormat } from "../../../../../helpers/currency-formatter/getCurrencyFormat";
+import { IoIosStar } from "react-icons/io";
+import { GoDotFill } from "react-icons/go";
+import { FaShoppingBasket } from "react-icons/fa";
 
 const TopSellingBanner = () => {
   /* Slider settings */
@@ -46,7 +52,7 @@ const TopSellingBanner = () => {
       {
         breakpoint: 600,
         settings: {
-          slidesToShow: 3,
+          slidesToShow: 2,
           slidesToScroll: 2,
           initialSlide: 2,
         },
@@ -70,6 +76,7 @@ const TopSellingBanner = () => {
     (state) => state.wishListState
   );
   const [selectedProductId, setSelectedProductId] = useState("");
+  const [addingCart, setAddingCart] = useState(false);
   const [localStorageItems, setLocalStorageItems] = useState(() => {
     return JSON.parse(localStorage.getItem("cart-items")) || [];
   });
@@ -124,6 +131,13 @@ const TopSellingBanner = () => {
     };
     dispatch(moveWishList(payload));
   };
+  useEffect(() => {
+    if (addingCart) {
+      setTimeout(() => {
+        setAddingCart(false);
+      }, 3000);
+    }
+  }, [addingCart]);
   return (
     <div className="top-selling-banner">
       <div className="container-fluid">
@@ -144,6 +158,10 @@ const TopSellingBanner = () => {
                       navigate(
                         `${LOCKED_CLOTH_PAGE}?type=men&product_id=${product?._id}`
                       );
+                      window.scrollTo({
+                        top: 0,
+                        behavior: "smooth",
+                      });
                     }}
                   >
                     <div className="product-img-container">
@@ -163,7 +181,6 @@ const TopSellingBanner = () => {
                             }
                           }}
                         >
-                          {console.log("wishListItems: ", wishListItems)}
                           {wishListItems?.some(
                             (wishListProduct) =>
                               wishListProduct?._id === product?._id
@@ -183,32 +200,22 @@ const TopSellingBanner = () => {
                       <div className="add-to-cart-container">
                         <button
                           className={`add-to-cart-btn d-flex align-items-center justify-content-center gap-3 ${
-                            (cartItems?.some(
+                            ((cartItems?.some(
                               (cartProduct) =>
                                 cartProduct?.product?._id === product?._id
-                            ) ||
+                            ) &&
+                              addingCart) ||
                               (cartLoading &&
-                                selectedProductId === product._id)) &&
+                                selectedProductId === product._id &&
+                                addingCart)) &&
                             "disabled"
                           }`}
                           onClick={(e) => {
                             e.stopPropagation();
                             setSelectedProductId(product._id);
-                            if (
-                              cartItems?.some(
-                                (cartProduct) =>
-                                  cartProduct?.product?._id === product?._id
-                              ) ||
-                              cartLoading
-                            ) {
-                              return;
-                            } else {
-                              handleAddToCart(product);
-                            }
+                            handleAddToCart(product);
                           }}
                         >
-                          {console.log(cartLoading)}
-                          {console.log(selectedProductId, "<<<<<<<<<<<<<<")}
                           {cartLoading && selectedProductId === product._id ? (
                             <div>
                               <SpinnerLoader />
@@ -218,7 +225,7 @@ const TopSellingBanner = () => {
                               {cartItems?.some(
                                 (cartProduct) =>
                                   cartProduct?.product?._id === product?._id
-                              ) ? (
+                              ) && addingCart ? (
                                 <TiTick className="font-size-3 d-flex align-items-center" />
                               ) : (
                                 <TiShoppingCart className="font-size-3 d-flex align-items-center" />
@@ -229,7 +236,7 @@ const TopSellingBanner = () => {
                             {cartItems?.some(
                               (cartProduct) =>
                                 cartProduct?.product?._id === product?._id
-                            )
+                            ) && addingCart
                               ? "Added to Cart"
                               : cartLoading && selectedProductId === product._id
                               ? "Adding to Cart"
@@ -247,53 +254,64 @@ const TopSellingBanner = () => {
                       >
                         {product.product_title}
                       </div>
-                      <div className="d-flex align-items-center font-weight-1">
-                        {/* <div>
-                      <BsCurrencyRupee className="d-flex align-items-center"/>
-                    </div> */}
-                        <div className="d-flex align-items-center gap-2 mt-1 mb-1 res-849px-d-none">
+                      <div className="product-ratings d-flex align-items-center gap-2 mt-1">
+                        <div className="d-flex align-items-center gap-1">
+                          <div className="d-flex align-items-center">
+                            <IoIosStar
+                              color="#feaa02"
+                              className="d-flex align-items-center"
+                            />
+                          </div>
+                          <div className="font-12 font-weight-1 rate">4.5</div>
+                        </div>
+                        <div className="d-flex align-items-center dot-ic">
+                          <GoDotFill size={10} />
+                        </div>
+                        <div className="font-12 sold">125 Items Sold</div>
+                      </div>
+                      <div className="d-flex align-items-center font-weight-1 justify-content-space-between">
+                        <div className="d-flex gap-1 mt-1 mb-1 price-container">
                           {product?.is_discounted_product && (
-                            <span className="price">
-                              ₹ {product.sale_price - product.discount_price}
-                            </span>
+                            <div className="price">
+                              <div className="d-flex align-items-center">
+                                <PiCurrencyInrBold />
+                              </div>
+                              <div>
+                                {getCurrencyFormat(
+                                  product.sale_price - product.discount_price
+                                )}
+                              </div>
+                            </div>
                           )}
-                          <span
+                          <div
                             className={`${
                               product?.is_discounted_product && "offered"
                             } price`}
                           >
-                            ₹ {product?.sale_price}
-                          </span>{" "}
-                          {product?.is_discounted_product && (
+                            <div className="d-flex align-items-center">
+                              <PiCurrencyInrBold />
+                            </div>
+                            <div>{getCurrencyFormat(product.sale_price)}</div>
+                          </div>{" "}
+                          {/* {product?.is_discounted_product && (
                             <span className="discount price">
                               ({product.discount_percentage}% offer)
                             </span>
-                          )}
+                          )} */}
                         </div>
-                        <div className="mt-1 mb-1 res-849px-d-unset">
-                          {product?.is_discounted_product && (
-                            <div className="price">
-                              ₹ {product.sale_price - product.discount_price}
-                            </div>
-                          )}
-                          <div className="d-flex align-items-center gap-2">
-                            <span
-                              className={`${
-                                product?.is_discounted_product && "offered"
-                              } font-12`}
-                            >
-                              ₹ {product?.sale_price}
-                            </span>{" "}
-                            {product?.is_discounted_product && (
-                              <span className="discount price">
-                                ({product.discount_percentage}% offer)
-                              </span>
-                            )}
-                          </div>
+                        <div
+                          className="bag-ic"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedProductId(product._id);
+                            handleAddToCart(product);
+                          }}
+                        >
+                          <FaShoppingBasket className="ic" />
                         </div>
                       </div>
                     </div>
-                    <div className="avail-colors-container">
+                    {/* <div className="avail-colors-container">
                       {product?.group?.map((product_group) => {
                         return (
                           <div
@@ -304,7 +322,7 @@ const TopSellingBanner = () => {
                           ></div>
                         );
                       })}
-                    </div>
+                    </div> */}
                   </div>
                 );
               }

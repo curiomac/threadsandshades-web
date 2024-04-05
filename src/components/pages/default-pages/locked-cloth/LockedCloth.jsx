@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
-import ProductDetails from './layouts/ProductDetails';
-import TopSellingBanner from '../home/layouts/TopSellingBanner';
+import React, { useEffect } from "react";
+import ProductDetails from "./layouts/ProductDetails";
+import TopSellingBanner from "../home/layouts/TopSellingBanner";
 
 const LockedCloth = () => {
   useEffect(() => {
@@ -11,10 +11,10 @@ const LockedCloth = () => {
   }, []);
   return (
     <div>
-        <ProductDetails />
-        <TopSellingBanner />
+      <ProductDetails />
+      <TopSellingBanner />
     </div>
-  )
-}
+  );
+};
 
-export default LockedCloth
+export default LockedCloth;

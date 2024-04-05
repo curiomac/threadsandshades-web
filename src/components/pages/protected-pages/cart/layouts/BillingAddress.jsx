@@ -9,7 +9,7 @@ import { useNavigate, useOutletContext } from "react-router-dom";
 import { createOrder } from "../../../../../redux/actions/orderAction";
 import { ORDER_STATUS_PAGE } from "../../../../../helpers/route-paths/paths";
 import { clearCode } from "../../../../../redux/slices/orderSlice";
-import { MdCurrencyRupee, MdShoppingCartCheckout } from "react-icons/md";
+import { PiCurrencyInrBold } from "react-icons/pi";
 import { BsBoxSeamFill } from "react-icons/bs";
 import { MdOutlineKeyboardDoubleArrowUp } from "react-icons/md";
 import { MdOutlineKeyboardDoubleArrowDown } from "react-icons/md";
@@ -514,7 +514,7 @@ const BillingAddress = () => {
                     </div>
                     <div className="d-flex align-items-center price">
                       <div className="d-flex align-items-center">
-                        <MdCurrencyRupee />
+                        <PiCurrencyInrBold />
                       </div>
                       <div>{cartItem?.product?.fixed_price}.00</div>
                     </div>

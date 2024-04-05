@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FaRegHeart, FaHeart } from "react-icons/fa";
+import { FaRegHeart, FaHeart, FaShoppingBasket } from "react-icons/fa";
 import { TiShoppingCart } from "react-icons/ti";
 import { TiTick } from "react-icons/ti";
 import { LOCKED_CLOTH_PAGE } from "../../../../../helpers/route-paths/paths";
@@ -11,10 +11,13 @@ import {
 } from "../../../../../redux/actions/cartAction";
 import SpinnerLoader from "../../../../plugins/loaders/spinner-loader/SpinnerLoader";
 import { moveWishList } from "../../../../../redux/actions/wishListAction";
-import { getLocalStorageItem } from "../../../../../helpers/local-storage-item/getLocalStorageItem";
+import { GoDotFill } from "react-icons/go";
 import { getQueryParam } from "../../../../../helpers/search-query-params/getQueryParams";
 import { getProducts } from "../../../../../redux/actions/productsAction";
 import sorry_gif from "../../../../../assets/imgs/store-room/sorry-gif.gif";
+import { IoIosStar } from "react-icons/io";
+import { PiCurrencyInrBold } from "react-icons/pi";
+import { getCurrencyFormat } from "../../../../../helpers/currency-formatter/getCurrencyFormat";
 
 const CollectionsList = () => {
   const navigate = useNavigate();
@@ -139,13 +142,15 @@ const CollectionsList = () => {
     return (
       <div className="collection-list">
         <div>
-          <div className="container-fluid">
+          <div className="">
             <div className="font-size-3 text-align-center mt-3 mb-3">
               MEN'S COLLECTION
             </div>
             <div className="products-grid">
-              {products?.map((product) => {
-                console.log("product: ", product);
+            {products?.map((product, index) => {
+              console.log("product: ", product);
+              // if (index <= 3) {
+              if (true) {
                 return (
                   <div
                     className="product"
@@ -154,10 +159,16 @@ const CollectionsList = () => {
                       navigate(
                         `${LOCKED_CLOTH_PAGE}?type=men&product_id=${product?._id}`
                       );
+                      window.scrollTo({
+                        top: 0,
+                        behavior: "smooth",
+                      });
                     }}
                   >
-                    <img src={product?.product_images[0]} alt="image_1" />
-                    <div className="container-fluid-padding base-container">
+                    <div className="product-img-container">
+                      <img src={product?.product_images[0]} alt="image_1" />
+                    </div>
+                    <div className="container-fluid-padding base-container p-none">
                       <div className="add-to-fav-icon-container">
                         <div
                           className="add-to-fav-icon"
@@ -244,53 +255,64 @@ const CollectionsList = () => {
                       >
                         {product.product_title}
                       </div>
-                      <div className="d-flex align-items-center font-weight-1">
-                        {/* <div>
-                      <BsCurrencyRupee className="d-flex align-items-center"/>
-                    </div> */}
-                        <div className="d-flex align-items-center gap-2 mt-1 mb-1 res-849px-d-none">
+                      <div className="product-ratings d-flex align-items-center gap-2 mt-1">
+                        <div className="d-flex align-items-center gap-1">
+                          <div className="d-flex align-items-center">
+                            <IoIosStar
+                              color="#feaa02"
+                              className="d-flex align-items-center"
+                            />
+                          </div>
+                          <div className="font-12 font-weight-1 rate">4.5</div>
+                        </div>
+                        <div className="d-flex align-items-center dot-ic">
+                          <GoDotFill size={10} />
+                        </div>
+                        <div className="font-12 sold">125 Items Sold</div>
+                      </div>
+                      <div className="d-flex align-items-center font-weight-1 justify-content-space-between">
+                        <div className="d-flex gap-1 mt-1 mb-1 price-container">
                           {product?.is_discounted_product && (
-                            <span className="price">
-                              ₹ {product.sale_price - product.discount_price}
-                            </span>
+                            <div className="price">
+                              <div className="d-flex align-items-center">
+                                <PiCurrencyInrBold />
+                              </div>
+                              <div>
+                                {getCurrencyFormat(
+                                  product.sale_price - product.discount_price
+                                )}
+                              </div>
+                            </div>
                           )}
-                          <span
+                          <div
                             className={`${
                               product?.is_discounted_product && "offered"
                             } price`}
                           >
-                            ₹ {product?.sale_price}
-                          </span>{" "}
-                          {product?.is_discounted_product && (
+                            <div className="d-flex align-items-center">
+                              <PiCurrencyInrBold />
+                            </div>
+                            <div>{getCurrencyFormat(product.sale_price)}</div>
+                          </div>{" "}
+                          {/* {product?.is_discounted_product && (
                             <span className="discount price">
                               ({product.discount_percentage}% offer)
                             </span>
-                          )}
+                          )} */}
                         </div>
-                        <div className="mt-1 mb-1 res-849px-d-unset">
-                          {product?.is_discounted_product && (
-                            <div className="price">
-                              ₹ {product.sale_price - product.discount_price}
-                            </div>
-                          )}
-                          <div className="d-flex align-items-center gap-2">
-                            <span
-                              className={`${
-                                product?.is_discounted_product && "offered"
-                              } font-12`}
-                            >
-                              ₹ {product?.sale_price}
-                            </span>{" "}
-                            {product?.is_discounted_product && (
-                              <span className="discount price">
-                                ({product.discount_percentage}% offer)
-                              </span>
-                            )}
-                          </div>
+                        <div
+                          className="bag-ic"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedProductId(product._id);
+                            handleAddToCart(product);
+                          }}
+                        >
+                          <FaShoppingBasket className="ic" />
                         </div>
                       </div>
                     </div>
-                    <div className="avail-colors-container">
+                    {/* <div className="avail-colors-container">
                       {product?.group?.map((product_group) => {
                         return (
                           <div
@@ -301,10 +323,11 @@ const CollectionsList = () => {
                           ></div>
                         );
                       })}
-                    </div>
+                    </div> */}
                   </div>
                 );
-              })}
+              }
+            })}
             </div>
           </div>
         </div>

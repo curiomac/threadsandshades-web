@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getOrders } from "../../../../../redux/actions/orderAction";
 import { RxCross2 } from "react-icons/rx";
-import { MdCurrencyRupee } from "react-icons/md";
+import { PiCurrencyInrBold } from "react-icons/pi";
 import { useNavigate } from "react-router-dom";
 import {
   LOCKED_CLOTH_PAGE,
@@ -140,12 +140,12 @@ const OrderList = () => {
                                   <div>{order_item?.selected_quantity}</div>
                                   <RxCross2 />
                                   <div className="d-flex align-items-center">
-                                    <MdCurrencyRupee />
+                                    <PiCurrencyInrBold />
                                     <div>{order_item?.fixed_price}</div>
                                   </div>
                                 </div>
                                 <div className="d-flex align-items-center price">
-                                  <MdCurrencyRupee />
+                                  <PiCurrencyInrBold />
                                   <div>
                                     {order_item?.selected_quantity *
                                       order_item?.fixed_price}
@@ -159,12 +159,12 @@ const OrderList = () => {
                               <div>{order_item?.selected_quantity}</div>
                               <RxCross2 />
                               <div className="d-flex align-items-center">
-                                <MdCurrencyRupee />
+                                <PiCurrencyInrBold />
                                 <div>{order_item?.fixed_price}</div>
                               </div>
                             </div>
                             <div className="d-flex align-items-center">
-                              <MdCurrencyRupee />
+                              <PiCurrencyInrBold />
                               <div>
                                 {order_item?.selected_quantity *
                                   order_item?.fixed_price}
