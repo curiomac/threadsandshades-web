@@ -27,6 +27,7 @@ import { getCurrencyFormat } from "../../../../../helpers/currency-formatter/get
 import { GoDotFill } from "react-icons/go";
 import ProductInfo from "./ProductInfo";
 import ProductRatings from "./ProductRatings";
+import { getRatings } from "../../../../../redux/actions/ratingsAction";
 
 const rating = 4.5;
 
@@ -44,6 +45,7 @@ const ProductDetails = () => {
     (state) => state.cartState
   );
   const { isAuthenticated, user } = useSelector((state) => state.authState);
+  const { ratings } = useSelector((state) => state.ratingsState);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isVisible, setIsVisible] = useState(false);
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
@@ -138,6 +140,7 @@ const ProductDetails = () => {
       product_id: productId,
     };
     dispatch(getProduct(payload));
+    dispatch(getRatings(payload));
   }, [productId, dispatch]);
   useEffect(() => {
     if (product && products_group) {
@@ -149,7 +152,7 @@ const ProductDetails = () => {
       setTargetProductQuantity(1);
     }
   }, [product, products_group]);
-  console.log("product-console: ", product);
+  console.log("ratings: ", ratings);
   return (
     <div className="product-details">
       {productLoading ? <BackdropLoader /> : ""}
@@ -259,7 +262,10 @@ const ProductDetails = () => {
                 </div>
               )}
               <div className="product-title">{product?.product_title}</div>
-              <div className="product-ratings d-flex align-items-center gap-2 mt-1">
+              <div
+                className="product-ratings d-flex align-items-center gap-2 mt-1 cursor-pointer"
+                onClick={() => setRatingsModalOpen(true)}
+              >
                 <div className="d-flex align-items-center gap-1">
                   <div className="d-flex align-items-center">
                     <IoIosStar
@@ -483,17 +489,18 @@ const ProductDetails = () => {
                 </button>
                 <button className="buy-now-btn">Buy now</button>
               </div>
+              <div className="container-fluid">
+                <div className="product-info-ratings">
+                  <ProductInfo product={product}  />
+                  <ProductRatings ratings={ratings}/>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       )}
       {/* Product Info and Ratings */}
-      <div className="container-fluid">
-        <div className="product-info-ratings">
-          <ProductInfo product={product}/>
-          <ProductRatings />
-        </div>
-      </div>
+
       {/* Ratings Modal */}
       <CustomModal
         isOpen={ratingsModalOpen}

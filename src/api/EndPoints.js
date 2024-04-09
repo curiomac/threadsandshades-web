@@ -17,6 +17,9 @@ export const endpoints = {
   theme: {
     get: "theme/get",
   },
+  ratings: {
+    get: "ratings/get",
+  },
   products: {
     get: "products",
   },

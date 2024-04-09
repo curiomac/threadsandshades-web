@@ -6,12 +6,12 @@ import { GoDotFill } from "react-icons/go";
 import empty_profile_img from "../../../../../assets/imgs/profile/profile-empty.jpg";
 import { IoIosArrowDown } from "react-icons/io";
 
-const ProductRatings = () => {
+const ProductRatings = ({ ratings }) => {
   const [height, setHeight] = useState(200);
   const [loadComments, setLoadComments] = useState(false);
-  const ratings = [27, 5, 3, 0, 5];
-  const percentages = ratings.map((count) => `${(count / 41) * 100}%`);
-  const percentagesValue = ratings.map((count) => (count / 41) * 100);
+  const ratingsValue = [27, 5, 3, 0, 5];
+  const percentages = ratingsValue.map((count) => `${(count / 41) * 100}%`);
+  const percentagesValue = ratingsValue.map((count) => (count / 41) * 100);
   const demo_msgs = [
     {
       id: 1,
@@ -80,7 +80,7 @@ const ProductRatings = () => {
           </div>
           <div className="product-rating-bar-container">
             <div className="rating-bar">
-              {ratings.map((rating, index) => {
+              {ratingsValue.map((rating, index) => {
                 return (
                   <div>
                     <div className="d-flex align-items-center gap-1">
@@ -89,7 +89,7 @@ const ProductRatings = () => {
                           <IoIosStar className="ic" />
                         </div>
                         <div className="font-weight-1 text-align-center rating-star">
-                          {ratings.length - index}
+                          {ratingsValue.length - index}
                         </div>
                       </div>
                       <div
@@ -108,28 +108,35 @@ const ProductRatings = () => {
             </div>
           </div>
         </div>
-        <div className={`comments-container ${height === 800 ? 'full-load' : ''}`} style={{ height: height }}>
-          {demo_msgs.map((msg, index) => {
+        <div
+          className={`comments-container ${height === 800 ? "full-load" : ""} ${
+            ratings?.reviews?.length > 0 ? "list" : ""
+          }`}
+          style={{ height: height }}
+        >
+          {ratings?.reviews?.map((review, index) => {
             return (
               <div className="comment">
                 <div>
                   <div className="d-flex align-items-center justify-content-space-between comment-info">
                     <div className="user-info">
                       <div className="profile-img">
-                        <img src={empty_profile_img} alt={msg.id} />
+                        <img src={empty_profile_img} alt={review.user_id} />
                       </div>
-                      <div className="user-name">{msg.username}</div>
+                      <div className="user-name">
+                        {review?.user?.first_name}
+                      </div>
                     </div>
                     <div className="d-flex align-items-center gap-2 font-weight-1">
                       <div className="d-flex align-items-center ic-star gap-1 font-12">
                         <IoIosStar size={14} color="rgb(254, 170, 2)" />{" "}
-                        {msg.rating}
+                        {review?.rating_value}
                       </div>
                       <div className="d-flex align-items-center ic-dot">
                         <GoDotFill color="#c2c2c2" size={10} />
                       </div>
                       <div className="font-12">
-                        {moment(msg.date).format("DD MMM YYYY")}
+                        {moment(review?.posted_on).format("DD MMM YYYY")}
                       </div>
                     </div>
                   </div>
@@ -138,15 +145,15 @@ const ProductRatings = () => {
                       demo_msgs.length > index + 1 ? "end" : ""
                     }`}
                   >
-                    <div className="heading">{msg.heading}</div>
-                    <div className="comment">{msg.comment}</div>
+                    <div className="heading">{review?.review_title}</div>
+                    <div className="comment">{review?.product_review}</div>
                   </div>
                 </div>
               </div>
             );
           })}
         </div>
-        {height < 800 && (
+        {height < 800 && ratings?.reviews?.length > 0 && (
           <div className="d-flex align-items-center justify-content-center show-more-comments-container">
             <div>
               <div className="d-flex align-items-center justify-content-center w-fill">
@@ -164,7 +171,7 @@ const ProductRatings = () => {
                   <IoIosArrowDown />
                 </div>
               </div>
-              <div className="text-align-center">Show More</div>
+              <div className="text-align-center font-12">Show More</div>
             </div>
           </div>
         )}
