@@ -137,8 +137,12 @@ const BillingAddress = () => {
     if (isValid) {
       const getProductIds = () => {
         return cartItems.map((cart_item) => {
+          console.log("cart_sitem: ", cart_item)
           const product_id = cart_item?.product?._id;
-          return product_id;
+          return {
+            product_id,
+            ...cart_item.selected_product_details,
+          };
         });
       };
       const payload = {
@@ -176,6 +180,7 @@ const BillingAddress = () => {
       if (isValid) {
         const getProducts = () => {
           return cartItems.map((cart_item) => {
+            console.log("cart_sitem: ", cart_item)
             const product_id = cart_item?.product?._id;
             return {
               product_id,

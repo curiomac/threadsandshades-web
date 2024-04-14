@@ -27,10 +27,13 @@ import { getCurrencyFormat } from "../../../../../helpers/currency-formatter/get
 import { GoDotFill } from "react-icons/go";
 import ProductInfo from "./ProductInfo";
 import ProductRatings from "./ProductRatings";
-import { getRatings } from "../../../../../redux/actions/ratingsAction";
-
-const rating = 4.5;
-
+import {
+  createRating,
+  getRatings,
+} from "../../../../../redux/actions/ratingsAction";
+import ToastMessage from "../../../../plugins/toast-msg/ToastMessage";
+import { clearRatingsError } from "../../../../../redux/slices/ratingsSlice";
+import Loader from "react-js-loader";
 const ProductDetails = () => {
   const productId = getQueryParam("product_id");
   const productType = getQueryParam("type");
@@ -45,7 +48,12 @@ const ProductDetails = () => {
     (state) => state.cartState
   );
   const { isAuthenticated, user } = useSelector((state) => state.authState);
-  const { ratings } = useSelector((state) => state.ratingsState);
+  const {
+    ratings,
+    status,
+    message,
+    loading: ratingLoading,
+  } = useSelector((state) => state.ratingsState);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isVisible, setIsVisible] = useState(false);
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
@@ -56,6 +64,55 @@ const ProductDetails = () => {
   const [targetProductSize, setTargetProductSize] = useState("");
   const [targetProductQuantity, setTargetProductQuantity] = useState("");
   const [ratingsModalOpen, setRatingsModalOpen] = useState(false);
+  const [toastMsg, setToastMsg] = useState(false);
+  const [toastMessageValue, setToastMessageValue] = useState(null);
+  /* Ratings Variables */
+
+  const [rating, setRating] = useState(0);
+  const [reviewTitle, setReviewTitle] = useState("");
+  const [productReview, setProductReview] = useState("");
+  const [termsConditionsAccepted, setTermsConditionsAccepted] = useState(false);
+  const [productRecommend, setProductRecommend] = useState(null);
+
+  const getRatingsStat = () => {
+    if (rating === 1) {
+      return (
+        <div className="d-flex align-items-center gap-1">
+          <div className="font-size-2-h">😠</div>
+          <div>Bad</div>
+        </div>
+      );
+    } else if (rating === 2) {
+      return (
+        <div className="d-flex align-items-center gap-1">
+          <div className="font-size-2-h">🤨</div>
+          <div>Not Bad</div>
+        </div>
+      );
+    } else if (rating === 3) {
+      return (
+        <div className="d-flex align-items-center gap-1">
+          <div className="font-size-2-h">😐</div>
+          <div>Okay</div>
+        </div>
+      );
+    } else if (rating === 4) {
+      return (
+        <div className="d-flex align-items-center gap-1">
+          <div className="font-size-2-h">🙂</div>
+          <div>Good</div>
+        </div>
+      );
+    } else if (rating === 5) {
+      return (
+        <div className="d-flex align-items-center gap-1">
+          <div className="font-size-2-h">😁</div>
+          <div>Excellent</div>
+        </div>
+      );
+    }
+  };
+
   const [localStorageItems, setLocalStorageItems] = useState(() => {
     return JSON.parse(localStorage.getItem("cart-items")) || [];
   });
@@ -63,7 +120,7 @@ const ProductDetails = () => {
     useState(1);
 
   const filledStars = Array.from({ length: Math.floor(rating) }, (_, index) => (
-    <IoIosStar key={index} className="filled d-flex align-items-center" />
+    <IoIosStar key={index} className="d-flex align-items-center" />
   ));
 
   const handleMouseMove = (e) => {
@@ -129,6 +186,25 @@ const ProductDetails = () => {
       }
     }
   };
+  const handleSubmitReview = () => {
+    const payload = {
+      user_id: user._id,
+      product_id: product._id,
+      rating_value: rating,
+      review_title: reviewTitle,
+      product_review: productReview,
+      product_recommend: productRecommend ? "YES" : "NO",
+    };
+    setToastMsg(true);
+    console.log("payload,ds", payload);
+    if (!toastMsg) {
+      dispatch(createRating(payload));
+    }
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
   useEffect(() => {
     dispatch(clearProduct());
   }, []);
@@ -151,8 +227,54 @@ const ProductDetails = () => {
       }
       setTargetProductQuantity(1);
     }
+    console.log(
+      "Datat: ",
+      product?.verified_purchase_users?.some(
+        (verified_user) => verified_user.user_id === user._id
+      )
+    );
+    if (
+      isAuthenticated &&
+      product?.verified_purchase_users?.some(
+        (verified_user) => verified_user.user_id === user._id
+      )
+    ) {
+      setRatingsModalOpen(true);
+    }
   }, [product, products_group]);
-  console.log("ratings: ", ratings);
+  useEffect(() => {
+    switch (status) {
+      case "success": {
+        setToastMessageValue(message);
+        setToastMsg(true);
+        setTimeout(() => {
+          dispatch(clearRatingsError());
+          setToastMsg(false);
+          if (message) {
+            setRatingsModalOpen(false);
+          }
+        }, 5000);
+        break;
+      }
+      case "error": {
+        setToastMessageValue(message);
+        setToastMsg(true);
+        setTimeout(() => {
+          dispatch(clearRatingsError());
+          setToastMsg(false);
+        }, 5000);
+        break;
+      }
+      default: {
+        setToastMessageValue(null);
+        setToastMsg(false);
+        dispatch(clearRatingsError());
+        break;
+      }
+    }
+  }, [status]);
+  console.log("product-value: ", status);
+  console.log("product-value: ", toastMessageValue);
   return (
     <div className="product-details">
       {productLoading ? <BackdropLoader /> : ""}
@@ -264,7 +386,11 @@ const ProductDetails = () => {
               <div className="product-title">{product?.product_title}</div>
               <div
                 className="product-ratings d-flex align-items-center gap-2 mt-1 cursor-pointer"
-                onClick={() => setRatingsModalOpen(true)}
+                onClick={() => {
+                  if (isAuthenticated) {
+                    setRatingsModalOpen(true);
+                  }
+                }}
               >
                 <div className="d-flex align-items-center gap-1">
                   <div className="d-flex align-items-center">
@@ -489,10 +615,10 @@ const ProductDetails = () => {
                 </button>
                 <button className="buy-now-btn">Buy now</button>
               </div>
-              <div className="container-fluid">
+              <div>
                 <div className="product-info-ratings">
-                  <ProductInfo product={product}  />
-                  <ProductRatings ratings={ratings}/>
+                  <ProductInfo product={product} />
+                  <ProductRatings ratings={ratings} />
                 </div>
               </div>
             </div>
@@ -512,7 +638,20 @@ const ProductDetails = () => {
             <div className="d-flex align-items-center justify-content-flex-end w-fill mt-2">
               <div
                 className="close-ic-content"
-                onClick={() => setRatingsModalOpen(false)}
+                onClick={() => {
+                  setRatingsModalOpen(false);
+                  dispatch(clearRatingsError());
+                  setToastMsg(false);
+                  setRating(0);
+                  setReviewTitle("")
+                  setProductReview("")
+                  setProductRecommend(null)
+                  setTermsConditionsAccepted(false)
+                  window.scrollTo({
+                    top: 0,
+                    behavior: "smooth",
+                  });
+                }}
               >
                 <GrClose className="close-ic" />
               </div>
@@ -526,41 +665,66 @@ const ProductDetails = () => {
             </div>
             <div className="rating-star-container">
               <div className="rating-star-content">
-                <div className="rating-star">
-                  <IoIosStar />
+                {filledStars.map((star, index) => {
+                  return (
+                    <div
+                      className="rating-star"
+                      onClick={() => setRating(index + 1)}
+                    >
+                      {star}
+                    </div>
+                  );
+                })}
+                {remainingStars.map((star, index) => {
+                  return (
+                    <div
+                      className="rating-star unfilled"
+                      onClick={() => {
+                        // if()
+                        setRating(filledStars.length + index + 1);
+                      }}
+                    >
+                      {star}
+                    </div>
+                  );
+                })}
+                <div className="product-review-result open-849px-gt">
+                  {getRatingsStat()}
                 </div>
-                <div className="rating-star">
-                  <IoIosStar />
-                </div>
-                <div className="rating-star">
-                  <IoIosStar />
-                </div>
-                <div className="rating-star unfilled">
-                  <IoIosStarOutline />
-                </div>
-                <div className="rating-star unfilled">
-                  <IoIosStarOutline />
-                </div>
-                <div className="product-review-result">🙂 Good</div>
+              </div>
+              <div className="product-review-result open-849px-lt">
+                {getRatingsStat()}
               </div>
             </div>
             <div className="review-title mt-3">
               <div className="font-weight-1 font-14 review-title-heading">
                 Review title
               </div>
-              <input placeholder="Example: Comfort Fit" />
+              <input
+                placeholder="Example: Comfort Fit"
+                value={reviewTitle}
+                onChange={(e) => setReviewTitle(e.target.value)}
+              />
             </div>
             <div className="recomend-product-res-container mt-2">
               <div className="font-weight-1">
-                Would you recomend this product to a friend?
+                Would you recommend this product to a friend?
               </div>
               <div className="recomend-product-res w-fill">
                 <div className="d-flex align-items-center gap-1">
-                  <input type="radio" />
+                  <input
+                    type="radio"
+                    checked={productRecommend}
+                    onClick={() => setProductRecommend(true)}
+                  />
                   <div className="res">Yes</div>
                 </div>
                 <div className="d-flex align-items-center gap-1">
-                  <input type="radio" />
+                  <input
+                    type="radio"
+                    checked={productRecommend === false ? true : false}
+                    onClick={() => setProductRecommend(false)}
+                  />
                   <div className="res">No</div>
                 </div>
               </div>
@@ -570,13 +734,19 @@ const ProductDetails = () => {
                 Product review
               </div>
               <textarea
+                value={productReview}
                 rows={5}
                 placeholder="Example: The fabric is incredibly soft and breathable, making it a joy to wear all day long. What really sets this dress apart is the attention to detail in the fit."
+                onChange={(e) => setProductReview(e.target.value)}
               />
             </div>
             <div>
               <div className="terms d-flex align-items-center gap-1">
-                <input type="radio" />
+                <input
+                  type="radio"
+                  checked={termsConditionsAccepted}
+                  onChange={() => setTermsConditionsAccepted(true)}
+                />
                 <div className="res">I accept terms and conditions</div>
               </div>
             </div>
@@ -587,11 +757,34 @@ const ProductDetails = () => {
               personal information will be collected, used, and protected.
             </div>
             <div className="submit-btn">
-              <button>Submit product review</button>
+              <button
+                className={`${ratingLoading ? "current-loading" : ""}`}
+                disabled={
+                  termsConditionsAccepted && !toastMsg && !ratingLoading
+                    ? false
+                    : true
+                }
+                onClick={handleSubmitReview}
+              >
+                {ratingLoading ? (
+                  <div className={"item ratings-loader"}>
+                    <Loader
+                      type="spinner-cub"
+                      bgColor={"#fff"}
+                      color={"#fff"}
+                      size={35}
+                    />
+                    <div>Please wait...</div>
+                  </div>
+                ) : (
+                  "Submit product review"
+                )}{" "}
+              </button>
             </div>
           </div>
         </div>
       </CustomModal>
+      {toastMsg && <ToastMessage message={toastMessageValue} status={status} />}
     </div>
   );
 };

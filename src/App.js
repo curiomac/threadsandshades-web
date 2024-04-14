@@ -18,11 +18,9 @@ import "./styles/scss/WishList.scss";
 import "./styles/scss/Account.scss";
 import "./styles/scss/Footer.scss";
 import "./styles/scss/OpeningLoadingPage.scss";
-import "react-toastify/dist/ReactToastify.css";
 import "aos/dist/aos.css";
 import { useDispatch, useSelector } from "react-redux";
 import { getTheme } from "./redux/actions/themeAction";
-import logo from "./assets/imgs/store-room/logo-loader.png";
 import OpeningLoadingPage from "./components/common/opening-loading-page/OpeningLoadingPage";
 
 function App() {
@@ -32,6 +30,7 @@ function App() {
   const { theme, loading: themeLoading } = useSelector(
     (state) => state.themeState
   );
+  const { loading: authLoading } = useSelector((state) => state.authState);
   const theme_req = theme?._id;
   const getThemeId = () => {
     if (!localStorage.getItem("theme-id")) {
@@ -39,11 +38,11 @@ function App() {
     }
   };
   const documentHeight = () => {
-    const doc = document.documentElement
-    doc.style.setProperty('--doc-height', `${window.innerHeight}px`)
-   }
-   window.addEventListener('resize', documentHeight)
-   documentHeight()
+    const doc = document.documentElement;
+    doc.style.setProperty("--doc-height", `${window.innerHeight}px`);
+  };
+  window.addEventListener("resize", documentHeight);
+  documentHeight();
 
   useEffect(() => {
     getThemeId();
@@ -86,11 +85,7 @@ function App() {
 
   return (
     <div>
-      {themeLoading ? (
-        <OpeningLoadingPage />
-      ) : (
-        <Pages />
-      )}
+      {themeLoading || authLoading ? <OpeningLoadingPage /> : <Pages />}
     </div>
   );
 }

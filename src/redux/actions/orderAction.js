@@ -35,7 +35,7 @@ export const getOrders = (payload) => async (dispatch) => {
   try {
     dispatch(ordersRequest());
     const response = await axios.get(
-      `${BASE_URL}/${endpoints.orders.get}/65d6192823aa08af7f970375`
+      `${BASE_URL}/${endpoints.orders.get}/${payload?.user_id}`
     );
     dispatch(ordersSuccess(response?.data));
   } catch (error) {

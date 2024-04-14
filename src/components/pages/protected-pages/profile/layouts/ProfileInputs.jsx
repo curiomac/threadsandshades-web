@@ -24,7 +24,7 @@ const ProfileInputs = () => {
       gender: gender,
       date_of_birth: dateOfBirth,
     };
-    const user_id = localStorage.getItem("user-id");
+    const user_id = user?._id;
     dispatch(updateProfile(user_id, payload));
   };
   useEffect(() => {

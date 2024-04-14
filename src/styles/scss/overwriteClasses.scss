@@ -30,7 +30,27 @@
       opacity: 0;
     }
     .slick-dots {
-        display: none !important;
+      display: none !important;
+    }
+  }
+}
+
+/* React Loader */
+
+.ratings-loader {
+  display: flex;
+  // gap: 5px;
+  .sl-spinner1 {
+    flex-direction: unset !important;
+    flex-wrap: unset !important;
+    justify-content: unset !important;
+    .sl-loader {
+     width: 55px !important;
+     .sl-loader-items {
+      height: 0px !important;
+      margin-top: -46px;
+      margin-left: 10px;
+     }
     }
   }
 }

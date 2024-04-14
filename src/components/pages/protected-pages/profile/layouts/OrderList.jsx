@@ -33,8 +33,12 @@ const OrderList = () => {
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
   const [orderList, setOrderList] = useState([]);
   const { orders } = useSelector((state) => state.orderState);
+  const { user } = useSelector((state) => state.authState);
   useEffect(() => {
-    dispatch(getOrders());
+    const payload= {
+      user_id: user?._id
+    }
+    dispatch(getOrders(payload));
   }, []);
   useEffect(() => {
     setOrderList(orders);

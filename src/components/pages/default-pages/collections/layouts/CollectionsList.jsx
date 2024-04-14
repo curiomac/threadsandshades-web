@@ -18,6 +18,7 @@ import sorry_gif from "../../../../../assets/imgs/store-room/sorry-gif.gif";
 import { IoIosStar } from "react-icons/io";
 import { PiCurrencyInrBold } from "react-icons/pi";
 import { getCurrencyFormat } from "../../../../../helpers/currency-formatter/getCurrencyFormat";
+import { clearProduct } from "../../../../../redux/slices/productSlice";
 
 const CollectionsList = () => {
   const navigate = useNavigate();
@@ -156,6 +157,7 @@ const CollectionsList = () => {
                     className="product"
                     onClick={() => {
                       setSelectedProductId(product._id);
+                      dispatch(clearProduct())
                       navigate(
                         `${LOCKED_CLOTH_PAGE}?type=men&product_id=${product?._id}`
                       );

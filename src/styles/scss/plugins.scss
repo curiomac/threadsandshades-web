@@ -496,6 +496,14 @@
     height: 45px !important;
     width: 135px !important;
   }
+  .modal-content {
+    box-shadow: unset !important;
+    border-radius: 0px !important;
+    &.open {
+      height: $height-cover !important;
+      overflow: auto !important;
+    }
+  }
 }
 @media screen and (max-width: 410px) {
   .logo-img {

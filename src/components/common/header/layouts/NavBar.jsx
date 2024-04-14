@@ -17,7 +17,7 @@ import {
 } from "../../../../helpers/route-paths/paths";
 import { useDispatch, useSelector } from "react-redux";
 import SideDrawer from "../../../plugins/side-drawer/SideDrawer";
-import { getCart, getTemporaryCart } from "../../../../redux/actions/cartAction";
+import { getTemporaryCart } from "../../../../redux/actions/cartAction";
 import CartDrawer from "./CartDrawer";
 import { getWishList } from "../../../../redux/actions/wishListAction";
 import DialogModalWishList from "../../../plugins/dialog-modal-wishlist/DialogModalWishList";
@@ -49,24 +49,16 @@ const NavBar = () => {
     }
   };
   const handleGetTemporaryCartItems = () => {
-    const cartLocalStorageItem = JSON.parse(localStorage.getItem("cart-items")) || [];
+    const cartLocalStorageItem =
+      JSON.parse(localStorage.getItem("cart-items")) || [];
     const payload = {
-      cart_details: cartLocalStorageItem
-    }
-    dispatch(getTemporaryCart(payload))
-  }
-  useEffect(() => {
-    const wishListPayload = {
-      user_id: "65a7eef1a7e2b0eda9f545e8",
+      cart_details: cartLocalStorageItem,
     };
-    dispatch(getWishList(wishListPayload));
-    if(isAuthenticated) {
-      const cartPayload = {
-        user_id: user?._id,
-      };
-      dispatch(getCart(cartPayload));
-    } else {
-      handleGetTemporaryCartItems()
+    dispatch(getTemporaryCart(payload));
+  };
+  useEffect(() => {
+    if (!isAuthenticated) {
+      handleGetTemporaryCartItems();
     }
   }, []);
   useEffect(() => {
@@ -96,7 +88,7 @@ const NavBar = () => {
           </div>
           <div className="nav-links">
             <div className="nav-bar-logo">
-              <Logo height={50} onClick={() => navigate(HOME_PAGE)}/>
+              <Logo height={50} onClick={() => navigate(HOME_PAGE)} />
             </div>
             <div className="default-links res-849px-d-none">
               <div className="links-container">
@@ -190,12 +182,12 @@ const NavBar = () => {
               )}
               <div
                 onClick={() => {
-                    setIsModalOpen(true);
-                    if(pathname === COLLECTIONS_PAGE) {
-                      navigate(`${pathname}?type=men&wishlist=true`);
-                    } else {
-                      navigate(`${pathname}?wishlist=true`);
-                    }
+                  setIsModalOpen(true);
+                  if (pathname === COLLECTIONS_PAGE) {
+                    navigate(`${pathname}?type=men&wishlist=true`);
+                  } else {
+                    navigate(`${pathname}?wishlist=true`);
+                  }
                 }}
                 className="links-decoration-unset"
               >
@@ -208,10 +200,7 @@ const NavBar = () => {
                   </div>
                 </div>
               </div>
-              <Link
-                className="links-decoration-unset"
-                to={CART_ITEMS_PAGE}
-              >
+              <Link className="links-decoration-unset" to={CART_ITEMS_PAGE}>
                 <div className="links icon">
                   <HiOutlineShoppingBag />
                   <div className="shopping-cart-count-container">

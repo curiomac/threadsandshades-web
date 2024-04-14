@@ -6,9 +6,6 @@ import {
   registerRequest,
   registerSuccess,
   registerFail,
-  loadUserRequest,
-  loadUserSuccess,
-  loadUserFail,
   logoutSuccess,
   logoutFail,
   updateProfileRequest,
@@ -54,6 +51,12 @@ import {
 } from "../slices/userSlice";
 import { BASE_URL } from "../../api/ApiPath";
 import { endpoints } from "../../api/EndPoints";
+import { getCart } from "./cartAction";
+import { getWishList } from "./wishListAction";
+
+const getToken = () => {
+  return localStorage.getItem("token") || "";
+};
 
 export const sendOtp = (payload) => async (dispatch) => {
   try {
@@ -71,11 +74,20 @@ export const login = (payload) => async (dispatch) => {
   try {
     dispatch(loginRequest());
     const response = await axios.post(
-      `${BASE_URL}/${endpoints.login.post}`,
-      payload
+      `${BASE_URL}/${endpoints.user.login}`,
+      payload,
+      {
+        withCredentials: true,
+      }
     );
     dispatch(loginSuccess(response?.data));
-    localStorage.setItem("user-id", response?.data?.user?._id);
+    const items_payload = {
+      user_id: response?.data?.user?._id,
+    };
+    dispatch(getWishList(items_payload));
+    dispatch(getCart(items_payload));
+    const parse_res = JSON.parse(response?.request?.response) || {};
+    localStorage.setItem("token", parse_res?.token);
   } catch (error) {
     dispatch(loginFail(error?.response?.data?.message));
   }
@@ -85,34 +97,29 @@ export const register = (payload) => async (dispatch) => {
   try {
     dispatch(registerRequest());
     const response = await axios.post(
-      `${BASE_URL}/${endpoints.register.post}`,
+      `${BASE_URL}/${endpoints.user.register}`,
       payload
     );
     dispatch(registerSuccess(response?.data));
-    localStorage.setItem("user-id", response?.data?.user?._id);
   } catch (error) {
     dispatch(registerFail(error.response.data.message));
   }
 };
-export const loadUser = (user_id) => async (dispatch) => {
-  try {
-    dispatch(loadUserRequest());
-    const response = await axios.get(
-      `${BASE_URL}/${endpoints.profile.get}/${user_id}`
-    );
-    dispatch(loadUserSuccess(response?.data));
-  } catch (error) {
-    dispatch(loadUserFail(error.response.data.message));
-  }
-};
-export const getUserProfile = (user_id) => async (dispatch) => {
+export const getUserProfile = () => async (dispatch) => {
   try {
     dispatch(userProfileRequest());
-    const response = await axios.get(
-      `${BASE_URL}/${endpoints.profile.get}/${user_id}`
-    );
-    console.log("response?.data: ", response?.data);
+    const response = await axios.get(`${BASE_URL}/${endpoints.profile.get}`, {
+      withCredentials: true,
+      headers: {
+        Authorization: `${getToken()}`,
+      },
+    });
     dispatch(userProfileSuccess(response?.data));
+    const items_payload = {
+      user_id: response?.data?.user?._id,
+    };
+    dispatch(getWishList(items_payload));
+    dispatch(getCart(items_payload));
   } catch (error) {
     dispatch(userProfileFail(error.response.data.message));
   }
@@ -121,16 +128,22 @@ export const getUserProfileImage = (user_id) => async (dispatch) => {
   try {
     dispatch(userProfileImageRequest());
     const response = await axios.get(
-      `${BASE_URL}/${endpoints.profile.get_image}/${user_id}`
+      `${BASE_URL}/${endpoints.profile.get_image}`,
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: `${getToken()}`,
+        },
+      }
     );
     dispatch(userProfileImageSuccess(response?.data));
   } catch (error) {
     dispatch(userProfileImageFail(error.response.data.message));
   }
 };
-export const logout = async (dispatch) => {
+export const logout = () => async (dispatch) => {
   try {
-    await axios.get(`/api/v1/logout`);
+    localStorage.clear();
     dispatch(logoutSuccess());
   } catch (error) {
     dispatch(logoutFail(error.response.data.message));

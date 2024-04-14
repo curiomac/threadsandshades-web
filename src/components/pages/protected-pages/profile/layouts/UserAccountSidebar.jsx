@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   ORDER_LIST_PAGE,
+  SETTINGS_PAGE,
   USER_ACCOUNT_DETAILS_PAGE,
 } from "../../../../../helpers/route-paths/paths";
 import { updateProfileImage } from "../../../../../redux/actions/userActions";
@@ -12,7 +13,7 @@ import { BsBoxSeamFill } from "react-icons/bs";
 import { FaAddressBook } from "react-icons/fa6";
 import { IoSettingsOutline } from "react-icons/io5";
 
-const UserAccountSidebar = ({handleSidebarOpenParams, sidebarOpenParams}) => {
+const UserAccountSidebar = ({ handleSidebarOpenParams, sidebarOpenParams }) => {
   const { user, user_image } = useSelector((state) => state.authState);
   const { pathname } = useLocation();
   const [profileImage, setProfileImage] = useState("");
@@ -32,7 +33,7 @@ const UserAccountSidebar = ({handleSidebarOpenParams, sidebarOpenParams}) => {
       setProfileImage(file);
       const formdata = new FormData();
       formdata.append("avatar", file);
-      const user_id = localStorage.getItem("user-id");
+      const user_id = user?._id;
       if (user_id) {
         dispatch(updateProfileImage(user_id, formdata));
       }
@@ -44,7 +45,7 @@ const UserAccountSidebar = ({handleSidebarOpenParams, sidebarOpenParams}) => {
     }
   }, [user_image]);
   useEffect(() => {
-      setSidebarOpen(sidebarOpenParams);
+    setSidebarOpen(sidebarOpenParams);
   }, [sidebarOpenParams]);
   return (
     <div>
@@ -53,7 +54,7 @@ const UserAccountSidebar = ({handleSidebarOpenParams, sidebarOpenParams}) => {
           className={`sidebar-opener ${sidebarOpen ? "open" : ""}`}
           onClick={() => handleSidebarOpenParams(!sidebarOpen)}
         >
-          <FaAngleDown className="angle-ic"/>
+          <FaAngleDown className="angle-ic" />
         </div>
       </div>
       <div className={`user-profile-sidebar ${sidebarOpen ? "open" : ""}`}>
@@ -120,7 +121,7 @@ const UserAccountSidebar = ({handleSidebarOpenParams, sidebarOpenParams}) => {
             <div
               className={`link ${isCurrentPath(ORDER_LIST_PAGE) && "active"}`}
               onClick={() => {
-                navigate(ORDER_LIST_PAGE)
+                navigate(ORDER_LIST_PAGE);
                 handleSidebarOpenParams(!sidebarOpen);
               }}
             >
@@ -135,7 +136,13 @@ const UserAccountSidebar = ({handleSidebarOpenParams, sidebarOpenParams}) => {
               </div>
               <div className="res-849px-d-none">Address</div>
             </div>
-            <div className={`link ${isCurrentPath("null") && "active"}`}>
+            <div
+              className={`link ${isCurrentPath(SETTINGS_PAGE) && "active"}`}
+              onClick={() => {
+                navigate(SETTINGS_PAGE);
+                handleSidebarOpenParams(!sidebarOpen);
+              }}
+            >
               <div className="d-flex align-items-center">
                 <IoSettingsOutline />
               </div>

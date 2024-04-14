@@ -64,7 +64,7 @@ const ProductRatings = ({ ratings }) => {
     }
   }, [height]);
   return (
-    <div className="product-ratings">
+    <div className="product-ratings mt-3">
       <div className="product-ratings-contents">
         <div className="heading">Product Ratings</div>
         <div className="product-ratings-container">
@@ -152,6 +152,21 @@ const ProductRatings = ({ ratings }) => {
               </div>
             );
           })}
+          {console.log("ratings?.reviews?.length: ", ratings?.reviews?.length)}
+          {(ratings?.reviews?.length === undefined ||
+            ratings?.reviews?.length === 0) && (
+            <div
+              style={{
+                height: height,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#bdbdbd"
+              }}
+            >
+              <div className="font-20 text-transform-uc font-weight-1">No Ratings Found</div>
+            </div>
+          )}
         </div>
         {height < 800 && ratings?.reviews?.length > 0 && (
           <div className="d-flex align-items-center justify-content-center show-more-comments-container">

@@ -248,6 +248,38 @@
     border: 1px solid #db3059;
   }
 }
+
+/* Profile Settings */
+
+.profile-settings {
+  .logout-btn {
+    background-color: $primary-color;
+    color: #fff;
+    border: 2px solid transparent;
+    outline: none;
+    border-radius: 50px;
+    height: 40px;
+    width: 200px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.5s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    .text {
+      position: relative;
+      top: 1px;
+    }
+  }
+  .logout-btn:hover {
+    background-color: transparent;
+    color: $primary-color;
+    border: 2px solid $primary-color;
+  }
+}
+
+
 @media screen and (min-width: 1150px) {
   .nested-user-profile-page {
     .content {

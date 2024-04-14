@@ -2,6 +2,9 @@ import axios from "axios";
 import { BASE_URL } from "../../api/ApiPath";
 import { endpoints } from "../../api/EndPoints";
 import {
+  ratingCreateFail,
+  ratingCreateRequest,
+  ratingCreateSuccess,
   ratingsFail,
   ratingsRequest,
   ratingsSuccess,
@@ -13,8 +16,22 @@ export const getRatings = (payload) => async (dispatch) => {
     const response = await axios.get(
       `${BASE_URL}/${endpoints.ratings.get}?product_id=${payload.product_id}`
     );
+    console.log("responseresponseresponse: ", response)
     dispatch(ratingsSuccess(response?.data));
   } catch (err) {
     dispatch(ratingsFail(err?.response?.data?.message));
+  }
+};
+export const createRating = (payload) => async (dispatch) => {
+  console.log("payloadpayload", payload)
+  try {
+    dispatch(ratingCreateRequest());
+    const response = await axios.post(
+      `${BASE_URL}/${endpoints.rating.create}`, payload
+    );
+    dispatch(ratingCreateSuccess(response?.data));
+  } catch (err) {
+    console.log("errerr", err)
+    dispatch(ratingCreateFail(err?.response?.data));
   }
 };

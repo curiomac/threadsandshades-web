@@ -106,30 +106,10 @@ const authSlice = createSlice({
         auth_error: action.payload,
       };
     },
-    loadUserRequest(state, action) {
-      return {
-        ...state,
-        isAuthenticated: false,
-        loading: true,
-      };
-    },
-    loadUserSuccess(state, action) {
-      return {
-        loading: false,
-        isAuthenticated: true,
-        user: action.payload.user,
-      };
-    },
-    loadUserFail(state, action) {
-      return {
-        ...state,
-        loading: false,
-      };
-    },
     userProfileRequest(state, action) {
       return {
         ...state,
-        isAuthenticated: true,
+        isAuthenticated: false,
         loading: true,
       };
     },
@@ -143,14 +123,14 @@ const authSlice = createSlice({
     userProfileFail(state, action) {
       return {
         ...state,
-        isAuthenticated: true,
+        isAuthenticated: false,
         loading: false,
       };
     },
     userProfileImageRequest(state, action) {
       return {
         ...state,
-        isAuthenticated: true,
+        isAuthenticated: false,
         loading: true,
       };
     },
@@ -165,7 +145,7 @@ const authSlice = createSlice({
     userProfileImageFail(state, action) {
       return {
         ...state,
-        isAuthenticated: true,
+        isAuthenticated: false,
         loading: false,
       };
     },
@@ -173,6 +153,7 @@ const authSlice = createSlice({
       return {
         loading: false,
         isAuthenticated: false,
+        user: {}
       };
     },
     logoutFail(state, action) {
@@ -316,9 +297,6 @@ export const {
   registerSuccess,
   registerFail,
   clearAuthErrorClear,
-  loadUserRequest,
-  loadUserSuccess,
-  loadUserFail,
   userProfileRequest,
   userProfileSuccess,
   userProfileFail,

@@ -2,11 +2,9 @@ export const endpoints = {
   otp: {
     post: "otp/send",
   },
-  login: {
-    post: "login",
-  },
-  register: {
-    post: "register",
+  user: {
+    login: "login",
+    register: "register",
   },
   profile: {
     get: "/profile/get",
@@ -19,6 +17,9 @@ export const endpoints = {
   },
   ratings: {
     get: "ratings/get",
+  },
+  rating: {
+    create: "rating/create",
   },
   products: {
     get: "products",

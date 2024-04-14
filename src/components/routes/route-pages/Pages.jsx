@@ -16,6 +16,7 @@ import {
   USER_ACCOUNT_DETAILS_PAGE,
   ORDER_STATUS_PAGE,
   ORDER_LIST_PAGE,
+  SETTINGS_PAGE,
 } from "../../../helpers/route-paths/paths";
 import Header from "../../common/header/Header";
 import Footer from "../../common/footer/Footer";
@@ -39,6 +40,7 @@ import ProtectedRoute from "../protected-routes/ProtectedRoute";
 import Order from "../../pages/protected-pages/order/Order";
 import OrderList from "../../pages/protected-pages/profile/layouts/OrderList";
 import TestCartPage from "../../pages/protected-pages/cart/layouts/NestedCartPage_T";
+import ProfileSettings from "../../pages/protected-pages/profile/layouts/ProfileSettings";
 
 const Pages = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -52,7 +54,7 @@ const Pages = () => {
     if (isAuthenticated) {
       setTimeout(() => {
         setIsAuthenticated(true);
-      }, 3000);
+      }, 0);
     } else {
       setIsAuthenticated(false);
     }
@@ -111,6 +113,14 @@ const Pages = () => {
             element={
               <ProtectedRoute>
                 <OrderList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={SETTINGS_PAGE}
+            element={
+              <ProtectedRoute>
+                <ProfileSettings />
               </ProtectedRoute>
             }
           />

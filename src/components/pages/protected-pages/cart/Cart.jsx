@@ -24,12 +24,7 @@ const Cart = () => {
     });
   }, []);
   useEffect(() => {
-    if (isAuthenticated) {
-      const payload = {
-        user_id: user?._id,
-      };
-      dispatch(getCart(payload));
-    } else {
+    if (!isAuthenticated) {
       handleGetTemporaryCartItems();
     }
   }, [dispatch]);
