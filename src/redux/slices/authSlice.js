@@ -3,47 +3,14 @@ import { createSlice } from "@reduxjs/toolkit";
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    loading: true,
-    otp_loading: true,
+    loading: false,
     isAuthenticated: false,
+    status: null,
+    code: false,
+    message: null,
     user: {},
   },
   reducers: {
-    otpRequest(state, action) {
-      return {
-        ...state,
-        otp_loading: true,
-      };
-    },
-    otpSuccess(state, action) {
-      return {
-        otp_loading: false,
-        isAuthenticated: false,
-        expires_on: action.payload.expires_on,
-        code: action.payload.code,
-      };
-    },
-    otpFail(state, action) {
-      return {
-        ...state,
-        otp_loading: false,
-        otp_error: action.payload,
-      };
-    },
-    clearOtpError(state, action) {
-      return {
-        ...state,
-        otp_loading: false,
-        otp_error: null,
-      };
-    },
-    clearCode(state, action) {
-      return {
-        ...state,
-        loading: false,
-        code: null,
-      };
-    },
     loginRequest(state, action) {
       return {
         ...state,
@@ -55,33 +22,24 @@ const authSlice = createSlice({
         loading: false,
         isAuthenticated: true,
         user: action.payload.user,
-        code: action.payload.code,
+        message: action.payload.message,
+        code: true,
+        status: "success",
       };
     },
     loginFail(state, action) {
       return {
         ...state,
         loading: false,
-        auth_error: action.payload,
-      };
-    },
-    clearError(state, action) {
-      return {
-        ...state,
-        error: null,
-      };
-    },
-    clearSuccess(state, action) {
-      return {
-        ...state,
-        success: null,
+        message: action.payload,
+        status: "error",
+        code: false,
       };
     },
     registerRequest(state, action) {
       return {
         ...state,
         loading: true,
-        success: action.payload,
       };
     },
     registerSuccess(state, action) {
@@ -89,21 +47,49 @@ const authSlice = createSlice({
         loading: false,
         isAuthenticated: true,
         user: action.payload.user,
-        code: action.payload.code,
+        message: action.payload.message,
+        code: true,
+        status: "success",
       };
     },
     registerFail(state, action) {
       return {
         ...state,
         loading: false,
-        auth_error: action.payload,
+        message: action.payload,
+        status: "error",
+        code: false,
       };
     },
-    clearAuthErrorClear(state, action) {
+    clearAuth(state, action) {
       return {
         ...state,
         loading: false,
-        auth_error: action.payload,
+        code: false,
+        status: null,
+        user: {},
+        message: null,
+      };
+    },
+    clearAuthCode(state, action) {
+      return {
+        ...state,
+        loading: false,
+        code: false,
+      };
+    },
+    clearAuthStatus(state, action) {
+      return {
+        ...state,
+        loading: false,
+        status: null,
+      };
+    },
+    clearAuthMessage(state, action) {
+      return {
+        ...state,
+        loading: false,
+        message: null,
       };
     },
     userProfileRequest(state, action) {
@@ -153,7 +139,7 @@ const authSlice = createSlice({
       return {
         loading: false,
         isAuthenticated: false,
-        user: {}
+        user: {},
       };
     },
     logoutFail(state, action) {
@@ -283,20 +269,16 @@ const authSlice = createSlice({
 const { actions, reducer } = authSlice;
 
 export const {
-  otpRequest,
-  otpSuccess,
-  otpFail,
-  clearOtpError,
-  clearCode,
   loginRequest,
   loginSuccess,
   loginFail,
-  clearError,
-  clearSuccess,
   registerRequest,
   registerSuccess,
   registerFail,
-  clearAuthErrorClear,
+  clearAuth,
+  clearAuthCode,
+  clearAuthStatus,
+  clearAuthMessage,
   userProfileRequest,
   userProfileSuccess,
   userProfileFail,

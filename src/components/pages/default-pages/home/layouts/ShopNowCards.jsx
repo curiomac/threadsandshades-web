@@ -42,8 +42,7 @@ const ShopNowCards = () => {
           </div>
           <div
             className="card explore-card-bg"
-            data-aos="fade-right"
-            data-aos-delay="300"
+            // data-aos="fade-right"
           >
             <div className="linear-bg">
               <div className="content container-fluid">

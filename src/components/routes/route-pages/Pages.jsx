@@ -54,7 +54,7 @@ const Pages = () => {
     if (isAuthenticated) {
       setTimeout(() => {
         setIsAuthenticated(true);
-      }, 0);
+      }, 3000);
     } else {
       setIsAuthenticated(false);
     }

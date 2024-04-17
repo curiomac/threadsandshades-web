@@ -19,12 +19,13 @@ import { IoIosStar } from "react-icons/io";
 import { PiCurrencyInrBold } from "react-icons/pi";
 import { getCurrencyFormat } from "../../../../../helpers/currency-formatter/getCurrencyFormat";
 import { clearProduct } from "../../../../../redux/slices/productSlice";
+import Loader from "react-js-loader";
 
 const CollectionsList = () => {
   const navigate = useNavigate();
   const search_input = getQueryParam("input");
   const searching = getQueryParam("searching");
-  const { products } = useSelector((state) => state.productsState);
+  const { products, loading } = useSelector((state) => state.productsState);
   const { isAuthenticated, user } = useSelector((state) => state.authState);
   const { cartItems, loading: cartLoading } = useSelector(
     (state) => state.cartState
@@ -139,7 +140,13 @@ const CollectionsList = () => {
       }, 3000);
     }
   }, [addingCart]);
-  if (products.length > 0) {
+  if (loading) {
+    return (
+      <div className={`loader-container-he ${!isAuthenticated ? 'isNotAuth' : ''} `}>
+        <Loader type="spinner-cub" bgColor={'gray'} color={"green"} size={60} />
+      </div>
+    );
+  } else if (products.length > 0) {
     return (
       <div className="collection-list">
         <div>
@@ -148,173 +155,177 @@ const CollectionsList = () => {
               MEN'S COLLECTION
             </div>
             <div className="products-grid">
-            {products?.map((product, index) => {
-              console.log("product: ", product);
-              // if (index <= 3) {
-              if (true) {
-                return (
-                  <div
-                    className="product"
-                    onClick={() => {
-                      setSelectedProductId(product._id);
-                      dispatch(clearProduct())
-                      navigate(
-                        `${LOCKED_CLOTH_PAGE}?type=men&product_id=${product?._id}`
-                      );
-                      window.scrollTo({
-                        top: 0,
-                        behavior: "smooth",
-                      });
-                    }}
-                  >
-                    <div className="product-img-container">
-                      <img src={product?.product_images[0]} alt="image_1" />
-                    </div>
-                    <div className="container-fluid-padding base-container p-none">
-                      <div className="add-to-fav-icon-container">
-                        <div
-                          className="add-to-fav-icon"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedProductId(product._id);
-                            if (wishListLoading) {
-                              return;
-                            } else {
-                              handleMoveToWishList(product);
-                            }
-                          }}
-                        >
-                          {wishListItems?.some(
-                            (wishListProduct) =>
-                              wishListProduct?._id === product?._id
-                          ) ? (
-                            <FaHeart className="primary-color" />
-                          ) : (
-                            <FaRegHeart
-                              className={
-                                wishListLoading &&
-                                selectedProductId === product._id &&
-                                "primary-color"
-                              }
-                            />
-                          )}
-                        </div>
+              {products?.map((product, index) => {
+                console.log("product: ", product);
+                // if (index <= 3) {
+                if (true) {
+                  return (
+                    <div
+                      className="product"
+                      onClick={() => {
+                        setSelectedProductId(product._id);
+                        dispatch(clearProduct());
+                        navigate(
+                          `${LOCKED_CLOTH_PAGE}?type=men&product_id=${product?._id}`
+                        );
+                        window.scrollTo({
+                          top: 0,
+                          behavior: "smooth",
+                        });
+                      }}
+                    >
+                      <div className="product-img-container">
+                        <img src={product?.product_images[0]} alt="image_1" />
                       </div>
-                      <div className="add-to-cart-container">
-                        <button
-                          className={`add-to-cart-btn d-flex align-items-center justify-content-center gap-3 ${
-                            ((cartItems?.some(
-                              (cartProduct) =>
-                                cartProduct?.product?._id === product?._id
-                            ) &&
-                              addingCart) ||
-                              (cartLoading &&
-                                selectedProductId === product._id &&
-                                addingCart)) &&
-                            "disabled"
-                          }`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedProductId(product._id);
-                            handleAddToCart(product);
-                          }}
-                        >
-                          {cartLoading && selectedProductId === product._id ? (
-                            <div>
-                              <SpinnerLoader />
-                            </div>
-                          ) : (
+                      <div className="container-fluid-padding base-container p-none">
+                        <div className="add-to-fav-icon-container">
+                          <div
+                            className="add-to-fav-icon"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedProductId(product._id);
+                              if (wishListLoading) {
+                                return;
+                              } else {
+                                handleMoveToWishList(product);
+                              }
+                            }}
+                          >
+                            {wishListItems?.some(
+                              (wishListProduct) =>
+                                wishListProduct?._id === product?._id
+                            ) ? (
+                              <FaHeart className="primary-color" />
+                            ) : (
+                              <FaRegHeart
+                                className={
+                                  wishListLoading &&
+                                  selectedProductId === product._id &&
+                                  "primary-color"
+                                }
+                              />
+                            )}
+                          </div>
+                        </div>
+                        <div className="add-to-cart-container">
+                          <button
+                            className={`add-to-cart-btn d-flex align-items-center justify-content-center gap-3 ${
+                              ((cartItems?.some(
+                                (cartProduct) =>
+                                  cartProduct?.product?._id === product?._id
+                              ) &&
+                                addingCart) ||
+                                (cartLoading &&
+                                  selectedProductId === product._id &&
+                                  addingCart)) &&
+                              "disabled"
+                            }`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedProductId(product._id);
+                              handleAddToCart(product);
+                            }}
+                          >
+                            {cartLoading &&
+                            selectedProductId === product._id ? (
+                              <div>
+                                <SpinnerLoader />
+                              </div>
+                            ) : (
+                              <div>
+                                {cartItems?.some(
+                                  (cartProduct) =>
+                                    cartProduct?.product?._id === product?._id
+                                ) && addingCart ? (
+                                  <TiTick className="font-size-3 d-flex align-items-center" />
+                                ) : (
+                                  <TiShoppingCart className="font-size-3 d-flex align-items-center" />
+                                )}
+                              </div>
+                            )}
                             <div>
                               {cartItems?.some(
                                 (cartProduct) =>
                                   cartProduct?.product?._id === product?._id
-                              ) && addingCart ? (
-                                <TiTick className="font-size-3 d-flex align-items-center" />
-                              ) : (
-                                <TiShoppingCart className="font-size-3 d-flex align-items-center" />
-                              )}
+                              ) && addingCart
+                                ? "Added to Cart"
+                                : cartLoading &&
+                                  selectedProductId === product._id
+                                ? "Adding to Cart"
+                                : "Add To Cart"}
                             </div>
-                          )}
-                          <div>
-                            {cartItems?.some(
-                              (cartProduct) =>
-                                cartProduct?.product?._id === product?._id
-                            ) && addingCart
-                              ? "Added to Cart"
-                              : cartLoading && selectedProductId === product._id
-                              ? "Adding to Cart"
-                              : "Add To Cart"}
-                          </div>
-                        </button>
-                      </div>
-                      <div
-                        className="product-title"
-                        onClick={() =>
-                          navigate(
-                            `${LOCKED_CLOTH_PAGE}?type=men&product_id=${product?._id}`
-                          )
-                        }
-                      >
-                        {product.product_title}
-                      </div>
-                      <div className="product-ratings d-flex align-items-center gap-2 mt-1">
-                        <div className="d-flex align-items-center gap-1">
-                          <div className="d-flex align-items-center">
-                            <IoIosStar
-                              color="#feaa02"
-                              className="d-flex align-items-center"
-                            />
-                          </div>
-                          <div className="font-12 font-weight-1 rate">4.5</div>
+                          </button>
                         </div>
-                        <div className="d-flex align-items-center dot-ic">
-                          <GoDotFill size={10} />
+                        <div
+                          className="product-title"
+                          onClick={() =>
+                            navigate(
+                              `${LOCKED_CLOTH_PAGE}?type=men&product_id=${product?._id}`
+                            )
+                          }
+                        >
+                          {product.product_title}
                         </div>
-                        <div className="font-12 sold">125 Items Sold</div>
-                      </div>
-                      <div className="d-flex align-items-center font-weight-1 justify-content-space-between">
-                        <div className="d-flex gap-1 mt-1 mb-1 price-container">
-                          {product?.is_discounted_product && (
-                            <div className="price">
+                        <div className="product-ratings d-flex align-items-center gap-2 mt-1">
+                          <div className="d-flex align-items-center gap-1">
+                            <div className="d-flex align-items-center">
+                              <IoIosStar
+                                color="#feaa02"
+                                className="d-flex align-items-center"
+                              />
+                            </div>
+                            <div className="font-12 font-weight-1 rate">
+                              4.5
+                            </div>
+                          </div>
+                          <div className="d-flex align-items-center dot-ic">
+                            <GoDotFill size={10} />
+                          </div>
+                          <div className="font-12 sold">125 Items Sold</div>
+                        </div>
+                        <div className="d-flex align-items-center font-weight-1 justify-content-space-between">
+                          <div className="d-flex gap-1 mt-1 mb-1 price-container">
+                            {product?.is_discounted_product && (
+                              <div className="price">
+                                <div className="d-flex align-items-center">
+                                  <PiCurrencyInrBold />
+                                </div>
+                                <div>
+                                  {getCurrencyFormat(
+                                    product.sale_price - product.discount_price
+                                  )}
+                                </div>
+                              </div>
+                            )}
+                            <div
+                              className={`${
+                                product?.is_discounted_product && "offered"
+                              } price`}
+                            >
                               <div className="d-flex align-items-center">
                                 <PiCurrencyInrBold />
                               </div>
-                              <div>
-                                {getCurrencyFormat(
-                                  product.sale_price - product.discount_price
-                                )}
-                              </div>
-                            </div>
-                          )}
-                          <div
-                            className={`${
-                              product?.is_discounted_product && "offered"
-                            } price`}
-                          >
-                            <div className="d-flex align-items-center">
-                              <PiCurrencyInrBold />
-                            </div>
-                            <div>{getCurrencyFormat(product.sale_price)}</div>
-                          </div>{" "}
-                          {/* {product?.is_discounted_product && (
+                              <div>{getCurrencyFormat(product.sale_price)}</div>
+                            </div>{" "}
+                            {/* {product?.is_discounted_product && (
                             <span className="discount price">
                               ({product.discount_percentage}% offer)
                             </span>
                           )} */}
-                        </div>
-                        <div
-                          className="bag-ic"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedProductId(product._id);
-                            handleAddToCart(product);
-                          }}
-                        >
-                          <FaShoppingBasket className="ic" />
+                          </div>
+                          <div
+                            className="bag-ic"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedProductId(product._id);
+                              handleAddToCart(product);
+                            }}
+                          >
+                            <FaShoppingBasket className="ic" />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    {/* <div className="avail-colors-container">
+                      {/* <div className="avail-colors-container">
                       {product?.group?.map((product_group) => {
                         return (
                           <div
@@ -326,10 +337,10 @@ const CollectionsList = () => {
                         );
                       })}
                     </div> */}
-                  </div>
-                );
-              }
-            })}
+                    </div>
+                  );
+                }
+              })}
             </div>
           </div>
         </div>

@@ -1,4 +1,9 @@
+/* imports */
+
+@import url("https://fonts.googleapis.com/css?family=Nothing+You+Could+Do");
+@import url("https://fonts.googleapis.com/css?family=Eagle+Lake");
 @import url("https://fonts.googleapis.com/css?family=Poppins");
+@import url("https://fonts.googleapis.com/css?family=Spinnaker");
 :root {
   --doc-height: 100%;
 }
@@ -13,6 +18,7 @@ body {
   padding: 0;
   font-family: "Poppins", sans-serif;
   background-color: var(--default-color);
+  -webkit-tap-highlight-color: transparent;
 }
 
 input::-webkit-outer-spin-button,

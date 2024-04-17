@@ -3,26 +3,46 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import { IoClose } from "react-icons/io5";
 import { IoMailOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  clearAuthError,
-  login,
-  register,
-  sendOtp,
-} from "../../../redux/actions/userActions";
+import { login, register, sendOtp } from "../../../redux/actions/userActions";
 import OtpInput from "react-otp-input";
 import { MdEmail } from "react-icons/md";
-import { clearCode, clearOtpError } from "../../../redux/slices/authSlice";
+import {
+  clearAuthCode,
+  clearAuthMessage,
+  clearAuthStatus,
+} from "../../../redux/slices/authSlice";
 import { FaCircleCheck } from "react-icons/fa6";
 import moment from "moment";
 import { getCart, updateCart } from "../../../redux/actions/cartAction";
+import {
+  clearOtpCode,
+  clearOtpMessage,
+  clearOtpStatus,
+} from "../../../redux/slices/otpSlice";
+import ToastMessage from "../toast-msg/ToastMessage";
 const DialogModalAuth = ({ isOpen, onClose, isAuth }) => {
-  const { user, code, otp_error, auth_error, expires_on, otp_loading } =
-    useSelector((state) => state.authState);
+  const {
+    user,
+    message: auth_message,
+    status: auth_status,
+    code: auth_code,
+    auth_error,
+  } = useSelector((state) => state.authState);
+  const {
+    loading: otp_loading,
+    message: otp_message,
+    status: otp_status,
+    code: otp_code,
+    expires_on: otp_expires_on,
+  } = useSelector((state) => state.otpState);
   const [email, setEmail] = useState("");
   const [otp, setOTP] = useState("");
   const [proceedOTP, setProceedOTP] = useState(false);
   const [verifySuccess, setVerifySuccess] = useState(false);
   const [remainingTime, setRemainingTime] = useState(0);
+  const [toastMsg, setToastMsg] = useState(false);
+  const [toastMessageValue, setToastMessageValue] = useState(null);
+  const [status, setStatus] = useState(null);
   const dispatch = useDispatch();
   const handleSendOTP = () => {
     const payload = {
@@ -39,26 +59,9 @@ const DialogModalAuth = ({ isOpen, onClose, isAuth }) => {
     };
     dispatch(sendOtp(payload));
   };
-  useEffect(() => {
-    if (code === "proceed-otp") {
-      setProceedOTP(true);
-      setVerifySuccess(false);
-      dispatch(clearOtpError());
-      setRemainingTime(0);
-    } else if (code === "proceed-verify-success") {
-      setProceedOTP(false);
-      setVerifySuccess(true);
-      setEmail("");
-      setRemainingTime(0);
-    } else {
-      setOTP("");
-      setProceedOTP(false);
-      setVerifySuccess(false);
-    }
-  }, [code]);
   const calculateRemainingTime = () => {
     const currentTime = moment();
-    const expirationTime = moment(expires_on);
+    const expirationTime = moment(otp_expires_on);
     const diff = expirationTime.diff(currentTime);
     const remainingSeconds = Math.max(0, Math.floor(diff / 1000));
     return remainingSeconds;
@@ -73,6 +76,98 @@ const DialogModalAuth = ({ isOpen, onClose, isAuth }) => {
     }${remainingSeconds}`;
   };
   useEffect(() => {
+    console.log("code: ", otp_code, auth_code);
+    if (otp_code && !auth_code) {
+      setProceedOTP(true);
+      setVerifySuccess(false);
+      setRemainingTime(0);
+      console.log("Code: ", "exe - 1");
+    } else if (otp_code && auth_code) {
+      setProceedOTP(false);
+      setVerifySuccess(true);
+      setEmail("");
+      setRemainingTime(0);
+      console.log("Code: ", "exe - 2");
+    } else {
+      setOTP("");
+      setProceedOTP(false);
+      setVerifySuccess(false);
+      console.log("Code: ", "exe - 3");
+    }
+  }, [otp_code, auth_code]);
+  useEffect(() => {
+    console.log("otp_message: ", otp_message);
+    switch (auth_status) {
+      case "success": {
+        setStatus(auth_status);
+        setToastMessageValue(auth_message);
+        setToastMsg(true);
+        setTimeout(() => {
+          dispatch(clearAuthMessage());
+          dispatch(clearAuthStatus());
+          setStatus(null);
+        }, 5000);
+        break;
+      }
+      case "error": {
+        setStatus(auth_status);
+        setToastMessageValue(auth_message);
+        setToastMsg(true);
+        setTimeout(() => {
+          setStatus(null);
+          dispatch(clearAuthMessage());
+          dispatch(clearAuthStatus());
+          setToastMsg(false);
+        }, 5000);
+        break;
+      }
+      default: {
+        setStatus(auth_status);
+        setToastMessageValue(null);
+        setToastMsg(false);
+        dispatch(clearAuthMessage());
+        dispatch(clearAuthStatus());
+        break;
+      }
+    }
+  }, [auth_status]);
+  useEffect(() => {
+    console.log("otp_message: ", otp_message);
+    switch (otp_status) {
+      case "success": {
+        setStatus(otp_status);
+        setToastMessageValue(otp_message);
+        setToastMsg(true);
+        setTimeout(() => {
+          setStatus(null);
+          dispatch(clearOtpMessage());
+          dispatch(clearOtpStatus());
+        }, 5000);
+        break;
+      }
+      case "error": {
+        setStatus(otp_status);
+        setToastMessageValue(otp_message);
+        setToastMsg(true);
+        setTimeout(() => {
+          setStatus(null);
+          dispatch(clearOtpMessage());
+          dispatch(clearOtpStatus());
+          setToastMsg(false);
+        }, 5000);
+        break;
+      }
+      default: {
+        setStatus(otp_status);
+        setToastMessageValue(null);
+        setToastMsg(false);
+        dispatch(clearOtpMessage());
+        dispatch(clearOtpStatus());
+        break;
+      }
+    }
+  }, [otp_status]);
+  useEffect(() => {
     setRemainingTime(calculateRemainingTime());
   }, []);
   useEffect(() => {
@@ -84,11 +179,11 @@ const DialogModalAuth = ({ isOpen, onClose, isAuth }) => {
       isAuth === "Login"
         ? dispatch(login(payload))
         : dispatch(register(payload));
-      dispatch(clearAuthError());
+      dispatch(clearAuthMessage());
     }
   }, [otp]);
   useEffect(() => {
-    if (code === "proceed-verify-success") {
+    if (auth_code) {
       const payload = {
         user_id: user?._id,
       };
@@ -104,15 +199,15 @@ const DialogModalAuth = ({ isOpen, onClose, isAuth }) => {
         dispatch(getCart(payload));
       }
       setTimeout(() => {
-        dispatch(clearCode());
-        dispatch(clearOtpError());
-        dispatch(clearAuthError());
+        dispatch(clearAuthCode());
+        dispatch(clearOtpCode());
+        dispatch(clearAuthMessage());
         setProceedOTP(false);
         setVerifySuccess(false);
         onClose();
       }, 3000);
     }
-  }, [code]);
+  }, [auth_code]);
 
   useEffect(() => {
     if (!otp_loading) {
@@ -123,6 +218,9 @@ const DialogModalAuth = ({ isOpen, onClose, isAuth }) => {
       return () => clearInterval(interval);
     }
   }, [remainingTime, otp_loading]);
+  useEffect(() => {
+    console.log("code: ", proceedOTP, verifySuccess);
+  }, [proceedOTP, verifySuccess]);
   if (!isOpen) {
     return null;
   }
@@ -131,10 +229,9 @@ const DialogModalAuth = ({ isOpen, onClose, isAuth }) => {
       className="modal-overlay"
       onClick={() => {
         onClose();
-        dispatch(clearCode());
-        dispatch(clearOtpError());
-        dispatch(clearAuthError());
-        dispatch(clearCode());
+        dispatch(clearAuthCode());
+        dispatch(clearOtpCode());
+        dispatch(clearAuthMessage());
       }}
     >
       <div className="modal-content-auth" onClick={(e) => e.stopPropagation()}>
@@ -147,10 +244,9 @@ const DialogModalAuth = ({ isOpen, onClose, isAuth }) => {
                     className="close-icon"
                     onClick={() => {
                       onClose();
-                      dispatch(clearCode());
-                      dispatch(clearOtpError());
-                      dispatch(clearAuthError());
-                      dispatch(clearCode());
+                      dispatch(clearAuthCode());
+                      dispatch(clearOtpCode());
+                      dispatch(clearAuthMessage());
                     }}
                   >
                     <IoClose />
@@ -221,9 +317,9 @@ const DialogModalAuth = ({ isOpen, onClose, isAuth }) => {
                     className="close-icon"
                     onClick={() => {
                       onClose();
-                      dispatch(clearCode());
-                      dispatch(clearOtpError());
-                      dispatch(clearAuthError());
+                      dispatch(clearAuthCode());
+                      dispatch(clearOtpCode());
+                      dispatch(clearAuthMessage());
                     }}
                   >
                     <IoClose />
@@ -239,11 +335,6 @@ const DialogModalAuth = ({ isOpen, onClose, isAuth }) => {
                       placeholder="Enter your email"
                       onChange={(e) => setEmail(e.target.value)}
                     />
-                  </div>
-                  <div className="h-0">
-                    {otp_error && (
-                      <div className="request-otp-error">*{otp_error}</div>
-                    )}
                   </div>
                 </div>
                 <div className="d-flex align-items-center justify-content-center">
@@ -272,6 +363,7 @@ const DialogModalAuth = ({ isOpen, onClose, isAuth }) => {
           </div>
         </div>
       </div>
+      <ToastMessage message={toastMessageValue} status={status} />
     </div>
   );
 };

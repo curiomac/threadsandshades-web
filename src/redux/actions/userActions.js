@@ -24,9 +24,6 @@ import {
   resetPasswordSuccess,
   resetPasswordFail,
   clearSuccess,
-  otpRequest,
-  otpSuccess,
-  otpFail,
   userProfileRequest,
   userProfileSuccess,
   userProfileFail,
@@ -53,6 +50,11 @@ import { BASE_URL } from "../../api/ApiPath";
 import { endpoints } from "../../api/EndPoints";
 import { getCart } from "./cartAction";
 import { getWishList } from "./wishListAction";
+import {
+  otpSendFail,
+  otpSendRequest,
+  otpSendSuccess,
+} from "../slices/otpSlice";
 
 const getToken = () => {
   return localStorage.getItem("token") || "";
@@ -60,14 +62,14 @@ const getToken = () => {
 
 export const sendOtp = (payload) => async (dispatch) => {
   try {
-    dispatch(otpRequest());
+    dispatch(otpSendRequest());
     const response = await axios.post(
       `${BASE_URL}/${endpoints.otp.post}`,
       payload
     );
-    dispatch(otpSuccess(response?.data));
+    dispatch(otpSendSuccess(response?.data));
   } catch (error) {
-    dispatch(otpFail(error?.response?.data?.message));
+    dispatch(otpSendFail(error?.response?.data?.message));
   }
 };
 export const login = (payload) => async (dispatch) => {
@@ -225,13 +227,6 @@ export const resetPassword = (formData, token) => async (dispatch) => {
   } catch (error) {
     dispatch(resetPasswordFail(error.response.data.message));
   }
-};
-
-export const clearAuthError = () => (dispatch) => {
-  dispatch(clearError());
-};
-export const clearAuthSuccess = () => (dispatch) => {
-  dispatch(clearSuccess());
 };
 
 export const getUsers = async (dispatch) => {

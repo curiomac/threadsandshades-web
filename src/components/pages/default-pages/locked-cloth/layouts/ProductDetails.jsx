@@ -35,7 +35,7 @@ import ToastMessage from "../../../../plugins/toast-msg/ToastMessage";
 import { clearRatingsError } from "../../../../../redux/slices/ratingsSlice";
 import Loader from "react-js-loader";
 const ProductDetails = () => {
-  const productId = getQueryParam("product_id");
+
   const productType = getQueryParam("type");
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -206,18 +206,8 @@ const ProductDetails = () => {
     });
   };
   useEffect(() => {
-    dispatch(clearProduct());
-  }, []);
-  useEffect(() => {
     dispatch(getProducts([], [], []));
   }, [dispatch]);
-  useEffect(() => {
-    const payload = {
-      product_id: productId,
-    };
-    dispatch(getProduct(payload));
-    dispatch(getRatings(payload));
-  }, [productId, dispatch]);
   useEffect(() => {
     if (product && products_group) {
       setProductData(product);
@@ -273,11 +263,10 @@ const ProductDetails = () => {
       }
     }
   }, [status]);
-  console.log("product-value: ", status);
+  console.log("product-value: ", product);
   console.log("product-value: ", toastMessageValue);
   return (
     <div className="product-details">
-      {productLoading ? <BackdropLoader /> : ""}
       {Object.keys(productData).length !== 0 && (
         <div className="container-fluid">
           <div className="d-flex align-items-center gap-2 bread-crumbs">
@@ -475,6 +464,10 @@ const ProductDetails = () => {
                           navigate(
                             `${LOCKED_CLOTH_PAGE}?type=men&product_id=${product_group?._id}`
                           );
+                          const payload = {
+                            product_id: product_group?._id,
+                          };
+                          dispatch(getProduct(payload))
                           window.scrollTo({
                             top: 0,
                             behavior: "smooth",

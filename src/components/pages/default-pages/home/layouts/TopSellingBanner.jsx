@@ -33,11 +33,11 @@ const TopSellingBanner = () => {
     initialSlide: 0,
     centerPadding: "60px",
     /* Autoplay settings */
-    autoplay: true,
-    infinite: true,
-    pauseOnHover: true,
-    autoplaySpeed: 2000,
-    cssEase: "linear",
+    // autoplay: true,
+    // infinite: true,
+    // pauseOnHover: true,
+    // autoplaySpeed: 2000,
+    // cssEase: "linear",
     /* Responsive settings */
     responsive: [
       {

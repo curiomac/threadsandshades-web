@@ -16,7 +16,7 @@ const Collections = () => {
         <FilterBar />
         <CollectionsList />
       </div>
-        <FilterBarRes />
+      <FilterBarRes />
     </div>
   );
 };

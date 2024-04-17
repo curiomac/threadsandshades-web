@@ -37,12 +37,14 @@ function App() {
       localStorage.setItem("theme-id", process.env.REACT_APP_DEFAULT_THEME_ID);
     }
   };
-  const documentHeight = () => {
+  const documentDimensions = () => {
     const doc = document.documentElement;
     doc.style.setProperty("--doc-height", `${window.innerHeight}px`);
+    doc.style.setProperty("--doc-width", `${window.innerWidth}px`);
   };
-  window.addEventListener("resize", documentHeight);
-  documentHeight();
+  
+  window.addEventListener("resize", documentDimensions);
+  documentDimensions();
 
   useEffect(() => {
     getThemeId();

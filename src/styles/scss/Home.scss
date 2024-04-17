@@ -597,6 +597,18 @@
       }
     }
   }
+  .support-banner {
+    .contents {
+      display: block;
+      width: 100%;
+      .content {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        margin-top: 10px;
+      }
+    }
+  }
 }
 @media screen and (max-width: 539px) {
   .modal-content-auth {
@@ -617,18 +629,6 @@
       display: block;
       width: 100%;
       .card {
-        margin-top: 10px;
-      }
-    }
-  }
-  .support-banner {
-    .contents {
-      display: block;
-      width: 100%;
-      .content {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
         margin-top: 10px;
       }
     }

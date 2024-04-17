@@ -1,8 +1,9 @@
 import React from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 const ToastMessage = ({ message, status, hideProgressBar }) => {
-  toast(message, {
+  const toastOptions = {
     position: "top-right",
     autoClose: 5000,
     hideProgressBar: false,
@@ -12,8 +13,19 @@ const ToastMessage = ({ message, status, hideProgressBar }) => {
     progress: undefined,
     theme: "light",
     type: status,
-    // onC
-  });
+  };
+
+  const existingToast = toast.isActive(message);
+
+  if (existingToast) {
+    toast.update(existingToast, toastOptions);
+  } else {
+    toast(message, {
+      ...toastOptions,
+      toastId: message,
+    });
+  }
+
   return (
     <ToastContainer
       theme={"light"}
