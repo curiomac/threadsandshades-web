@@ -1,9 +1,12 @@
-import React, { useEffect } from 'react';
-// import FashionBanner from './layouts/FashionBanner';
-import ShopNowCards from './layouts/ShopNowCards';
-import TopSellingBanner from './layouts/TopSellingBanner';
-import ShopForBanner from './layouts/ShopForBanner';
-import SupportBanner from './layouts/SupportBanner';
+import React, { useEffect } from "react";
+import FashionBanner from "./layouts/FashionBanner";
+import ShopNowCards from "./layouts/ShopNowCards";
+import TopSellingBanner from "./layouts/TopSellingBanner";
+import ShopForBanner from "./layouts/ShopForBanner";
+import SupportBanner from "./layouts/SupportBanner";
+import NewCollectionsList from "./layouts/NewCollectionsList";
+import FashionShopNowBanner from "./layouts/FashionShopNowBanner";
+import TargetProductBanner from "./layouts/TargetProductBanner";
 
 const Home = () => {
   useEffect(() => {
@@ -13,14 +16,17 @@ const Home = () => {
     });
   }, []);
   return (
-    <div className='home'>
+    <div className="home">
       {/* <FashionBanner /> */}
       <ShopForBanner />
       <ShopNowCards />
       <SupportBanner />
-      <TopSellingBanner />
+      <TargetProductBanner />
+      <NewCollectionsList />
+      <FashionShopNowBanner />
+      {/* <TopSellingBanner /> */}
     </div>
-  )
-}
+  );
+};
 
 export default Home;

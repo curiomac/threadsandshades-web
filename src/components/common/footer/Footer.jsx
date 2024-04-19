@@ -34,41 +34,41 @@ const Footer = () => {
         <div className="footer">
           <div className="footer-container res-849px-d-block">
             <div className="brand">
+              <div className="footer-logo-mobile">
               <Logo height={100} />
+              </div>
               <div className="details">
-                Dive into the world of premium fashion, where style meets
-                innovation. Stay ahead in the trend game with our top-tier
-                clothing collection.
+              Step into the realm of luxury fashion, where every garment is a fusion of style and innovation. Our curated collection ensures you're always at the forefront of trends, embracing sophistication and exclusivity. Elevate your wardrobe with our premium offerings, designed to captivate and inspire. Experience the epitome of sartorial excellence as you indulge in our meticulously crafted pieces.
               </div>
             </div>
             <div className="quick-links">
-              <div className="heading">QUICK LINKS</div>
+              <div className="heading">SHOP</div>
               <div className="links-container">
-                <div className="links">
+                {/* <div className="links">
                   <span>SHOP</span>
+                </div> */}
+                <div className="links">
+                  <span>Men</span>
                 </div>
                 <div className="links">
-                  <span>MEN</span>
+                  <span>Women</span>
                 </div>
                 <div className="links">
-                  <span>WOMEN</span>
-                </div>
-                <div className="links">
-                  <span>NEW ARRIVALS</span>
+                  <span>New Arrivals</span>
                 </div>
               </div>
             </div>
             <div className="support">
-              <div className="heading">SUPPORTS</div>
+              <div className="heading">SUPPORT</div>
               <div className="links-container">
                 <div className="links">
-                  <span>Setting & Privacy</span>
+                  <span>Privacy Policy</span>
                 </div>
                 <div className="links">
                   <span>Help & Support</span>
                 </div>
                 <div className="links">
-                  <span>Live Streaming</span>
+                  <span>Terms & Conditions</span>
                 </div>
                 <div className="links">
                   <span>Our Updates</span>
@@ -88,13 +88,13 @@ const Footer = () => {
                 </button>
               </div>
               <div className="external-links">
-                <Link
+                {/* <Link
                   className="link ic-twitter"
                   to="https://www.twitter.com"
                   target="_blank"
                 >
                   <BsTwitter />
-                </Link>
+                </Link> */}
                 <Link
                   className="link ic-facebook"
                   to="https://www.facebook.com"
@@ -109,18 +109,19 @@ const Footer = () => {
                 >
                   <GrInstagram />
                 </Link>
-                <Link
+                {/* <Link
                   className="link ic-xbox"
                   to="https://www.xbox.com"
                   target="_blank"
                 >
                   <IoLogoXbox />
-                </Link>
+                </Link> */}
               </div>
             </div>
           </div>
           <div className="copy-rights">
-            © 2024 Threads & Shades. All rights reserved
+          <div className="border-bottom"></div>
+            © 2024 Threads & Shades, All rights reserved.
           </div>
         </div>
       )}

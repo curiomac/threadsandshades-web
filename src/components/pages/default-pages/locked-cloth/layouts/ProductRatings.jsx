@@ -66,7 +66,10 @@ const ProductRatings = ({ ratings }) => {
   return (
     <div className="product-ratings mt-3">
       <div className="product-ratings-contents">
-        <div className="heading">Product Ratings</div>
+        <div className="heading-product w-fit-content">
+          <div>Product Ratings</div>
+          <div className="drop-border"></div>
+        </div>
         <div className="product-ratings-container">
           <div className="reviews-calc">
             <div className="reviews-calc-content">
@@ -161,10 +164,12 @@ const ProductRatings = ({ ratings }) => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                color: "#bdbdbd"
+                color: "#bdbdbd",
               }}
             >
-              <div className="font-20 text-transform-uc font-weight-1">No Ratings Found</div>
+              <div className="font-20 text-transform-uc font-weight-1">
+                No Ratings Found
+              </div>
             </div>
           )}
         </div>

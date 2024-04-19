@@ -15,6 +15,7 @@ export const ORDER_STATUS_PAGE = `/order-status`;
 export const USER_ACCOUNT_PAGE = `/user-profile`
 export const USER_ACCOUNT_DETAILS_PAGE = `/user-profile/details`
 export const ORDER_LIST_PAGE = `/user-profile/order-list`
+export const ORDER_ADDRESS = `/user-profile/order-address`
 export const SETTINGS_PAGE = `/user-profile/settings`
 
 /* Auth Pages */

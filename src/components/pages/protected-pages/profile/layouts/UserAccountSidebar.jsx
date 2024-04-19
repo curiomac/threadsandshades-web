@@ -3,6 +3,7 @@ import empty_profile_img from "../../../../../assets/imgs/profile/profile-empty.
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
+  ORDER_ADDRESS,
   ORDER_LIST_PAGE,
   SETTINGS_PAGE,
   USER_ACCOUNT_DETAILS_PAGE,
@@ -130,7 +131,11 @@ const UserAccountSidebar = ({ handleSidebarOpenParams, sidebarOpenParams }) => {
               </div>
               <div className="res-849px-d-none">Order List</div>
             </div>
-            <div className={`link ${isCurrentPath("null") && "active"}`}>
+            <div className={`link ${isCurrentPath(ORDER_ADDRESS) && "active"}`}
+            onClick={() => {
+              navigate(ORDER_ADDRESS)
+              handleSidebarOpenParams(!sidebarOpen);
+            }}>
               <div className="d-flex align-items-center">
                 <FaAddressBook />
               </div>

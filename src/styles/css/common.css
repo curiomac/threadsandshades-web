@@ -43,3 +43,12 @@ button {
   width: 100%;
   background-color: #9a9a9a;
 }
+
+.drop-border {
+  height: 6px;
+  width: 70%;
+  background-color: var(--primary-color);
+  border-radius: 50px;
+  margin-top: 5px;
+  margin-bottom: 20px;
+}

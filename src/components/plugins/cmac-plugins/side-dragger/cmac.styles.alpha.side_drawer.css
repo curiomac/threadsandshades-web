@@ -1,11 +1,11 @@
-/* Side Dragger */
+Side Dragger
 
 body {
   margin: 0;
   padding: 0;
 }
 
-#root {
+.cmac-overlay {
   max-height: var(--doc-height);
   overflow: auto;
 }

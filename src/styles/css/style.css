@@ -4,6 +4,8 @@
 @import url("https://fonts.googleapis.com/css?family=Eagle+Lake");
 @import url("https://fonts.googleapis.com/css?family=Poppins");
 @import url("https://fonts.googleapis.com/css?family=Spinnaker");
+@import url("https://fonts.googleapis.com/css?family=Jersey+20");
+@import url("https://fonts.googleapis.com/css?family=Protest+Guerrilla");
 
 /* container */
 
@@ -105,6 +107,9 @@
 }
 .w-fill {
   width: -webkit-fill-available;
+}
+.w-fit-content {
+  width: fit-content;
 }
 .w-0 {
   width: 0;
@@ -595,6 +600,12 @@
 }
 .font-family-spinnaker {
   font-family: "Spinnaker";
+}
+.font-family-jersey-20 {
+  font-family: "Jersey 20";
+}
+.font-family-protest-guerrilla {
+  font-family: "Protest Guerrilla";
 }
 
 /* font-weight */

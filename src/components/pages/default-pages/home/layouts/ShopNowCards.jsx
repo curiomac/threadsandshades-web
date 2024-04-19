@@ -1,15 +1,6 @@
-import Aos from "aos";
 import React, { useEffect } from "react";
 
 const ShopNowCards = () => {
-  useEffect(() => {
-    Aos.init({
-      duration: 800,
-      offset: 0,
-      easing: "ease",
-      delay: 0,
-    });
-  }, []);
   return (
     <div className="shop-now-cards">
       <div className="container-fluid">
@@ -27,7 +18,7 @@ const ShopNowCards = () => {
               </div>
             </div>
           </div>
-          <div className="card sweat-card-bg" data-aos="fade-right">
+          <div className="card sweat-card-bg" >
             <div className="linear-bg">
               <div className="content container-fluid">
                 <div className="default-color font-weight-1 heading">
@@ -42,7 +33,7 @@ const ShopNowCards = () => {
           </div>
           <div
             className="card explore-card-bg"
-            // data-aos="fade-right"
+            // 
           >
             <div className="linear-bg">
               <div className="content container-fluid">

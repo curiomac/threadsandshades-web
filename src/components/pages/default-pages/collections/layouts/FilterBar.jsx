@@ -15,8 +15,10 @@ const FilterBar = ({ toggleDrawer }) => {
   const [filterSize, setFilterSize] = useState(true);
   const [filterColor, setFilterColor] = useState(true);
   const [filterPrice, setFilterPrice] = useState(true);
+  const [filterGenders, setFilterGenders] = useState([]);
   const [filterSizes, setFilterSizes] = useState([]);
   const [filterColors, setFilterColors] = useState([]);
+  const availableGenders = ["Male", "Female"];
   const availableSizes = ["S", "M", "L", "XL", "XXL"];
   const [available_colors, setAvailableColors] = useState([]);
   const [isChecked, setIsChecked] = useState(false);
@@ -24,6 +26,27 @@ const FilterBar = ({ toggleDrawer }) => {
   const { filters_applied, filters_available } = useSelector(
     (state) => state.productsState
   );
+  const handleGenderFilter = (e) => {
+    let filter_genders = [];
+    if (filterGenders?.some((size) => size === e)) {
+      filter_genders = filterGenders.filter((size) => size !== e);
+      setFilterGenders(filter_genders);
+    } else {
+      filter_genders = [...filterGenders, e];
+      setFilterGenders(filter_genders);
+    }
+    getScreenResolution().then((res) => {
+      if (res.width >= 897) {
+        if (search_input) {
+          dispatch(
+            getProducts(search_input.split(" "), filter_genders, filterColors)
+          );
+        } else {
+          dispatch(getProducts([], filter_genders, filterColors));
+        }
+      }
+    });
+  };
   const handleSizeFilter = (e) => {
     let filter_sizes = [];
     if (filterSizes?.some((size) => size === e)) {
@@ -34,11 +57,14 @@ const FilterBar = ({ toggleDrawer }) => {
       setFilterSizes(filter_sizes);
     }
     getScreenResolution().then((res) => {
-      if (res.width >= 897) { if (search_input) {
-        dispatch(getProducts(search_input.split(" "), filter_sizes, filterColors));
-      } else {
-        dispatch(getProducts([], filter_sizes, filterColors));
-      }
+      if (res.width >= 897) {
+        if (search_input) {
+          dispatch(
+            getProducts(search_input.split(" "), filter_sizes, filterColors)
+          );
+        } else {
+          dispatch(getProducts([], filter_sizes, filterColors));
+        }
       }
     });
   };
@@ -54,9 +80,11 @@ const FilterBar = ({ toggleDrawer }) => {
     getScreenResolution().then((res) => {
       if (res.width >= 897) {
         if (search_input) {
-          dispatch(getProducts(search_input.split(" "), filterSizes, filter_colors));
+          dispatch(
+            getProducts(search_input.split(" "), filterSizes, filter_colors)
+          );
         } else {
-        dispatch(getProducts([], filterSizes, filter_colors));
+          dispatch(getProducts([], filterSizes, filter_colors));
         }
       }
     });
@@ -66,12 +94,27 @@ const FilterBar = ({ toggleDrawer }) => {
     dispatch(getProducts([], filterSizes, filterColors));
   };
   const handleClearFilter = () => {
+    setFilterGenders([]);
     setFilterSizes([]);
     setFilterColors([]);
   };
   const toggleCheckbox = () => {
     setIsChecked(!isChecked);
   };
+  useEffect(() => {
+    if (type) {
+      const getType = () => {
+        if (type === "men") return "Male";
+        else if (type === "women") {
+          return "Female";
+        } else {
+          return "";
+        }
+      };
+      console.log("DFDFDF", getType())
+      setFilterGenders([...filterGenders, getType()]);
+    }
+  }, [type]);
   useEffect(() => {
     if (filters_applied) {
       const formated_filter_size_array =
@@ -84,11 +127,21 @@ const FilterBar = ({ toggleDrawer }) => {
       console.log("formated_filter_color_array: ", formated_filter_color_array);
       setFilterColors(formated_filter_color_array);
       if (search_input) {
-        dispatch(getProducts(search_input.split(" "), formated_filter_size_array, formated_filter_color_array));
+        dispatch(
+          getProducts(
+            search_input.split(" "),
+            formated_filter_size_array,
+            formated_filter_color_array
+          )
+        );
       } else {
-      dispatch(
-        getProducts([], formated_filter_size_array, formated_filter_color_array)
-      );
+        dispatch(
+          getProducts(
+            [],
+            formated_filter_size_array,
+            formated_filter_color_array
+          )
+        );
       }
     } else {
       dispatch(getProducts([], [], []));
@@ -127,12 +180,29 @@ const FilterBar = ({ toggleDrawer }) => {
             </div>
             {filterGender && (
               <div className="mt-2 mb-2">
-                <CustomCheckbox
-                  isChecked={type ? true : false}
-                  // toggleCheckbox={toggleCheckbox}
-                >
-                  <div className="mt-1 mb-1 filter-value">{type}</div>
-                </CustomCheckbox>
+                {availableGenders.map((gender) => {
+                  const getAppliedGenders = () => {
+                    if (
+                      filterGenders?.some(
+                        (filterGenderValue) => filterGenderValue === gender
+                      )
+                    ) {
+                      return true;
+                    } else {
+                      return false;
+                    }
+                  };
+                  return (
+                    <CustomCheckbox
+                      isChecked={getAppliedGenders()}
+                      toggleCheckbox={toggleCheckbox}
+                      onClick={() => handleGenderFilter(gender)}
+                    >
+                      {" "}
+                      <div className="mt-1 mb-1 filter-value">{gender}</div>
+                    </CustomCheckbox>
+                  );
+                })}
               </div>
             )}
           </div>
@@ -211,9 +281,9 @@ const FilterBar = ({ toggleDrawer }) => {
               <div>{filterColor ? <FaMinus /> : <FaPlus />}</div>
             </div>
             {filterColor && (
-              <div className="mt-2 mb-2">
+              <div className="mt-2 mb-2 colors-mapper">
                 {available_colors?.map((available_color) => {
-                  const getAppliedColors = () => {
+                  const isAppliedColors = () => {
                     if (
                       filterColors?.some(
                         (filterColorValue) =>
@@ -226,16 +296,27 @@ const FilterBar = ({ toggleDrawer }) => {
                     }
                   };
                   return (
-                    <CustomCheckbox
-                      isChecked={getAppliedColors()}
-                      toggleCheckbox={toggleCheckbox}
+                    // <CustomCheckbox
+                    //   isChecked={getAppliedColors()}
+                    //   toggleCheckbox={toggleCheckbox}
+                    //   onClick={() => handleColorFilter(available_color)}
+                    // >
+                    //   {" "}
+                    //   <div className="mt-1 mb-1 filter-value">
+                    //     {available_color}
+                    //   </div>
+                    // </CustomCheckbox>
+                    <div
                       onClick={() => handleColorFilter(available_color)}
-                    >
-                      {" "}
-                      <div className="mt-1 mb-1 filter-value">
-                        {available_color}
-                      </div>
-                    </CustomCheckbox>
+                      className="color-value"
+                      style={{
+                        background: available_color,
+                        border: "2px solid #fff",
+                        boxShadow: isAppliedColors()
+                          ? "0 0 0 1px #00000069"
+                          : "0 0 0 1px transparent",
+                      }}
+                    ></div>
                   );
                 })}
 
@@ -281,25 +362,17 @@ const FilterBar = ({ toggleDrawer }) => {
                 // isChecked={isChecked}
                 // toggleCheckbox={toggleCheckbox}
                 >
-                  <div className="mt-1 mb-1 filter-value">100 - 500</div>
+                  <div className="mt-1 mb-1 filter-value">
+                    Price: Low to High
+                  </div>
                 </CustomCheckbox>
                 <CustomCheckbox
                 // isChecked={isChecked}
                 // toggleCheckbox={toggleCheckbox}
                 >
-                  <div className="mt-1 mb-1 filter-value">500 - 1000</div>
-                </CustomCheckbox>
-                <CustomCheckbox
-                // isChecked={isChecked}
-                // toggleCheckbox={toggleCheckbox}
-                >
-                  <div className="mt-1 mb-1 filter-value">1000 - 2000</div>
-                </CustomCheckbox>
-                <CustomCheckbox
-                // isChecked={isChecked}
-                // toggleCheckbox={toggleCheckbox}
-                >
-                  <div className="mt-1 mb-1 filter-value">2000 - 3000</div>
+                  <div className="mt-1 mb-1 filter-value">
+                    Price: High to Low
+                  </div>
                 </CustomCheckbox>
               </div>
             )}

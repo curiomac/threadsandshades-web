@@ -4,6 +4,7 @@
 @import url("https://fonts.googleapis.com/css?family=Eagle+Lake");
 @import url("https://fonts.googleapis.com/css?family=Poppins");
 @import url("https://fonts.googleapis.com/css?family=Spinnaker");
+@import url("https://fonts.googleapis.com/css?family=Libre+Franklin");
 @import url("https://fonts.googleapis.com/css?family=Lato");
 :root {
   --doc-height: 100%;
@@ -17,7 +18,8 @@ body {
 body {
   margin: 0;
   padding: 0;
-  font-family: "Lato", Arial;
+  /* font-family: "Libre Franklin", sans-serif; */
+  font-family: "Lato", Ariel !important;
   background-color: var(--default-color);
   -webkit-tap-highlight-color: transparent;
 }

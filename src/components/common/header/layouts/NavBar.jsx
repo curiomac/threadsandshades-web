@@ -29,6 +29,7 @@ import {
 import DialogModalWishList from "../../../plugins/dialog-modal-wishlist/DialogModalWishList";
 import { getQueryParam } from "../../../../helpers/search-query-params/getQueryParams";
 import { getProducts } from "../../../../redux/actions/productsAction";
+import { BsCart } from "react-icons/bs";
 import SideDragger from "../../../plugins/cmac-plugins/side-dragger/SideDragger";
 import { IoCloseOutline } from "react-icons/io5";
 import { BsFacebook, BsInstagram, BsTwitterX } from "react-icons/bs";
@@ -228,7 +229,7 @@ const NavBar = () => {
                 >
                   <input
                     value={defaultSearchinput}
-                    placeholder="Search for products 🛒"
+                    placeholder="Search for Products 🛒"
                     onChange={(e) => {
                       setDefaultSearchInput(e.target.value);
                       const search_input = e.target.value.split(" ").join("+");
@@ -287,15 +288,17 @@ const NavBar = () => {
                 <div className="links icon">
                   <FaRegHeart />
                   <div className="shopping-cart-count-container">
+                    {wishListCount>0&&
                     <div className="shopping-cart-count d-flex align-items-center justify-content-center">
                       {wishListCount}
                     </div>
+                    }
                   </div>
                 </div>
               </div>
               <Link className="links-decoration-unset" to={CART_ITEMS_PAGE}>
                 <div className="links icon">
-                  <HiOutlineShoppingBag />
+                  <BsCart />
                   <div className="shopping-cart-count-container">
                     <div className="shopping-cart-count d-flex align-items-center justify-content-center">
                       {cartCount}
@@ -335,7 +338,7 @@ const NavBar = () => {
             </div>
             <input
               value={defaultSearchinput}
-              placeholder="Search for products 🛒"
+              placeholder="Search for Products 🛒"
               onChange={(e) => {
                 const search_input = e.target.value.split(" ").join("+");
                 setDefaultSearchInput(e.target.value);

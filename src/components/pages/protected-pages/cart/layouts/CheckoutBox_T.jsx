@@ -177,7 +177,7 @@ const TestCheckoutBox = ({ triggerPlaceOrder }) => {
         </div>
         <div className="price-info">
           <div className="d-flex align-items-center justify-content-space-between mt-1">
-            <div className="key">Shipping Cost</div>
+            <div className="key">Delivery Charges</div>
             <div className="value d-flex align-items-center">
               <div className="d-flex align-items-center">
                 <PiCurrencyInrBold />
@@ -196,7 +196,7 @@ const TestCheckoutBox = ({ triggerPlaceOrder }) => {
               </div>
             </div>
           </div>
-          <div className="d-flex align-items-center justify-content-space-between mt-1">
+          {/* <div className="d-flex align-items-center justify-content-space-between mt-1">
             <div className="key">Total</div>
             <div className="value d-flex align-items-center">
               <div className="d-flex align-items-center">
@@ -205,7 +205,7 @@ const TestCheckoutBox = ({ triggerPlaceOrder }) => {
               <div>{checkoutDetailsValue?.cart_total +
                   (18 / 100) * checkoutDetailsValue?.cart_total}.00</div>
             </div>
-          </div>
+          </div> */}
           <div className="sec-custom-hr" />
         </div>
         <div className="order-total">
@@ -215,7 +215,9 @@ const TestCheckoutBox = ({ triggerPlaceOrder }) => {
               <div className="d-flex align-items-center">
                 <PiCurrencyInrBold />
               </div>
-              <div>{checkoutDetailsValue?.total_mrp}.00</div>
+              {/* <div>{checkoutDetailsValue?.total_mrp}.00</div> */}
+              <div>{checkoutDetailsValue?.cart_total +
+                  (18 / 100) * checkoutDetailsValue?.cart_total}.00</div>
             </div>
           </div>
         </div>

@@ -32,18 +32,29 @@ const LockedCloth = () => {
   }, [productId, dispatch]);
   console.log("product: ::", product);
   return (
-    <div>
-      {loading ? (
-     <div className={`loader-container-he ${!isAuthenticated ? 'isNotAuth' : ''} `}>
-          {/* <LiquidLoader /> */}
-          <Loader type="spinner-cub" bgColor={'gray'} color={"green"} size={60} />
-        </div>
-      ) : (
-        <>
-          <ProductDetails />
-          <TopSellingBanner />
-        </>
-      )}
+    <div className="locked-cloth">
+      <div className="shrink-width">
+        {loading ? (
+          <div
+            className={`loader-container-he ${
+              !isAuthenticated ? "isNotAuth" : ""
+            } `}
+          >
+            {/* <LiquidLoader /> */}
+            <Loader
+              type="spinner-cub"
+              bgColor={"gray"}
+              color={"green"}
+              size={60}
+            />
+          </div>
+        ) : (
+          <>
+            <ProductDetails />
+            <TopSellingBanner />
+          </>
+        )}
+      </div>
     </div>
   );
 };

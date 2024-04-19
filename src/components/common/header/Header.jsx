@@ -16,6 +16,7 @@ import {
   USER_ACCOUNT_DETAILS_PAGE,
   ORDER_STATUS_PAGE,
   ORDER_LIST_PAGE,
+  ORDER_ADDRESS,
   SETTINGS_PAGE,
 } from "../../../helpers/route-paths/paths";
 import NavBar from "./layouts/NavBar";
@@ -39,6 +40,7 @@ const Header = () => {
     USER_ACCOUNT_DETAILS_PAGE,
     ORDER_STATUS_PAGE,
     ORDER_LIST_PAGE,
+    ORDER_ADDRESS,
     SETTINGS_PAGE
   ];
 

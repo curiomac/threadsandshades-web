@@ -16,6 +16,7 @@ import {
   USER_ACCOUNT_DETAILS_PAGE,
   ORDER_STATUS_PAGE,
   ORDER_LIST_PAGE,
+  ORDER_ADDRESS,
   SETTINGS_PAGE,
 } from "../../../helpers/route-paths/paths";
 import Header from "../../common/header/Header";
@@ -40,6 +41,7 @@ import ProtectedRoute from "../protected-routes/ProtectedRoute";
 import Order from "../../pages/protected-pages/order/Order";
 import OrderList from "../../pages/protected-pages/profile/layouts/OrderList";
 import TestCartPage from "../../pages/protected-pages/cart/layouts/NestedCartPage_T";
+import OrderAddress from "../../pages/protected-pages/profile/layouts/OrderAddress";
 import ProfileSettings from "../../pages/protected-pages/profile/layouts/ProfileSettings";
 
 const Pages = () => {
@@ -117,14 +119,15 @@ const Pages = () => {
             }
           />
           <Route
-            path={SETTINGS_PAGE}
+            path={ORDER_ADDRESS}
             element={
               <ProtectedRoute>
-                <ProfileSettings />
+                <OrderAddress />
               </ProtectedRoute>
             }
           />
         </Route>
+          
 
         {/* Auth Pages */}
         <Route path={LOGIN_PAGE} element={<Login />} />

@@ -34,8 +34,8 @@ import {
 import ToastMessage from "../../../../plugins/toast-msg/ToastMessage";
 import { clearRatingsError } from "../../../../../redux/slices/ratingsSlice";
 import Loader from "react-js-loader";
+import ProductDeliveryBanner from "./ProductDeliveryBanner";
 const ProductDetails = () => {
-
   const productType = getQueryParam("type");
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -269,14 +269,14 @@ const ProductDetails = () => {
     <div className="product-details">
       {Object.keys(productData).length !== 0 && (
         <div className="container-fluid">
-          <div className="d-flex align-items-center gap-2 bread-crumbs">
+          {/* <div className="d-flex align-items-center gap-2 bread-crumbs">
             <div
               className="border-bottom brand"
               onClick={() =>
                 navigate(`${COLLECTIONS_PAGE}?type=${productType}`)
               }
             >
-              Threads and Shades
+              Shop
             </div>
             <div>
               <RxSlash className="d-flex align-items-center" />
@@ -284,7 +284,7 @@ const ProductDetails = () => {
             <div className="border-bottom product-title">
               {product?.product_title}
             </div>
-          </div>
+          </div> */}
           <div className="product-details-content">
             <div className="show-case-container">
               <div className="avail-images-container">
@@ -467,7 +467,7 @@ const ProductDetails = () => {
                           const payload = {
                             product_id: product_group?._id,
                           };
-                          dispatch(getProduct(payload))
+                          dispatch(getProduct(payload));
                           window.scrollTo({
                             top: 0,
                             behavior: "smooth",
@@ -608,12 +608,13 @@ const ProductDetails = () => {
                 </button>
                 <button className="buy-now-btn">Buy now</button>
               </div>
-              <div>
-                <div className="product-info-ratings">
-                  <ProductInfo product={product} />
-                  <ProductRatings ratings={ratings} />
-                </div>
-              </div>
+            </div>
+          </div>
+          <div>
+            <div className="product-info-ratings">
+              <ProductInfo product={product} />
+              <ProductDeliveryBanner />
+              <ProductRatings ratings={ratings} />
             </div>
           </div>
         </div>
@@ -636,10 +637,10 @@ const ProductDetails = () => {
                   dispatch(clearRatingsError());
                   setToastMsg(false);
                   setRating(0);
-                  setReviewTitle("")
-                  setProductReview("")
-                  setProductRecommend(null)
-                  setTermsConditionsAccepted(false)
+                  setReviewTitle("");
+                  setProductReview("");
+                  setProductRecommend(null);
+                  setTermsConditionsAccepted(false);
                   window.scrollTo({
                     top: 0,
                     behavior: "smooth",
