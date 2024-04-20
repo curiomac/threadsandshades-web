@@ -85,7 +85,7 @@ const ProductRatings = ({ ratings }) => {
             <div className="rating-bar">
               {ratingsValue.map((rating, index) => {
                 return (
-                  <div>
+                  <div className="mt-2">
                     <div className="d-flex align-items-center gap-1">
                       <div className="d-flex align-items-center gap-1 rating-for">
                         <div className="d-flex align-items-center ic-star">
@@ -101,9 +101,11 @@ const ProductRatings = ({ ratings }) => {
                         }`}
                         style={{ width: percentages[index] || "0%" }}
                       ></div>
+                      
                     </div>
                     <div className="bar-dummy">
                       <div className="dummy" />
+                      <div>0+</div>
                     </div>
                   </div>
                 );
