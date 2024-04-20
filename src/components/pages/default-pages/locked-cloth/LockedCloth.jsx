@@ -8,6 +8,7 @@ import { getProduct } from "../../../../redux/actions/productAction";
 import { getRatings } from "../../../../redux/actions/ratingsAction";
 import { clearProduct } from "../../../../redux/slices/productSlice";
 import Loader from "react-js-loader";
+import RecentLooks from "./layouts/RecentLooks";
 
 const LockedCloth = () => {
   const dispatch = useDispatch();
@@ -51,7 +52,7 @@ const LockedCloth = () => {
         ) : (
           <>
             <ProductDetails />
-            <TopSellingBanner />
+            {/* <TopSellingBanner /> */}
           </>
         )}
       </div>

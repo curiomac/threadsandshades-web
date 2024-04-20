@@ -35,6 +35,7 @@ import ToastMessage from "../../../../plugins/toast-msg/ToastMessage";
 import { clearRatingsError } from "../../../../../redux/slices/ratingsSlice";
 import Loader from "react-js-loader";
 import ProductDeliveryBanner from "./ProductDeliveryBanner";
+import RecentLooks from "./RecentLooks";
 const ProductDetails = () => {
   const productType = getQueryParam("type");
   const dispatch = useDispatch();
@@ -615,6 +616,7 @@ const ProductDetails = () => {
               <ProductInfo product={product} />
               <ProductDeliveryBanner />
               <ProductRatings ratings={ratings} />
+              <RecentLooks />
             </div>
           </div>
         </div>
