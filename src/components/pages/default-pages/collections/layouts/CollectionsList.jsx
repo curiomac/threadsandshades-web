@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import { FaRegHeart, FaHeart, FaShoppingBasket } from "react-icons/fa";
 import { TiShoppingCart } from "react-icons/ti";
 import { TiTick } from "react-icons/ti";
-import { CART_ITEMS_PAGE, LOCKED_CLOTH_PAGE } from "../../../../../helpers/route-paths/paths";
+import {
+  CART_ITEMS_PAGE,
+  LOCKED_CLOTH_PAGE,
+} from "../../../../../helpers/route-paths/paths";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { IoClose } from "react-icons/io5";
@@ -11,7 +14,10 @@ import {
   getTemporaryCart,
 } from "../../../../../redux/actions/cartAction";
 import SpinnerLoader from "../../../../plugins/loaders/spinner-loader/SpinnerLoader";
-import { moveWishList } from "../../../../../redux/actions/wishListAction";
+import {
+  getTemporaryWishList,
+  moveWishList,
+} from "../../../../../redux/actions/wishListAction";
 import { GoDotFill } from "react-icons/go";
 import { getQueryParam } from "../../../../../helpers/search-query-params/getQueryParams";
 import { getProducts } from "../../../../../redux/actions/productsAction";
@@ -24,6 +30,7 @@ import Loader from "react-js-loader";
 import JumpToaster from "../../../../plugins/cmac-plugins/jump-toaster/JumpToaster";
 import { clearCartMessage } from "../../../../../redux/slices/cartSlice";
 import AddCartBtn from "../../../../utils/AddCartBtn";
+import AddCartBtnMobile from "../../../../utils/AddCartBtnMobile";
 
 const CollectionsList = () => {
   const navigate = useNavigate();
@@ -44,14 +51,6 @@ const CollectionsList = () => {
   const [selectedProductId, setSelectedProductId] = useState("");
   const [initialSearchInput, setInitialSearchInput] = useState("");
   const [addingCart, setAddingCart] = useState(false);
-  const [localStorageCartItems, setLocalStorageCartItems] = useState(() => {
-    return JSON.parse(localStorage.getItem("cart-items")) || [];
-  });
-  const [localStorageWishListItems, setLocalStorageWishListItems] = useState(
-    () => {
-      return JSON.parse(localStorage.getItem("wish-list-items")) || [];
-    }
-  );
   const dispatch = useDispatch();
   console.log("user: ", user);
   const handleAddToCart = (product) => {
@@ -99,7 +98,6 @@ const CollectionsList = () => {
       : [localStoragePayload, ...local_cart_items];
 
     localStorage.setItem("cart-items", JSON.stringify(updatedCartItems));
-    setLocalStorageCartItems(updatedCartItems);
     dispatch(getTemporaryCart({ cart_details: updatedCartItems }));
   };
 
@@ -117,25 +115,33 @@ const CollectionsList = () => {
       const localStoragePayload = {
         product_id: product._id,
       };
-      const product_found = localStorageWishListItems.find(
+      const product_found = local_wish_list_items.find(
         (data) => data?.product_id === product._id
       );
-      if (!product_found || localStorageWishListItems?.length === 0) {
+      if (!product_found) {
         localStorage.setItem(
           "wish-list-items",
           JSON.stringify([...local_wish_list_items, localStoragePayload])
         );
-        setLocalStorageWishListItems([
-          ...localStorageWishListItems,
-          localStoragePayload,
-        ]);
         const payload = {
           wish_list_details: [
-            ...localStorageWishListItems,
+            ...local_wish_list_items,
             localStoragePayload,
           ],
         };
-        dispatch(getTemporaryCart(payload));
+        dispatch(getTemporaryWishList(payload));
+      } else {
+        const update_wishlist_products = local_wish_list_items.filter(
+          (data) => data?.product_id !== product._id
+        );
+        localStorage.setItem(
+          "wish-list-items",
+          JSON.stringify([...update_wishlist_products])
+        );
+        const payload = {
+          wish_list_details: [...update_wishlist_products],
+        };
+        dispatch(getTemporaryWishList(payload));
       }
     }
   };
@@ -311,7 +317,8 @@ const CollectionsList = () => {
                             </div>
                           </button> */}
                           <AddCartBtn
-                          width="230px"
+                          borderRadius={'0px'}
+                            width="230px"
                             loading={
                               cartLoading && selectedProductId === product._id
                                 ? true
@@ -381,16 +388,19 @@ const CollectionsList = () => {
                             </span>
                           )} */}
                           </div>
-                          <div
-                            className="bag-ic"
+                          <AddCartBtnMobile
+                          
+                            loading={
+                              cartLoading && selectedProductId === product._id
+                                ? true
+                                : false
+                            }
                             onClick={(e) => {
                               e.stopPropagation();
                               setSelectedProductId(product._id);
                               handleAddToCart(product);
                             }}
-                          >
-                            <FaShoppingBasket className="ic" />
-                          </div>
+                          />
                         </div>
                       </div>
                       {/* <div className="avail-colors-container">
@@ -421,7 +431,10 @@ const CollectionsList = () => {
             theme={"light"}
             renderMessage={() => {
               return (
-                <div onClick={() => navigate(CART_ITEMS_PAGE)} className="cursor-pointer">
+                <div
+                  onClick={() => navigate(CART_ITEMS_PAGE)}
+                  className="cursor-pointer"
+                >
                   <div
                     style={{
                       height: 0,

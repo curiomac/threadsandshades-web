@@ -50,6 +50,27 @@ const wishListSlice = createSlice({
         error: action.payload,
       };
     },
+    wishListUpdateRequest(state, action) {
+      return {
+        ...state,
+        loading: true,
+      };
+    },
+    wishListUpdateSuccess(state, action) {
+      return {
+        ...state,
+        loading: false,
+        wishListItems: action.payload.wish_list_items,
+        wishListCount: action.payload.wish_list_count,
+      };
+    },
+    wishListUpdateFail(state, action) {
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+    },
     clearError(state, action) {
       return {
         ...state,
@@ -68,6 +89,9 @@ export const {
   wishListAddRequest,
   wishListAddFail,
   wishListAddSuccess,
+  wishListUpdateRequest,
+  wishListUpdateFail,
+  wishListUpdateSuccess,
   clearError,
 } = actions;
 

@@ -41,6 +41,8 @@ export const endpoints = {
   wish_list: {
     get: "wishlist",
     move: "wishlist/move",
+    temp_get: "temp/wishlist",
+    update: "/wishlist/update",
   },
   address: {
     getPostalAddress: "postaladdress/get"

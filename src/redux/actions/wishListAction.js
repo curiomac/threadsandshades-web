@@ -9,6 +9,9 @@ import {
   wishListAddFail,
   wishListAddRequest,
   wishListAddSuccess,
+  wishListUpdateRequest,
+  wishListUpdateSuccess,
+  wishListUpdateFail,
 } from "../slices/wishListSlice";
 import { getCart } from "./cartAction";
 import { getAuthToken } from "../../helpers/auth-token/getAuthToken";
@@ -30,7 +33,26 @@ export const getWishList = (payload) => async (dispatch) => {
     dispatch(wishListFail(error?.response?.data?.message));
   }
 };
-
+export const getTemporaryWishList = (payload) => async (dispatch) => {
+  try {
+    dispatch(wishListRequest());
+    const response = await axios.post(
+      `${BASE_URL}/${endpoints.wish_list.temp_get}`,
+      payload
+    );
+    dispatch(wishListSuccess(response?.data?.wishList));
+    const localStorageTarget = response?.data?.wishList?.wish_list_items?.map(
+      (item) => {
+        return {
+          product_id: item?._id,
+        };
+      }
+    );
+    localStorage.setItem("wish-list-items", JSON.stringify(localStorageTarget));
+  } catch (error) {
+    dispatch(wishListFail(error?.response?.data?.message));
+  }
+};
 export const moveWishList = (payload) => async (dispatch) => {
   const formattedPayload = `${
     payload?.product_id ? `?product_id=${payload?.product_id}` : ""
@@ -58,6 +80,26 @@ export const moveWishList = (payload) => async (dispatch) => {
     }
   } catch (error) {
     dispatch(wishListAddFail(error?.response?.data?.message));
+  }
+};
+
+export const updateWishList = (payload) => async (dispatch) => {
+  try {
+    dispatch(wishListUpdateRequest());
+    const response = await axios.post(
+      `${BASE_URL}/${endpoints.wish_list.update}`,
+      payload,
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: `${getAuthToken()}`,
+        },
+      }
+    );
+    dispatch(wishListUpdateSuccess(response?.data?.cart));
+    localStorage.removeItem("wish-list-items");
+  } catch (error) {
+    dispatch(wishListUpdateFail(error?.response?.data?.message));
   }
 };
 

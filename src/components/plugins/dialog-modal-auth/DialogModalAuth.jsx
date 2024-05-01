@@ -20,6 +20,7 @@ import {
   clearOtpStatus,
 } from "../../../redux/slices/otpSlice";
 import ToastMessage from "../toast-msg/ToastMessage";
+import { getWishList, updateWishList } from "../../../redux/actions/wishListAction";
 const DialogModalAuth = ({ isOpen, onClose, isAuth }) => {
   const {
     user,
@@ -189,6 +190,8 @@ const DialogModalAuth = ({ isOpen, onClose, isAuth }) => {
       };
       const local_cart_items =
         JSON.parse(localStorage.getItem("cart-items")) || [];
+      const local_wish_list_items =
+        JSON.parse(localStorage.getItem("wish-list-items")) || [];
       if (local_cart_items?.length > 0) {
         const payload = {
           user_id: user?._id,
@@ -197,6 +200,15 @@ const DialogModalAuth = ({ isOpen, onClose, isAuth }) => {
         dispatch(updateCart(payload));
       } else {
         dispatch(getCart(payload));
+      }
+      if (local_wish_list_items?.length > 0) {
+        const payload = {
+          user_id: user?._id,
+          wish_list_details: local_wish_list_items,
+        };
+        dispatch(updateWishList(payload));
+      } else {
+        dispatch(getWishList(payload));
       }
       setTimeout(() => {
         dispatch(clearAuthCode());

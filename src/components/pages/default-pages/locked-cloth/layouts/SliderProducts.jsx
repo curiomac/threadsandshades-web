@@ -15,9 +15,6 @@ import {
 } from "../../../../../redux/actions/cartAction";
 import SpinnerLoader from "../../../../plugins/loaders/spinner-loader/SpinnerLoader";
 import { moveWishList } from "../../../../../redux/actions/wishListAction";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import { PiCurrencyInrBold } from "react-icons/pi";
 import { getCurrencyFormat } from "../../../../../helpers/currency-formatter/getCurrencyFormat";
 import { IoIosStar } from "react-icons/io";

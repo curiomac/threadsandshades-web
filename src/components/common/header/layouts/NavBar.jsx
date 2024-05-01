@@ -18,7 +18,10 @@ import {
   getTemporaryCart,
   removeCart,
 } from "../../../../redux/actions/cartAction";
-import { moveWishList } from "../../../../redux/actions/wishListAction";
+import {
+  getTemporaryWishList,
+  moveWishList,
+} from "../../../../redux/actions/wishListAction";
 import { getProducts } from "../../../../redux/actions/productsAction";
 import { BsCart, BsTwitterX } from "react-icons/bs";
 import SideDragger from "../../../plugins/cmac-plugins/side-dragger/SideDragger";
@@ -65,7 +68,7 @@ const NavBar = () => {
   const [localStorageItems, setLocalStorageItems] = useState(() => {
     return JSON.parse(localStorage.getItem("cart-items")) || [];
   });
-  const handleAddToCart = (product) => {
+  const handleAddToCart = (product, callFrom) => {
     const payload = {
       product_id: product._id,
       user_id: user?._id,
@@ -73,36 +76,57 @@ const NavBar = () => {
       selected_color_code: product.target_color_code,
       selected_size: product.available_sizes[0],
       selected_quantity: 1,
-      is_from: "wishlist",
+      is_from: callFrom,
     };
+
     if (isAuthenticated) {
       dispatch(addCart(payload));
-    } else {
-      const local_cart_items =
-        JSON.parse(localStorage.getItem("cart-items")) || [];
-      const localStoragePayload = {
-        product_id: product._id,
-        selected_product_details: {
-          selected_color: product.target_color,
-          selected_color_code: product.target_color_code,
-          selected_size: product.available_sizes[0],
-          selected_quantity: 1,
-        },
-      };
-      const product_found = localStorageItems.find(
-        (data) => data?.product_id === product._id
+      return;
+    }
+
+    const local_cart_items =
+      JSON.parse(localStorage.getItem("cart-items")) || [];
+    const local_wish_list_items =
+      JSON.parse(localStorage.getItem("wish-list-items")) || [];
+    const product_found = local_cart_items.find(
+      (data) => data?.product_id === product._id
+    );
+
+    const localStoragePayload = {
+      product_id: product._id,
+      selected_product_details: {
+        selected_color: product.target_color,
+        selected_color_code: product.target_color_code,
+        selected_size: product.available_sizes[0],
+        selected_quantity: product_found
+          ? product_found.selected_product_details.selected_quantity + 1
+          : 1,
+      },
+    };
+
+    const updatedCartItems = product_found
+      ? [
+          localStoragePayload,
+          ...local_cart_items.filter(
+            (data) => data?.product_id !== product._id
+          ),
+        ]
+      : [localStoragePayload, ...local_cart_items];
+
+    localStorage.setItem("cart-items", JSON.stringify(updatedCartItems));
+    dispatch(getTemporaryCart({ cart_details: updatedCartItems }));
+    if (callFrom === "wishlist") {
+      const update_wishlist_products = local_wish_list_items.filter(
+        (data) => data?.product_id !== product._id
       );
-      if (!product_found || localStorageItems?.length === 0) {
-        localStorage.setItem(
-          "cart-items",
-          JSON.stringify([...local_cart_items, localStoragePayload])
-        );
-        setLocalStorageItems([...localStorageItems, localStoragePayload]);
-        const payload = {
-          cart_details: [...localStorageItems, localStoragePayload],
-        };
-        dispatch(getTemporaryCart(payload));
-      }
+      localStorage.setItem(
+        "wish-list-items",
+        JSON.stringify([...update_wishlist_products])
+      );
+      const payload = {
+        wish_list_details: [...update_wishlist_products],
+      };
+      dispatch(getTemporaryWishList(payload));
     }
   };
   const handleReMoveFromWishList = (product) => {
@@ -128,6 +152,15 @@ const NavBar = () => {
       cart_details: cartLocalStorageItem,
     };
     dispatch(getTemporaryCart(payload));
+  };
+  const handleGetTemporaryWishListItems = () => {
+    const wishlistLocalStorageItem =
+      JSON.parse(localStorage.getItem("wish-list-items")) || [];
+    console.log("wishlistLocalStorageItem");
+    const payload = {
+      wish_list_details: wishlistLocalStorageItem,
+    };
+    dispatch(getTemporaryWishList(payload));
   };
   const documentDimensions = () => {
     return window.innerWidth;
@@ -217,6 +250,7 @@ const NavBar = () => {
   useEffect(() => {
     if (!isAuthenticated) {
       handleGetTemporaryCartItems();
+      handleGetTemporaryWishListItems();
     }
   }, []);
   useEffect(() => {
@@ -753,7 +787,7 @@ const NavBar = () => {
                             if (cartLoading) {
                               return;
                             } else {
-                              handleAddToCart(wishList);
+                              handleAddToCart(wishList, "wishlist");
                             }
                           }}
                         />

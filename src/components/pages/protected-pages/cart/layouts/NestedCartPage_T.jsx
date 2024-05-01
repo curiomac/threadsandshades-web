@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getQueryParam } from "../../../../../helpers/search-query-params/getQueryParams";
 import { useLocation, useNavigate } from "react-router-dom";
 import { proceedTrigger } from "../../../../../redux/slices/resCartSlice";
-import { moveWishList } from "../../../../../redux/actions/wishListAction";
+import { getTemporaryWishList, moveWishList } from "../../../../../redux/actions/wishListAction";
 import {
   addCart,
   getTemporaryCart,
@@ -45,7 +45,40 @@ const TestCartPage = () => {
       user_id: user?._id,
       is_from: "cart",
     };
-    dispatch(moveWishList(payload));
+    if (isAuthenticated) {
+      dispatch(moveWishList(payload));
+    } else {
+      /* Local Items */
+      const local_cart_items =
+        JSON.parse(localStorage.getItem("cart-items")) || [];
+      const local_wish_list_items =
+        JSON.parse(localStorage.getItem("wish-list-items")) || [];
+
+      /* Moving Wishlist to Wishlist Dragger */
+      const localStoragePayload = {
+        product_id: cartItem?.product?._id,
+      };
+      const product_found = local_wish_list_items.find(
+        (data) => data?.product_id === cartItem?.product?._id
+      );
+      if (!product_found) {
+        localStorage.setItem(
+          "wish-list-items",
+          JSON.stringify([...local_wish_list_items, localStoragePayload])
+        );
+        const payload = {
+          wish_list_details: [...local_wish_list_items, localStoragePayload],
+        };
+        dispatch(getTemporaryWishList(payload));
+      }
+
+      /* Removing Product from cart */
+      const updatedCartItems = local_cart_items.filter(
+        (data) => data?.product_id !== cartItem?.product?._id
+      );
+      localStorage.setItem("cart-items", JSON.stringify(updatedCartItems));
+      dispatch(getTemporaryCart({ cart_details: updatedCartItems }));
+    }
   };
   const handleRemoveCart = (cartItem) => {
     console.log("[logger] cartItem: ", cartItem);
@@ -56,8 +89,11 @@ const TestCartPage = () => {
       };
       dispatch(removeCart(payload));
     } else {
-      let local_cart_items = JSON.parse(localStorage.getItem("cart-items")) || [];
-      const updatedCartItems = local_cart_items.filter(data => data?.product_id !== cartItem?.product?._id);
+      let local_cart_items =
+        JSON.parse(localStorage.getItem("cart-items")) || [];
+      const updatedCartItems = local_cart_items.filter(
+        (data) => data?.product_id !== cartItem?.product?._id
+      );
       localStorage.setItem("cart-items", JSON.stringify(updatedCartItems));
       dispatch(getTemporaryCart({ cart_details: updatedCartItems }));
     }
@@ -71,21 +107,25 @@ const TestCartPage = () => {
       selected_size: product.available_sizes[0],
       selected_quantity: 1,
       ...(action === "reduce" && { qty: "negative" }),
-      is_from: "default"
+      is_from: "default",
     };
-  
+
     if (isAuthenticated) {
       dispatch(addCart(payload));
     } else {
-      let local_cart_items = JSON.parse(localStorage.getItem("cart-items")) || [];
-      const product_found = local_cart_items.find(data => data?.product_id === product._id);
-  
+      let local_cart_items =
+        JSON.parse(localStorage.getItem("cart-items")) || [];
+      const product_found = local_cart_items.find(
+        (data) => data?.product_id === product._id
+      );
+
       if (product_found) {
         const { selected_quantity } = product_found.selected_product_details;
-        const updated_quantity = action === "add" ? selected_quantity + 1 : selected_quantity - 1;
-  
+        const updated_quantity =
+          action === "add" ? selected_quantity + 1 : selected_quantity - 1;
+
         if (updated_quantity > 0) {
-          console.log("[logger] updated_quantity: [85]", updated_quantity)
+          console.log("[logger] updated_quantity: [85]", updated_quantity);
           const updatedProduct = {
             ...product_found,
             selected_product_details: {
@@ -93,19 +133,19 @@ const TestCartPage = () => {
               selected_quantity: updated_quantity,
             },
           };
-          const updatedCartItems = local_cart_items.map(item =>
+          const updatedCartItems = local_cart_items.map((item) =>
             item?.product_id === product._id ? updatedProduct : item
           );
           localStorage.setItem("cart-items", JSON.stringify(updatedCartItems));
           dispatch(getTemporaryCart({ cart_details: updatedCartItems }));
         } else {
-          console.log("[logger] updated_quantity: [99]", updated_quantity)
-          handleRemoveCart({product});
+          console.log("[logger] updated_quantity: [99]", updated_quantity);
+          handleRemoveCart({ product });
         }
       }
     }
   };
-  
+
   useEffect(() => {
     dispatch(proceedTrigger(trigger));
   }, [trigger]);
@@ -189,7 +229,7 @@ const TestCartPage = () => {
                                     <div
                                       className="event-ic cursor-pointer"
                                       onClick={() => {
-                                        handleQty(cartItem?.product, 'reduce');
+                                        handleQty(cartItem?.product, "reduce");
                                       }}
                                     >
                                       <FaMinus />
@@ -203,7 +243,7 @@ const TestCartPage = () => {
                                     <div
                                       className="event-ic cursor-pointer"
                                       onClick={() => {
-                                        handleQty(cartItem?.product, 'add');
+                                        handleQty(cartItem?.product, "add");
                                       }}
                                     >
                                       <FaPlus />
@@ -212,9 +252,11 @@ const TestCartPage = () => {
                                   <div className="d-flex align-items-center">
                                     <PiCurrencyInrBold />
                                     <div>
-                                      {getCurrencyFormat(cartItem?.selected_product_details
-                                        ?.selected_quantity *
-                                        cartItem?.product?.fixed_price)}
+                                      {getCurrencyFormat(
+                                        cartItem?.selected_product_details
+                                          ?.selected_quantity *
+                                          cartItem?.product?.fixed_price
+                                      )}
                                     </div>
                                   </div>
                                 </div>
@@ -232,7 +274,7 @@ const TestCartPage = () => {
                             <div className="custom-vr" />
                             <div
                               onClick={() => {
-                                handleMoveToWishList(cartItem)
+                                handleMoveToWishList(cartItem);
                               }}
                             >
                               Move to Wishlist
@@ -246,7 +288,7 @@ const TestCartPage = () => {
                             className="event-ic cursor-pointer"
                             onClick={() => {
                               if (!cartItemsLoading) {
-                                handleQty(cartItem?.product, 'reduce');
+                                handleQty(cartItem?.product, "reduce");
                               }
                             }}
                           >
@@ -262,7 +304,7 @@ const TestCartPage = () => {
                             className="event-ic cursor-pointer"
                             onClick={() => {
                               if (!cartItemsLoading) {
-                                handleQty(cartItem?.product, 'add');
+                                handleQty(cartItem?.product, "add");
                               }
                             }}
                           >
@@ -272,9 +314,11 @@ const TestCartPage = () => {
                         <div className="d-flex align-items-center mt-3">
                           <PiCurrencyInrBold />
                           <div>
-                            {getCurrencyFormat(cartItem?.selected_product_details
-                              ?.selected_quantity *
-                              cartItem?.product?.fixed_price)}
+                            {getCurrencyFormat(
+                              cartItem?.selected_product_details
+                                ?.selected_quantity *
+                                cartItem?.product?.fixed_price
+                            )}
                           </div>
                         </div>
                       </div>
