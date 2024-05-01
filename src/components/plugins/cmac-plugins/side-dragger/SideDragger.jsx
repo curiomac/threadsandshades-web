@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./cmac.styles.alpha.side_drawer.css";
+import "../styles/cmac.plugins.styles.alpha.dragon.scss";
 import DomRender from "../dom-render/DomRender";
 
 const SideDragger = ({
@@ -73,16 +73,6 @@ const SideDragger = ({
       }
     }
   };
-  
-  const documentDimensions = () => {
-    const doc = document.documentElement;
-    doc.style.setProperty("--doc-height", `${window.innerHeight}px`);
-    doc.style.setProperty("--doc-width", `${window.innerWidth}px`);
-  };
-
-  window.addEventListener("resize", documentDimensions);
-  documentDimensions();
-
   useEffect(() => {
     const sideDraggerElement = document.querySelector(".side-dragger");
     let root = document.querySelector("#root");

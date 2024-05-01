@@ -15,6 +15,7 @@ import { MdVerified } from "react-icons/md";
 import { FaMinus, FaPlus } from "react-icons/fa6";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { PiCurrencyInrBold } from "react-icons/pi";
+import { getCurrencyFormat } from "../../../../../helpers/currency-formatter/getCurrencyFormat";
 
 const TestCartPage = () => {
   const { cartItems, loading: cartItemsLoading } = useSelector(
@@ -35,15 +36,19 @@ const TestCartPage = () => {
   const dispatch = useDispatch();
   const [cartItemsValue, setCartItemsValue] = useState([]);
   const [cartItemsSelectedId, setCartItemSelectedId] = useState("");
+  const [localStorageCartItems, setLocalStorageCartItems] = useState(() => {
+    return JSON.parse(localStorage.getItem("cart-items")) || [];
+  });
   const handleMoveToWishList = (cartItem) => {
     const payload = {
       product_id: cartItem?.product?._id,
-      user_id: "65a7eef1a7e2b0eda9f545e8",
+      user_id: user?._id,
       is_from: "cart",
     };
     dispatch(moveWishList(payload));
   };
   const handleRemoveCart = (cartItem) => {
+    console.log("[logger] cartItem: ", cartItem);
     if (isAuthenticated) {
       const payload = {
         product_id: cartItem?.product?._id,
@@ -51,18 +56,13 @@ const TestCartPage = () => {
       };
       dispatch(removeCart(payload));
     } else {
-      const local_cart_items =
-        JSON.parse(localStorage.getItem("cart-items")) || [];
-      const product_found = local_cart_items.filter(
-        (data) => data?.product_id !== cartItem?.product?._id
-      );
-      const payload = {
-        cart_details: product_found,
-      };
-      dispatch(getTemporaryCart(payload));
+      let local_cart_items = JSON.parse(localStorage.getItem("cart-items")) || [];
+      const updatedCartItems = local_cart_items.filter(data => data?.product_id !== cartItem?.product?._id);
+      localStorage.setItem("cart-items", JSON.stringify(updatedCartItems));
+      dispatch(getTemporaryCart({ cart_details: updatedCartItems }));
     }
   };
-  const handleAddQty = (product) => {
+  const handleQty = (product, action) => {
     const payload = {
       product_id: product._id,
       user_id: user?._id,
@@ -70,25 +70,42 @@ const TestCartPage = () => {
       selected_color_code: product.target_color_code,
       selected_size: product.available_sizes[0],
       selected_quantity: 1,
+      ...(action === "reduce" && { qty: "negative" }),
+      is_from: "default"
     };
+  
     if (isAuthenticated) {
       dispatch(addCart(payload));
+    } else {
+      let local_cart_items = JSON.parse(localStorage.getItem("cart-items")) || [];
+      const product_found = local_cart_items.find(data => data?.product_id === product._id);
+  
+      if (product_found) {
+        const { selected_quantity } = product_found.selected_product_details;
+        const updated_quantity = action === "add" ? selected_quantity + 1 : selected_quantity - 1;
+  
+        if (updated_quantity > 0) {
+          console.log("[logger] updated_quantity: [85]", updated_quantity)
+          const updatedProduct = {
+            ...product_found,
+            selected_product_details: {
+              ...product_found.selected_product_details,
+              selected_quantity: updated_quantity,
+            },
+          };
+          const updatedCartItems = local_cart_items.map(item =>
+            item?.product_id === product._id ? updatedProduct : item
+          );
+          localStorage.setItem("cart-items", JSON.stringify(updatedCartItems));
+          dispatch(getTemporaryCart({ cart_details: updatedCartItems }));
+        } else {
+          console.log("[logger] updated_quantity: [99]", updated_quantity)
+          handleRemoveCart({product});
+        }
+      }
     }
   };
-  const handleReduceQty = (product) => {
-    const payload = {
-      product_id: product._id,
-      user_id: user?._id,
-      selected_color: product.target_color,
-      selected_color_code: product.target_color_code,
-      selected_size: product.available_sizes[0],
-      selected_quantity: 1,
-      qty: "negative",
-    };
-    if (isAuthenticated) {
-      dispatch(addCart(payload));
-    }
-  };
+  
   useEffect(() => {
     dispatch(proceedTrigger(trigger));
   }, [trigger]);
@@ -172,7 +189,7 @@ const TestCartPage = () => {
                                     <div
                                       className="event-ic cursor-pointer"
                                       onClick={() => {
-                                        handleReduceQty(cartItem?.product);
+                                        handleQty(cartItem?.product, 'reduce');
                                       }}
                                     >
                                       <FaMinus />
@@ -186,7 +203,7 @@ const TestCartPage = () => {
                                     <div
                                       className="event-ic cursor-pointer"
                                       onClick={() => {
-                                        handleAddQty(cartItem?.product);
+                                        handleQty(cartItem?.product, 'add');
                                       }}
                                     >
                                       <FaPlus />
@@ -195,10 +212,9 @@ const TestCartPage = () => {
                                   <div className="d-flex align-items-center">
                                     <PiCurrencyInrBold />
                                     <div>
-                                      {cartItem?.selected_product_details
+                                      {getCurrencyFormat(cartItem?.selected_product_details
                                         ?.selected_quantity *
-                                        cartItem?.product?.fixed_price}
-                                      .00
+                                        cartItem?.product?.fixed_price)}
                                     </div>
                                   </div>
                                 </div>
@@ -216,7 +232,7 @@ const TestCartPage = () => {
                             <div className="custom-vr" />
                             <div
                               onClick={() => {
-                                // handleMoveToWishList(cartItem)
+                                handleMoveToWishList(cartItem)
                               }}
                             >
                               Move to Wishlist
@@ -230,7 +246,7 @@ const TestCartPage = () => {
                             className="event-ic cursor-pointer"
                             onClick={() => {
                               if (!cartItemsLoading) {
-                                handleReduceQty(cartItem?.product);
+                                handleQty(cartItem?.product, 'reduce');
                               }
                             }}
                           >
@@ -246,7 +262,7 @@ const TestCartPage = () => {
                             className="event-ic cursor-pointer"
                             onClick={() => {
                               if (!cartItemsLoading) {
-                                handleAddQty(cartItem?.product);
+                                handleQty(cartItem?.product, 'add');
                               }
                             }}
                           >
@@ -256,10 +272,9 @@ const TestCartPage = () => {
                         <div className="d-flex align-items-center mt-3">
                           <PiCurrencyInrBold />
                           <div>
-                            {cartItem?.selected_product_details
+                            {getCurrencyFormat(cartItem?.selected_product_details
                               ?.selected_quantity *
-                              cartItem?.product?.fixed_price}
-                            .00
+                              cartItem?.product?.fixed_price)}
                           </div>
                         </div>
                       </div>

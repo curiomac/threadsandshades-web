@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import { FaRegHeart, FaHeart, FaShoppingBasket } from "react-icons/fa";
 import { TiShoppingCart } from "react-icons/ti";
 import { TiTick } from "react-icons/ti";
-import { LOCKED_CLOTH_PAGE } from "../../../../../helpers/route-paths/paths";
+import { CART_ITEMS_PAGE, LOCKED_CLOTH_PAGE } from "../../../../../helpers/route-paths/paths";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { IoClose } from "react-icons/io5";
 import {
   addCart,
   getTemporaryCart,
@@ -20,6 +21,9 @@ import { PiCurrencyInrBold } from "react-icons/pi";
 import { getCurrencyFormat } from "../../../../../helpers/currency-formatter/getCurrencyFormat";
 import { clearProduct } from "../../../../../redux/slices/productSlice";
 import Loader from "react-js-loader";
+import JumpToaster from "../../../../plugins/cmac-plugins/jump-toaster/JumpToaster";
+import { clearCartMessage } from "../../../../../redux/slices/cartSlice";
+import AddCartBtn from "../../../../utils/AddCartBtn";
 
 const CollectionsList = () => {
   const navigate = useNavigate();
@@ -27,9 +31,13 @@ const CollectionsList = () => {
   const searching = getQueryParam("searching");
   const { products, loading } = useSelector((state) => state.productsState);
   const { isAuthenticated, user } = useSelector((state) => state.authState);
-  const { cartItems, loading: cartLoading } = useSelector(
-    (state) => state.cartState
-  );
+  const {
+    success,
+    addedProduct,
+    message: cartMessage,
+    cartItems,
+    loading: cartLoading,
+  } = useSelector((state) => state.cartState);
   const { wishListItems, loading: wishListLoading } = useSelector(
     (state) => state.wishListState
   );
@@ -55,40 +63,46 @@ const CollectionsList = () => {
       selected_color_code: product.target_color_code,
       selected_size: product.available_sizes[0],
       selected_quantity: 1,
+      is_from: "default",
     };
+
     if (isAuthenticated) {
       dispatch(addCart(payload));
-    } else {
-      const local_cart_items =
-        JSON.parse(localStorage.getItem("cart-items")) || [];
-      const localStoragePayload = {
-        product_id: product._id,
-        selected_product_details: {
-          selected_color: product.target_color,
-          selected_color_code: product.target_color_code,
-          selected_size: product.available_sizes[0],
-          selected_quantity: 1,
-        },
-      };
-      const product_found = localStorageCartItems.find(
-        (data) => data?.product_id === product._id
-      );
-      if (!product_found || localStorageCartItems?.length === 0) {
-        localStorage.setItem(
-          "cart-items",
-          JSON.stringify([...local_cart_items, localStoragePayload])
-        );
-        setLocalStorageCartItems([
-          ...localStorageCartItems,
-          localStoragePayload,
-        ]);
-        const payload = {
-          cart_details: [...localStorageCartItems, localStoragePayload],
-        };
-        dispatch(getTemporaryCart(payload));
-      }
+      return;
     }
+
+    const local_cart_items =
+      JSON.parse(localStorage.getItem("cart-items")) || [];
+    const product_found = local_cart_items.find(
+      (data) => data?.product_id === product._id
+    );
+
+    const localStoragePayload = {
+      product_id: product._id,
+      selected_product_details: {
+        selected_color: product.target_color,
+        selected_color_code: product.target_color_code,
+        selected_size: product.available_sizes[0],
+        selected_quantity: product_found
+          ? product_found.selected_product_details.selected_quantity + 1
+          : 1,
+      },
+    };
+
+    const updatedCartItems = product_found
+      ? [
+          localStoragePayload,
+          ...local_cart_items.filter(
+            (data) => data?.product_id !== product._id
+          ),
+        ]
+      : [localStoragePayload, ...local_cart_items];
+
+    localStorage.setItem("cart-items", JSON.stringify(updatedCartItems));
+    setLocalStorageCartItems(updatedCartItems);
+    dispatch(getTemporaryCart({ cart_details: updatedCartItems }));
   };
+
   const handleMoveToWishList = (product) => {
     const payload = {
       product_id: product._id,
@@ -125,6 +139,42 @@ const CollectionsList = () => {
       }
     }
   };
+  const handleSetRecentProductsLocal = (product) => {
+    const localItems = JSON.parse(localStorage.getItem("lookups")) || [];
+    console.log("localItems.length: ", localItems.length);
+    if (localItems.length >= 1000) {
+      if (localItems?.some((item) => item?._id === product?._id)) {
+        console.log("Triggered");
+        const updateItems = localItems?.filter(
+          (item) => item?._id !== product?._id
+        );
+        const indexRemoved = updateItems?.filter((item, index) => index !== 10);
+        localStorage.setItem(
+          "lookups",
+          JSON.stringify([product, ...indexRemoved])
+        );
+      } else {
+        console.log("Triggerede");
+        const updateItems = localItems?.filter((item, index) => index !== 10);
+        localStorage.setItem(
+          "lookups",
+          JSON.stringify([product, ...updateItems])
+        );
+      }
+    } else if (localItems?.some((item) => item?._id === product?._id)) {
+      console.log("localItems", localItems);
+      const updateItems = localItems?.filter(
+        (item) => item?._id !== product?._id
+      );
+      localStorage.setItem(
+        "lookups",
+        JSON.stringify([product, ...updateItems])
+      );
+    } else {
+      console.log("localItems", localItems);
+      localStorage.setItem("lookups", JSON.stringify([product, ...localItems]));
+    }
+  };
   useEffect(() => {
     if (searching === "true") {
       setInitialSearchInput(search_input);
@@ -142,8 +192,12 @@ const CollectionsList = () => {
   }, [addingCart]);
   if (loading) {
     return (
-      <div className={`loader-container-he ${!isAuthenticated ? 'isNotAuth' : ''} `}>
-        <Loader type="spinner-cub" bgColor={'gray'} color={"green"} size={60} />
+      <div
+        className={`loader-container-he ${
+          !isAuthenticated ? "isNotAuth" : ""
+        } `}
+      >
+        <Loader type="spinner-cub" bgColor={"gray"} color={"green"} size={60} />
       </div>
     );
   } else if (products.length > 0) {
@@ -168,6 +222,7 @@ const CollectionsList = () => {
                         navigate(
                           `${LOCKED_CLOTH_PAGE}?type=men&product_id=${product?._id}`
                         );
+                        handleSetRecentProductsLocal(product);
                         window.scrollTo({
                           top: 0,
                           behavior: "smooth",
@@ -208,7 +263,7 @@ const CollectionsList = () => {
                           </div>
                         </div>
                         <div className="add-to-cart-container">
-                          <button
+                          {/* <button
                             className={`add-to-cart-btn d-flex align-items-center justify-content-center gap-3 ${
                               ((cartItems?.some(
                                 (cartProduct) =>
@@ -254,7 +309,20 @@ const CollectionsList = () => {
                                 ? "Adding to Cart"
                                 : "Add To Cart"}
                             </div>
-                          </button>
+                          </button> */}
+                          <AddCartBtn
+                          width="230px"
+                            loading={
+                              cartLoading && selectedProductId === product._id
+                                ? true
+                                : false
+                            }
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedProductId(product._id);
+                              handleAddToCart(product);
+                            }}
+                          />
                         </div>
                         <div
                           className="product-title"
@@ -344,6 +412,41 @@ const CollectionsList = () => {
             </div>
           </div>
         </div>
+        {console.log("[logger] [400] addedProduct: ", addedProduct)}
+        {success && (
+          <JumpToaster
+            duration={5000}
+            open={success}
+            onClose={() => dispatch(clearCartMessage())}
+            theme={"light"}
+            renderMessage={() => {
+              return (
+                <div onClick={() => navigate(CART_ITEMS_PAGE)} className="cursor-pointer">
+                  <div
+                    style={{
+                      height: 0,
+                      display: "flex",
+                      justifyContent: "flex-end",
+                    }}
+                  >
+                    <div onClick={() => dispatch(clearCartMessage())}>
+                      <IoClose />
+                    </div>
+                  </div>
+                  <div className="toast-product-container font-family-lato">
+                    <div className="toast-product-img">
+                      <img
+                        src={addedProduct?.product_images[0]}
+                        alt={addedProduct?._id}
+                      />
+                    </div>
+                    <div className="toast-product-msg">{cartMessage}</div>
+                  </div>
+                </div>
+              );
+            }}
+          />
+        )}
       </div>
     );
   } else {

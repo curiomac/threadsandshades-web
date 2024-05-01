@@ -48,14 +48,14 @@ const CartItems = () => {
       dispatch(removeCart(payload));
     } else {
       const local_cart_items =
-      JSON.parse(localStorage.getItem("cart-items")) || [];
-    const product_found = local_cart_items.filter(
-      (data) => data?.product_id !== cartItem?.product?._id
-    );
-    const payload = {
-      cart_details: product_found
-    }
-    dispatch(getTemporaryCart(payload));
+        JSON.parse(localStorage.getItem("cart-items")) || [];
+      const product_found = local_cart_items.filter(
+        (data) => data?.product_id !== cartItem?.product?._id
+      );
+      const payload = {
+        cart_details: product_found,
+      };
+      dispatch(getTemporaryCart(payload));
     }
   };
   useEffect(() => {

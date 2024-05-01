@@ -7,13 +7,22 @@ import {
   checkoutDetailsRequest,
   checkoutDetailsSuccess,
 } from "../slices/checkoutDetailsSlice";
+import { getAuthToken } from "../../helpers/auth-token/getAuthToken";
 
 export const getCheckoutDetails = (payload) => async (dispatch) => {
-  const extended_payload = `${payload.coupon_code ? `?coupon_code=${payload.coupon_code}` : ``}`
+  const extended_payload = `${
+    payload.coupon_code ? `?coupon_code=${payload.coupon_code}` : ``
+  }`;
   try {
     dispatch(checkoutDetailsRequest());
     const response = await axios.get(
-      `${BASE_URL}/${endpoints.checkout_details.get}/${payload.user_id}${extended_payload}`
+      `${BASE_URL}/${endpoints.checkout_details.get}/${payload.user_id}${extended_payload}`,
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: `${getAuthToken()}`,
+        },
+      }
     );
     dispatch(checkoutDetailsSuccess(response?.data));
   } catch (error) {
@@ -25,7 +34,8 @@ export const getTemporaryCheckoutDetails = (payload) => async (dispatch) => {
   try {
     dispatch(checkoutDetailsRequest());
     const response = await axios.post(
-      `${BASE_URL}/${endpoints.checkout_details.temp_get}`, payload
+      `${BASE_URL}/${endpoints.checkout_details.temp_get}`,
+      payload
     );
     dispatch(checkoutDetailsSuccess(response?.data));
   } catch (error) {

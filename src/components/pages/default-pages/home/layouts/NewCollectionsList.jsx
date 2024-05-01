@@ -45,6 +45,7 @@ const NewCollectionsList = () => {
       selected_color_code: product.target_color_code,
       selected_size: product.available_sizes[0],
       selected_quantity: 1,
+      is_from: "default"
     };
     if (isAuthenticated) {
       dispatch(addCart(payload));

@@ -11,12 +11,19 @@ import {
   wishListAddSuccess,
 } from "../slices/wishListSlice";
 import { getCart } from "./cartAction";
+import { getAuthToken } from "../../helpers/auth-token/getAuthToken";
 
 export const getWishList = (payload) => async (dispatch) => {
   try {
     dispatch(wishListRequest());
     const response = await axios.get(
-      `${BASE_URL}/${endpoints.wish_list.get}/${payload.user_id}`
+      `${BASE_URL}/${endpoints.wish_list.get}/${payload.user_id}`,
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: `${getAuthToken()}`,
+        },
+      }
     );
     dispatch(wishListSuccess(response?.data?.wishList));
   } catch (error) {
@@ -33,7 +40,14 @@ export const moveWishList = (payload) => async (dispatch) => {
   try {
     dispatch(wishListAddRequest());
     const response = await axios.post(
-      `${BASE_URL}/${endpoints.wish_list.move}${formattedPayload}`
+      `${BASE_URL}/${endpoints.wish_list.move}${formattedPayload}`,
+      {},
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: `${getAuthToken()}`,
+        },
+      }
     );
     dispatch(wishListAddSuccess(response?.data?.wishList));
     if (payload?.is_from === "cart") {

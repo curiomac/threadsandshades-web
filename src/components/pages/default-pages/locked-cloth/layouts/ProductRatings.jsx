@@ -12,52 +12,6 @@ const ProductRatings = ({ ratings }) => {
   const ratingsValue = [27, 5, 3, 0, 5];
   const percentages = ratingsValue.map((count) => `${(count / 41) * 100}%`);
   const percentagesValue = ratingsValue.map((count) => (count / 41) * 100);
-  const demo_msgs = [
-    {
-      id: 1,
-      username: "NightOwl23",
-      rating: 5,
-      heading: "Comfortable and Stylish",
-      comment:
-        "Absolutely love this hoodie! It's so comfortable and stylish. Perfect for cool evenings.",
-      date: "2024-03-15",
-    },
-    {
-      id: 2,
-      username: "SneakerHead87",
-      rating: 4,
-      heading: "Nice Design, a Bit Pricey",
-      comment:
-        "Nice design and quality, but a bit pricey. Still worth it for the style.",
-      date: "2024-03-18",
-    },
-    {
-      id: 3,
-      username: "FitnessFreak55",
-      rating: 5,
-      heading: "Great for Workouts",
-      comment:
-        "Great for workouts or casual wear. Breathable fabric and looks cool!",
-      date: "2024-03-20",
-    },
-    {
-      id: 4,
-      username: "Fashionista99",
-      rating: 3,
-      heading: "Good Look, Sizing Issue",
-      comment:
-        "The hoodie looks good, but the fit is a bit off for me. Maybe try a size up.",
-      date: "2024-03-22",
-    },
-    {
-      id: 5,
-      username: "NightSkyWatcher",
-      rating: 5,
-      heading: "Cozy and Stylish",
-      comment: "Love the dark theme! Feels cozy and stylish at the same time.",
-      date: "2024-03-25",
-    },
-  ];
   useEffect(() => {
     if (height > 800) {
       setHeight(800);
@@ -113,7 +67,7 @@ const ProductRatings = ({ ratings }) => {
             </div>
           </div>
         </div>
-        <div
+        {/* <div
           className={`comments-container ${height === 800 ? "full-load" : ""} ${
             ratings?.reviews?.length > 0 ? "list" : ""
           }`}
@@ -174,8 +128,8 @@ const ProductRatings = ({ ratings }) => {
               </div>
             </div>
           )}
-        </div>
-        {height < 800 && ratings?.reviews?.length > 0 && (
+        </div> */}
+        {/* {height < 800 && ratings?.reviews?.length > 0 && (
           <div className="d-flex align-items-center justify-content-center show-more-comments-container">
             <div>
               <div className="d-flex align-items-center justify-content-center w-fill">
@@ -196,7 +150,7 @@ const ProductRatings = ({ ratings }) => {
               <div className="text-align-center font-12">Show More</div>
             </div>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );

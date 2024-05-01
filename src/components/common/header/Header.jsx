@@ -20,12 +20,9 @@ import {
   SETTINGS_PAGE,
 } from "../../../helpers/route-paths/paths";
 import NavBar from "./layouts/NavBar";
-import TopBar from "./layouts/TopBar";
-import { useSelector } from "react-redux";
 
 const Header = () => {
   const location = useLocation();
-  const { isAuthenticated } = useSelector((state) => state.authState);
 
   const defaultPages = [
     HOME_PAGE,
@@ -78,7 +75,7 @@ const Header = () => {
         (isAuthPage() || isErrorPage()) && "d-none"
       } position-sticky-0`}
     >
-      {isDefaultPage() ? <NavBar /> : <TopBar />}
+      {isDefaultPage() ? <NavBar /> : ""}
     </div>
   );
 };

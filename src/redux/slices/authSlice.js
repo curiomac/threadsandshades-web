@@ -140,6 +140,7 @@ const authSlice = createSlice({
         loading: false,
         isAuthenticated: false,
         user: {},
+        user_image: {}
       };
     },
     logoutFail(state, action) {

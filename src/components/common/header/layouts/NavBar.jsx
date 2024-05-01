@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Logo from "../../../plugins/logo/Logo";
-// import { FaDiscord, FaYoutube } from "react-icons/fa";
-import { FaFacebookF, FaRegHeart } from "react-icons/fa";
-import { HiOutlineShoppingBag } from "react-icons/hi2";
-import { IoClose, IoLogoXbox, IoPersonOutline } from "react-icons/io5";
+import { FaFacebookF, FaMinus, FaPlus, FaRegHeart } from "react-icons/fa";
+import { IoLogoXbox, IoPersonOutline } from "react-icons/io5";
 import { RiSearch2Line } from "react-icons/ri";
-import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   HOME_PAGE,
-  ABOUT_PAGE,
   CONTACT_PAGE,
   COLLECTIONS_PAGE,
   LOCKED_CLOTH_PAGE,
@@ -16,36 +13,27 @@ import {
   USER_ACCOUNT_DETAILS_PAGE,
 } from "../../../../helpers/route-paths/paths";
 import { useDispatch, useSelector } from "react-redux";
-import SideDrawer from "../../../plugins/side-drawer/SideDrawer";
 import {
   addCart,
   getTemporaryCart,
+  removeCart,
 } from "../../../../redux/actions/cartAction";
-import CartDrawer from "./CartDrawer";
-import {
-  getWishList,
-  moveWishList,
-} from "../../../../redux/actions/wishListAction";
-import DialogModalWishList from "../../../plugins/dialog-modal-wishlist/DialogModalWishList";
-import { getQueryParam } from "../../../../helpers/search-query-params/getQueryParams";
+import { moveWishList } from "../../../../redux/actions/wishListAction";
 import { getProducts } from "../../../../redux/actions/productsAction";
-import { BsCart } from "react-icons/bs";
+import { BsCart, BsTwitterX } from "react-icons/bs";
 import SideDragger from "../../../plugins/cmac-plugins/side-dragger/SideDragger";
 import { IoCloseOutline } from "react-icons/io5";
-import { BsFacebook, BsInstagram, BsTwitterX } from "react-icons/bs";
 import { GrInstagram } from "react-icons/gr";
 import men_res_nav_img from "../../../../assets/imgs/store-room/men-res-nav-img.jpg";
 import women_res_nav_img from "../../../../assets/imgs/store-room/women-res-nav-img.jpg";
 import kids_res_nav_img from "../../../../assets/imgs/store-room/kids-res-nav-img.jpg";
 import discount_res_nav_img from "../../../../assets/imgs/store-room/discount-res-nav-img.jpg";
-import { RxHamburgerMenu } from "react-icons/rx";
 import { IoIosArrowForward } from "react-icons/io";
 import HambugerMenu from "../../../plugins/cmac-plugins/hamburger-menu/HambugerMenu";
-import SpinnerLoader from "../../../plugins/loaders/spinner-loader/SpinnerLoader";
-import { TiShoppingCart, TiTick } from "react-icons/ti";
 import { getCurrencyFormat } from "../../../../helpers/currency-formatter/getCurrencyFormat";
 import { PiCurrencyInrBold } from "react-icons/pi";
 import { CiTrash } from "react-icons/ci";
+import AddCartBtn from "../../../utils/AddCartBtn";
 
 const NavBar = () => {
   const { theme } = useSelector((state) => state.themeState);
@@ -63,7 +51,9 @@ const NavBar = () => {
   const [defaultSearchinput, setDefaultSearchInput] = useState("");
   const [draggerOpen, setDraggerOpen] = useState(false);
   const [categoryDraggerOpen, setCategoryDraggerOpen] = useState(false);
+  const [cartDraggerOpen, setCartDraggerOpen] = useState(false);
   const [catergoryValue, setCategory] = useState("");
+  const [cartItemsValue, setCartItemsValue] = useState([]);
   const { wishListItems, loading: wishListLoading } = useSelector(
     (state) => state.wishListState
   );
@@ -83,6 +73,7 @@ const NavBar = () => {
       selected_color_code: product.target_color_code,
       selected_size: product.available_sizes[0],
       selected_quantity: 1,
+      is_from: "wishlist",
     };
     if (isAuthenticated) {
       dispatch(addCart(payload));
@@ -138,6 +129,88 @@ const NavBar = () => {
     };
     dispatch(getTemporaryCart(payload));
   };
+  const documentDimensions = () => {
+    return window.innerWidth;
+  };
+
+  window.addEventListener("resize", documentDimensions);
+
+  const handleMoveToWishList = (cartItem) => {
+    const payload = {
+      product_id: cartItem?.product?._id,
+      user_id: user?._id,
+      is_from: "cart",
+    };
+    dispatch(moveWishList(payload));
+  };
+  const handleRemoveCart = (cartItem) => {
+    console.log("[logger] cartItem: ", cartItem);
+    if (isAuthenticated) {
+      const payload = {
+        product_id: cartItem?.product?._id,
+        user_id: user?._id,
+      };
+      dispatch(removeCart(payload));
+    } else {
+      let local_cart_items =
+        JSON.parse(localStorage.getItem("cart-items")) || [];
+      const updatedCartItems = local_cart_items.filter(
+        (data) => data?.product_id !== cartItem?.product?._id
+      );
+      localStorage.setItem("cart-items", JSON.stringify(updatedCartItems));
+      dispatch(getTemporaryCart({ cart_details: updatedCartItems }));
+    }
+  };
+  const handleQty = (product, action) => {
+    const payload = {
+      product_id: product._id,
+      user_id: user?._id,
+      selected_color: product.target_color,
+      selected_color_code: product.target_color_code,
+      selected_size: product.available_sizes[0],
+      selected_quantity: 1,
+      ...(action === "reduce" && { qty: "negative" }),
+      is_from: "default",
+    };
+
+    if (isAuthenticated) {
+      dispatch(addCart(payload));
+    } else {
+      let local_cart_items =
+        JSON.parse(localStorage.getItem("cart-items")) || [];
+      const product_found = local_cart_items.find(
+        (data) => data?.product_id === product._id
+      );
+
+      if (product_found) {
+        const { selected_quantity } = product_found.selected_product_details;
+        const updated_quantity =
+          action === "add" ? selected_quantity + 1 : selected_quantity - 1;
+
+        if (updated_quantity > 0) {
+          console.log("[logger] updated_quantity: [85]", updated_quantity);
+          const updatedProduct = {
+            ...product_found,
+            selected_product_details: {
+              ...product_found.selected_product_details,
+              selected_quantity: updated_quantity,
+            },
+          };
+          const updatedCartItems = local_cart_items.map((item) =>
+            item?.product_id === product._id ? updatedProduct : item
+          );
+          localStorage.setItem("cart-items", JSON.stringify(updatedCartItems));
+          dispatch(getTemporaryCart({ cart_details: updatedCartItems }));
+        } else {
+          console.log("[logger] updated_quantity: [99]", updated_quantity);
+          handleRemoveCart({ product });
+        }
+      }
+    }
+  };
+  useEffect(() => {
+    setCartItemsValue(cartItems);
+  }, [cartItems]);
   useEffect(() => {
     dispatch(getProducts([], [], []));
   }, [dispatch]);
@@ -288,15 +361,25 @@ const NavBar = () => {
                 <div className="links icon">
                   <FaRegHeart />
                   <div className="shopping-cart-count-container">
-                    {wishListCount>0&&
-                    <div className="shopping-cart-count d-flex align-items-center justify-content-center">
-                      {wishListCount}
-                    </div>
-                    }
+                    {wishListCount > 0 && (
+                      <div className="shopping-cart-count d-flex align-items-center justify-content-center">
+                        {wishListCount}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
-              <Link className="links-decoration-unset" to={CART_ITEMS_PAGE}>
+              <div
+                className="links-decoration-unset"
+                onClick={() => {
+                  if (documentDimensions() < 849) {
+                    setCartDraggerOpen(true);
+                  } else {
+                    navigate(CART_ITEMS_PAGE);
+                    setCartDraggerOpen(false);
+                  }
+                }}
+              >
                 <div className="links icon">
                   <BsCart />
                   <div className="shopping-cart-count-container">
@@ -305,18 +388,6 @@ const NavBar = () => {
                     </div>
                   </div>
                 </div>
-              </Link>
-            </div>
-          </div>
-        </div>
-        <div className="cart-drawer">
-          <div className={`side-drawer ${isCartOpen ? "open" : ""}`}>
-            <div className="links-container-res">
-              <div className="mt-5">
-                <div className="filter-close-ic">
-                  <IoClose onClick={() => setIsCartOpen(false)} />
-                </div>
-                <CartDrawer />
               </div>
             </div>
           </div>
@@ -590,7 +661,7 @@ const NavBar = () => {
         onClose={() => setWishListDragOpen(false)}
         dragPosition={"right"}
         className={"wish-list-dragger"}
-        width={'500px'}
+        width={"500px"}
       >
         <div>
           <div className="p-3 pt-2 pb-2 d-flex align-items-center justify-content-space-between">
@@ -669,8 +740,26 @@ const NavBar = () => {
                       ></div>
                     </div>
                     <div className="actions-container">
-                      <button
-                        className={`add-to-cart-btn d-flex align-items-center justify-content-center gap-3 ${
+                      <div>
+                        <AddCartBtn
+                          backgroundColor={"#fe2d5a"}
+                          loading={
+                            cartLoading &&
+                            selectedWishListProductId === wishList._id
+                              ? true
+                              : false
+                          }
+                          onClick={() => {
+                            if (cartLoading) {
+                              return;
+                            } else {
+                              handleAddToCart(wishList);
+                            }
+                          }}
+                        />
+                      </div>
+                      {/* <button
+                        className={`add-to-cart-btn d-flex align-items-center justify-content-center gap-3 cursor-pointer ${
                           cartLoading && "disabled"
                         }`}
                         onClick={() => {
@@ -688,7 +777,10 @@ const NavBar = () => {
                           </div>
                         ) : (
                           <div>
-                            <TiShoppingCart className="font-size-3 d-flex align-items-center" />
+                            <TiShoppingCart
+                              size={25}
+                              className="d-flex align-items-center"
+                            />
                           </div>
                         )}
                         <div>
@@ -697,15 +789,199 @@ const NavBar = () => {
                             ? "Adding to Cart"
                             : "Add To Cart"}
                         </div>
-                      </button>
-                      <div className="trash-ic">
-                        <CiTrash size={30}/>
+                      </button> */}
+                      <div className="trash-ic cursor-pointer">
+                        <CiTrash size={28} />
                       </div>
                     </div>
                   </div>
                 </div>
               );
             })}
+          </div>
+        </div>
+      </SideDragger>
+      <SideDragger
+        open={cartDraggerOpen}
+        onClose={() => setCartDraggerOpen(false)}
+        dragPosition={"right"}
+        className={"cart-dragger"}
+        width={"500px"}
+      >
+        <div>
+          <div className="p-3 pt-2 pb-2 d-flex align-items-center justify-content-space-between">
+            <div className="font-18">
+              Your Cart
+              <span className="font-family-spinnaker">({cartCount})</span>
+            </div>
+            <div>
+              <IoCloseOutline
+                onClick={() => setCartDraggerOpen(false)}
+                size={30}
+              />
+            </div>
+          </div>
+          <div className="products-container">
+            <div className="products">
+              {cartItemsValue?.map((cartItem, index) => {
+                console.log("cartItem: ", cartItem);
+                return (
+                  <div
+                    className={`order-item ${
+                      index < cartItemsValue?.length - 1 ? "end" : ""
+                    }`}
+                  >
+                    <div className="d-flex align-items-center gap-4">
+                      <div
+                        className="product-img cursor-pointer"
+                        onClick={() =>
+                          navigate(
+                            `${LOCKED_CLOTH_PAGE}?type=men&product_id=${cartItem?.product?._id}`
+                          )
+                        }
+                      >
+                        <img
+                          src={
+                            cartItem?.product?.product_images?.length > 0 &&
+                            cartItem?.product?.product_images[0]
+                          }
+                          alt="image_1"
+                        />
+                      </div>
+                      <div className="product-info cursor-pointer">
+                        <div
+                          className="product-title"
+                          onClick={() =>
+                            navigate(
+                              `${LOCKED_CLOTH_PAGE}?type=men&product_id=${cartItem?.product?._id}`
+                            )
+                          }
+                        >
+                          {cartItem?.product?.product_title}
+                        </div>
+                        <div className="selected-product-features">
+                          <div className="d-flex align-items-center justify-content-space-between selected-product-features-res">
+                            <div className="d-flex align-items-center gap-3 mt-1 features">
+                              <div className="font-14 font-weight-1">
+                                {
+                                  cartItem?.selected_product_details
+                                    ?.selected_size
+                                }
+                              </div>
+                              <div className="custom-vr"></div>
+                              <div
+                                className="target-color"
+                                style={{
+                                  backgroundColor:
+                                    cartItem?.selected_product_details
+                                      ?.selected_color_code,
+                                }}
+                              ></div>
+                            </div>
+                            <div className="d-flex align-items-center gap-3 mt-1 price">
+                              {/* res-vis */}
+                              <div className="product-price-details price-details-res-unset d-flex align-items-center gap-3">
+                                <div className="qty-container gap-3">
+                                  <div
+                                    className="event-ic cursor-pointer"
+                                    onClick={() => {
+                                      handleQty(cartItem?.product, "reduce");
+                                    }}
+                                  >
+                                    <FaMinus />
+                                  </div>
+                                  <div className="qty">
+                                    {
+                                      cartItem?.selected_product_details
+                                        ?.selected_quantity
+                                    }
+                                  </div>
+                                  <div
+                                    className="event-ic cursor-pointer"
+                                    onClick={() => {
+                                      handleQty(cartItem?.product, "add");
+                                    }}
+                                  >
+                                    <FaPlus />
+                                  </div>
+                                </div>
+                                <div className="d-flex align-items-center">
+                                  <PiCurrencyInrBold />
+                                  <div>
+                                    {getCurrencyFormat(
+                                      cartItem?.selected_product_details
+                                        ?.selected_quantity *
+                                        cartItem?.product?.fixed_price
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="cart-events gap-3">
+                          <div
+                            onClick={() => {
+                              handleRemoveCart(cartItem);
+                            }}
+                          >
+                            Remove
+                          </div>
+                          <div className="custom-vr" />
+                          <div
+                            onClick={() => {
+                              handleMoveToWishList(cartItem);
+                            }}
+                          >
+                            Move to Wishlist
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="product-price-details price-details-res-none">
+                      <div className="qty-container gap-3">
+                        <div
+                          className="event-ic cursor-pointer"
+                          onClick={() => {
+                            if (!cartLoading) {
+                              handleQty(cartItem?.product, "reduce");
+                            }
+                          }}
+                        >
+                          <FaMinus />
+                        </div>
+                        <div className="qty">
+                          {
+                            cartItem?.selected_product_details
+                              ?.selected_quantity
+                          }
+                        </div>
+                        <div
+                          className="event-ic cursor-pointer"
+                          onClick={() => {
+                            if (!cartLoading) {
+                              handleQty(cartItem?.product, "add");
+                            }
+                          }}
+                        >
+                          <FaPlus />
+                        </div>
+                      </div>
+                      <div className="d-flex align-items-center mt-3">
+                        <PiCurrencyInrBold />
+                        <div>
+                          {getCurrencyFormat(
+                            cartItem?.selected_product_details
+                              ?.selected_quantity *
+                              cartItem?.product?.fixed_price
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </SideDragger>

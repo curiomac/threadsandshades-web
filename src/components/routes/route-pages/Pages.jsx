@@ -31,7 +31,6 @@ import SigninHeader from "../../common/header/layouts/SigninHeader";
 import Register from "../../pages/auth-pages/register/Register";
 import Collections from "../../pages/default-pages/collections/Collections";
 import LockedCloth from "../../pages/default-pages/locked-cloth/LockedCloth";
-import CartItems from "../../pages/protected-pages/cart/layouts/CartItems";
 import BillingAddress from "../../pages/protected-pages/cart/layouts/BillingAddress";
 import Cart from "../../pages/protected-pages/cart/Cart";
 import { useSelector } from "react-redux";
@@ -51,7 +50,6 @@ const Pages = () => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
-  console.log("isAuthenticated: ", isAuthenticated);
   useEffect(() => {
     if (isAuthenticated) {
       setTimeout(() => {
@@ -76,7 +74,7 @@ const Pages = () => {
         {/* Protected Pages */}
         <Route path={CART_PAGE} element={<Cart />}>
           {/* <Route path={CART_ITEMS_PAGE} element={<CartItems />} /> */}
-          <Route path={CART_ITEMS_PAGE} element={<TestCartPage />} />
+          <Route path={CART_ITEMS_PAGE} element={<ProtectedRoute isMaxScreen><TestCartPage /></ProtectedRoute>} />
           <Route
             path={BILLING_ADDRESS_PAGE}
             element={
@@ -97,7 +95,7 @@ const Pages = () => {
         <Route
           path={USER_ACCOUNT_PAGE}
           element={
-            <ProtectedRoute>
+            <ProtectedRoute isAuth>
               <Profile />
             </ProtectedRoute>
           }
@@ -105,7 +103,7 @@ const Pages = () => {
           <Route
             path={USER_ACCOUNT_DETAILS_PAGE}
             element={
-              <ProtectedRoute>
+              <ProtectedRoute isAuth>
                 <ProfileInputs />
               </ProtectedRoute>
             }
@@ -113,7 +111,7 @@ const Pages = () => {
           <Route
             path={ORDER_LIST_PAGE}
             element={
-              <ProtectedRoute>
+              <ProtectedRoute isAuth>
                 <OrderList />
               </ProtectedRoute>
             }
@@ -121,8 +119,16 @@ const Pages = () => {
           <Route
             path={ORDER_ADDRESS}
             element={
-              <ProtectedRoute>
+              <ProtectedRoute isAuth>
                 <OrderAddress />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={SETTINGS_PAGE}
+            element={
+              <ProtectedRoute isAuth>
+                <ProfileSettings />
               </ProtectedRoute>
             }
           />

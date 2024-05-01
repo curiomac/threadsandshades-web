@@ -6,6 +6,7 @@
 @import url("https://fonts.googleapis.com/css?family=Spinnaker");
 @import url("https://fonts.googleapis.com/css?family=Jersey+20");
 @import url("https://fonts.googleapis.com/css?family=Protest+Guerrilla");
+@import url("https://fonts.googleapis.com/css?family=Lato");
 
 /* container */
 
@@ -606,6 +607,9 @@
 }
 .font-family-protest-guerrilla {
   font-family: "Protest Guerrilla";
+}
+.font-family-lato {
+  font-family: "Lato";
 }
 
 /* font-weight */

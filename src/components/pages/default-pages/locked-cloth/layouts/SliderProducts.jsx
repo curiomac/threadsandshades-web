@@ -24,94 +24,95 @@ import { IoIosStar } from "react-icons/io";
 import { GoDotFill } from "react-icons/go";
 import { FaShoppingBasket } from "react-icons/fa";
 
-const RecentLooks = () => {
-    const navigate = useNavigate();
-    const { products } = useSelector((state) => state.productsState);
-    const { isAuthenticated, user } = useSelector((state) => state.authState);
-    const { cartItems, loading: cartLoading } = useSelector(
-      (state) => state.cartState
-    );
-    const { wishListItems, loading: wishListLoading } = useSelector(
-      (state) => state.wishListState
-    );
-    const [selectedProductId, setSelectedProductId] = useState("");
-    const [addingCart, setAddingCart] = useState(false);
-    const [localStorageItems, setLocalStorageItems] = useState(() => {
-      return JSON.parse(localStorage.getItem("cart-items")) || [];
-    });
-    const dispatch = useDispatch();
-    useEffect(() => {
-      dispatch(getProducts([], [], []));
-    }, [dispatch]);
-    const handleAddToCart = (product) => {
-      const payload = {
+const SliderProducts = ({title, products}) => {
+  const navigate = useNavigate();
+  const { isAuthenticated, user } = useSelector((state) => state.authState);
+  const { cartItems, loading: cartLoading } = useSelector(
+    (state) => state.cartState
+  );
+  const { wishListItems, loading: wishListLoading } = useSelector(
+    (state) => state.wishListState
+  );
+  const [selectedProductId, setSelectedProductId] = useState("");
+  const [addingCart, setAddingCart] = useState(false);
+  const [dragStatus, setDragStatus] = useState(false)
+  const [localStorageItems, setLocalStorageItems] = useState(() => {
+    return JSON.parse(localStorage.getItem("cart-items")) || [];
+  });
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getProducts([], [], []));
+  }, [dispatch]);
+  const handleAddToCart = (product) => {
+    const payload = {
+      product_id: product._id,
+      user_id: user?._id,
+      selected_color: product.target_color,
+      selected_color_code: product.target_color_code,
+      selected_size: product.available_sizes[0],
+      selected_quantity: 1,
+      is_from: "default"
+    };
+    if (isAuthenticated) {
+      dispatch(addCart(payload));
+    } else {
+      const local_cart_items =
+        JSON.parse(localStorage.getItem("cart-items")) || [];
+      const localStoragePayload = {
         product_id: product._id,
-        user_id: user?._id,
-        selected_color: product.target_color,
-        selected_color_code: product.target_color_code,
-        selected_size: product.available_sizes[0],
-        selected_quantity: 1,
+        selected_product_details: {
+          selected_color: product.target_color,
+          selected_color_code: product.target_color_code,
+          selected_size: product.available_sizes[0],
+          selected_quantity: 1,
+        },
       };
-      if (isAuthenticated) {
-        dispatch(addCart(payload));
-      } else {
-        const local_cart_items =
-          JSON.parse(localStorage.getItem("cart-items")) || [];
-        const localStoragePayload = {
-          product_id: product._id,
-          selected_product_details: {
-            selected_color: product.target_color,
-            selected_color_code: product.target_color_code,
-            selected_size: product.available_sizes[0],
-            selected_quantity: 1,
-          },
-        };
-        const product_found = localStorageItems.find(
-          (data) => data?.product_id === product._id
+      const product_found = localStorageItems.find(
+        (data) => data?.product_id === product._id
+      );
+      if (!product_found || localStorageItems?.length === 0) {
+        localStorage.setItem(
+          "cart-items",
+          JSON.stringify([...local_cart_items, localStoragePayload])
         );
-        if (!product_found || localStorageItems?.length === 0) {
-          localStorage.setItem(
-            "cart-items",
-            JSON.stringify([...local_cart_items, localStoragePayload])
-          );
-          setLocalStorageItems([...localStorageItems, localStoragePayload]);
-          const payload = {
-            cart_details: [...localStorageItems, localStoragePayload],
-          };
-          dispatch(getTemporaryCart(payload));
-        }
+        setLocalStorageItems([...localStorageItems, localStoragePayload]);
+        const payload = {
+          cart_details: [...localStorageItems, localStoragePayload],
+        };
+        dispatch(getTemporaryCart(payload));
       }
+    }
+  };
+  const handleMoveToWishList = (product) => {
+    const payload = {
+      product_id: product._id,
+      user_id: "65a7eef1a7e2b0eda9f545e8",
+      is_from: "default",
     };
-    const handleMoveToWishList = (product) => {
-      const payload = {
-        product_id: product._id,
-        user_id: "65a7eef1a7e2b0eda9f545e8",
-        is_from: "default",
-      };
-      dispatch(moveWishList(payload));
-    };
-    useEffect(() => {
-      if (addingCart) {
-        setTimeout(() => {
-          setAddingCart(false);
-        }, 3000);
-      }
-    }, [addingCart]);
+    dispatch(moveWishList(payload));
+  };
+  useEffect(() => {
+    if (addingCart) {
+      setTimeout(() => {
+        setAddingCart(false);
+      }, 3000);
+    }
+  }, [addingCart]);
   return (
-    <div>
-       <div className="heading-product w-fit-content">
-          <div>Recent Looks</div>
-          <div className="drop-border"></div>
-        </div>
-      <CardSlider>
+    <div className="recent-products mt-3">
+      <div className="heading-product w-fit-content">
+        <div>{title}</div>
+        <div className="drop-border"></div>
+      </div>
+      <CardSlider style={{marginTop: "20px"}} cardGap={20} dragStatus={setDragStatus}>
         {products?.map((product, index) => {
           console.log("product: ", product);
-          // if (index <= 3) {
-          if (true) {
+          // if (index <= 1) {
+            if (true) {
             return (
-              <Card>
+              <Card width={240}>
                 <div
-                  className="product-recent"
+                  className="slider-products"
                   onClick={() => {
                     setSelectedProductId(product._id);
                     navigate(
@@ -292,4 +293,4 @@ const RecentLooks = () => {
   );
 };
 
-export default RecentLooks;
+export default SliderProducts;

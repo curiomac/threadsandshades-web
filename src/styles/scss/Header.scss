@@ -407,24 +407,24 @@ $items-card-width: 300px;
     gap: 0.8rem;
     border-bottom: 1px solid rgba(128, 128, 128, 0.111);
     .wish-list-image {
-      max-height: 120px;
-      min-height: 120px;
-      max-width: 120px;
-      min-width: 120px;
+      max-height: 115px;
+      min-height: 115px;
+      max-width: 115px;
+      min-width: 115px;
       object-fit: contain;
       background-color: #ededed;
-      padding: 20px;
-      border-radius: 10px;
+      // border-radius: 10px;
       img {
-        max-height: 120px;
-        min-height: 120px;
-        max-width: 120px;
-        min-width: 120px;
+        max-height: 115px;
+        min-height: 115px;
+        max-width: 115px;
+        min-width: 115px;
         object-fit: contain;
       }
     }
     .title {
       font-size: 13px;
+      font-weight: 600;
     }
     .price {
       font-size: 18px;
@@ -432,6 +432,7 @@ $items-card-width: 300px;
       align-items: center;
       letter-spacing: 0.5px;
       color: #2a2a2a;
+      font-weight: 600;
       // gap: 5px;
     }
     .offered {
@@ -459,12 +460,20 @@ $items-card-width: 300px;
       gap: 30px;
       .add-to-cart-btn {
         color: #fff;
-        background-color: $ternary-color;
-        height: 40px;
-        padding: 0 20px;
+        background-color: var(--ternary-color);
+        height: 38px;
+        padding: 0px 10px;
         border-radius: 50px;
         border: 2px solid transparent;
+        font-size: 12px;
+        transition: 0.5s;
       }
+      .add-to-cart-btn:hover {
+        color: $ternary-color;
+        background-color: transparent;
+        border: 2px solid $ternary-color;
+        transition: 0.5s;
+      } 
       .trash-ic {
         display: flex;
         align-items: center;

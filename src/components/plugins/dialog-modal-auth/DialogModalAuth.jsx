@@ -334,13 +334,18 @@ const DialogModalAuth = ({ isOpen, onClose, isAuth }) => {
                       type="email"
                       placeholder="Enter your email"
                       onChange={(e) => setEmail(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          handleSendOTP();
+                        }
+                      }}
                     />
                   </div>
                 </div>
                 <div className="d-flex align-items-center justify-content-center">
                   <button
                     className="auth-btn d-flex align-items-center justify-content-center gap-2 cursor-pointer"
-                    onClick={() => handleSendOTP()}
+                    onClick={handleSendOTP}
                   >
                     <div>Request OTP</div>
                     <div>

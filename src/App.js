@@ -10,7 +10,9 @@ import "./styles/scss/Home.scss";
 import "./styles/scss/Collections.scss";
 import "./styles/scss/LockedCloth.scss";
 import "./styles/scss/Auth.scss";
+import "./styles/scss/addons.scss";
 import "./styles/scss/plugins.scss";
+import "./styles/scss/utils.scss";
 import "./styles/scss/Header.scss";
 import "./styles/scss/SiteSettings.scss";
 import "./styles/scss/Cart.scss";
@@ -46,6 +48,18 @@ function App() {
   
   window.addEventListener("resize", documentDimensions);
   documentDimensions();
+
+  useEffect(() => {
+    const handleDevTools = (e) => {
+      if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
+        alert('Developer tools are not allowed!');
+      }
+    };
+    window.addEventListener('keydown', handleDevTools);
+    return () => {
+      window.removeEventListener('keydown', handleDevTools);
+    };
+  }, []);
 
   useEffect(() => {
     getThemeId();

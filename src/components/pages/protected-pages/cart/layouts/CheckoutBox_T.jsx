@@ -23,6 +23,7 @@ import { PhonePeIc } from "../../../../../assets/icons/PhonePeIc";
 import { PayPalIc } from "../../../../../assets/icons/PayPalIc";
 import SupportBanner from "../../../default-pages/home/layouts/SupportBanner";
 import { PiCurrencyInrBold } from "react-icons/pi";
+import { getCurrencyFormat } from "../../../../../helpers/currency-formatter/getCurrencyFormat";
 
 const TestCheckoutBox = ({ triggerPlaceOrder }) => {
   const navigate = useNavigate();
@@ -151,7 +152,7 @@ const TestCheckoutBox = ({ triggerPlaceOrder }) => {
                     <div className="d-flex align-items-center">
                       <PiCurrencyInrBold />
                     </div>
-                    <div>{cartItem?.product?.fixed_price}.00</div>
+                    <div>{getCurrencyFormat(cartItem?.product?.fixed_price)}</div>
                   </div>
                 </div>
               );
@@ -166,7 +167,7 @@ const TestCheckoutBox = ({ triggerPlaceOrder }) => {
               <div className="d-flex align-items-center">
                 <PiCurrencyInrBold />
               </div>
-              <div>{checkoutDetailsValue?.total_mrp}.00</div>
+              <div>{getCurrencyFormat(checkoutDetailsValue?.total_mrp)}</div>
             </div>
           </div>
           <div className="d-flex align-items-center justify-content-space-between mt-1">
@@ -182,7 +183,7 @@ const TestCheckoutBox = ({ triggerPlaceOrder }) => {
               <div className="d-flex align-items-center">
                 <PiCurrencyInrBold />
               </div>
-              <div>{checkoutDetailsValue?.discounted_delivery_charge}.00</div>
+              <div>{getCurrencyFormat(checkoutDetailsValue?.discounted_delivery_charge)}</div>
             </div>
           </div>
           <div className="d-flex align-items-center justify-content-space-between mt-1">
@@ -192,7 +193,7 @@ const TestCheckoutBox = ({ triggerPlaceOrder }) => {
                 <PiCurrencyInrBold />
               </div>
               <div>
-                {(18 / 100) * checkoutDetailsValue?.cart_total}
+                {getCurrencyFormat((18 / 100) * checkoutDetailsValue?.cart_total)}
               </div>
             </div>
           </div>
@@ -216,8 +217,8 @@ const TestCheckoutBox = ({ triggerPlaceOrder }) => {
                 <PiCurrencyInrBold />
               </div>
               {/* <div>{checkoutDetailsValue?.total_mrp}.00</div> */}
-              <div>{checkoutDetailsValue?.cart_total +
-                  (18 / 100) * checkoutDetailsValue?.cart_total}.00</div>
+              <div>{getCurrencyFormat(checkoutDetailsValue?.cart_total +
+                  (18 / 100) * checkoutDetailsValue?.cart_total)}</div>
             </div>
           </div>
         </div>

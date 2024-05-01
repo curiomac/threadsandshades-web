@@ -52,3 +52,23 @@ button {
   margin-top: 5px;
   margin-bottom: 20px;
 }
+
+.toast-product-container {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.toast-product-img img {
+  padding: 5px;
+  height: 70px;
+  width: 70px;
+  border: 1px solid rgba(128, 128, 128, 0.129);
+  object-fit: contain;
+}
+
+.toast-product-msg {
+  max-width: 270px;
+  font-size: 14px;
+  font-weight: 600;
+}

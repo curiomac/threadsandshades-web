@@ -5,7 +5,10 @@ const cartSlice = createSlice({
   initialState: {
     loading: false,
     cartItems: [],
-    cartCount: 0
+    cartCount: 0,
+    message: null,
+    success: false,
+    addedProduct: null
   },
   reducers: {
     cartRequest(state, action) {
@@ -39,8 +42,11 @@ const cartSlice = createSlice({
       return {
         ...state,
         loading: false,
-        cartItems: action.payload.cart_items,
-        cartCount: action.payload.cart_count,
+        cartItems: action.payload.cart.cart_items,
+        cartCount: action.payload.cart.cart_count,
+        message: action.payload.message,
+        addedProduct: action.payload.added_product,
+        success: true
       };
     },
     cartAddFail(state, action) {
@@ -92,6 +98,14 @@ const cartSlice = createSlice({
         error: action.payload,
       };
     },
+    clearCartMessage(state, action) {
+      return {
+        ...state,
+        message: null,
+        success: false,
+        addedProduct: null
+      };
+    },
     clearError(state, action) {
       return {
         ...state,
@@ -116,6 +130,7 @@ export const {
   cartRemoveRequest,
   cartRemoveFail,
   cartRemoveSuccess,
+  clearCartMessage,
   clearError,
 } = actions;
 

@@ -142,6 +142,9 @@
                         justify-content: center;
                       }
                     }
+                    &.price-details-res-unset {
+                      display: none;
+                    }
                   }
                 }
               }

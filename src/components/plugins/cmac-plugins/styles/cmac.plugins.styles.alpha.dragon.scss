@@ -1,0 +1,198 @@
+/* Styles */
+
+/* Common Styles */
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  max-height: var(--doc-height);
+  overflow: auto;
+}
+
+/* 
+.
+.
+.
+.
+*/
+
+/* Side Dragger */
+
+/* Root Classes */
+.cmac-overlay {
+  max-height: var(--doc-height);
+}
+
+.cmac-blur-overlay {
+  filter: blur(1px);
+}
+
+.side-dragger {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  height: var(--doc-height);
+  width: -webkit-fill-available;
+  display: flex;
+  animation-name: fadeInOut;
+  animation-duration: 0.8s;
+  animation-timing-function: ease;
+
+  & .slow-fade-out {
+    .dragger-content {
+      transition: right 2s ease, left 2s ease, opacity 2s ease !important;
+      opacity: 0;
+    }
+  }
+  .dragger-content {
+    visibility: hidden;
+    position: relative;
+    transition: right 0.6s ease, left 0.6s ease;
+  }
+  /* Keyframes fadeInOut*/
+  @keyframes fadeInOut {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+}
+
+/* 
+.
+.
+.
+.
+*/
+
+/* Card Slider */
+
+.wrapper {
+  width: 100%;
+  position: relative;
+  .i {
+    top: 50%;
+    height: 30px;
+    width: 30px;
+    cursor: pointer;
+    font-size: 1rem;
+    position: absolute;
+    text-align: center;
+    line-height: 50px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.23);
+    transform: translateY(-50%);
+    transition: transform 0.1s linear;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .i:active {
+    transform: translateY(-50%) scale(0.85);
+  }
+  .i:first-child {
+    left: -10px;
+  }
+  .i:last-child {
+    right: -10px;
+  }
+  .carousel {
+    display: flex;
+    grid-auto-flow: column;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    .no-transition {
+      scroll-behavior: auto;
+    }
+    .dragging {
+      scroll-snap-type: none;
+      scroll-behavior: auto;
+      .card {
+        cursor: pointer;
+        user-select: none;
+        scroll-behavior: smooth;
+      }
+    }
+    .card {
+      scroll-snap-align: start;
+    }
+  }
+  .carousel :where(.card, .img) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .carousel::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Card Slider Media Screens */
+
+@media screen and (max-width: 900px) {
+  .wrapper {
+    .carousel {
+      grid-auto-columns: calc((100% / 2) - 9px);
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .wrapper {
+    .carousel {
+      grid-auto-columns: 100%;
+    }
+  }
+}
+
+/*
+.
+.
+.
+.
+*/
+
+/* Jump Toaster */
+
+.toast-container {
+  position: fixed;
+  left: 0;
+  background-color: transparent;
+  z-index: 999;
+  width: -webkit-fill-available;
+  display: flex;
+  padding: 20px;
+  .toast {
+    min-height: 70px;
+    min-width: 370px;
+    max-width: 50%;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    position: relative;
+    transition: left 0.5s ease, right 0.5s ease, top 0.5s ease, bottom 0.5s ease;
+  }
+}
+
+/* Jump Toaster Media Screens */
+
+@media screen and (max-width: 576px) {
+  .toast-container {
+    display: block !important;
+    .toast {
+      min-width: -webkit-fill-available !important;
+      max-width: -webkit-fill-available !important;
+    }
+  }
+}

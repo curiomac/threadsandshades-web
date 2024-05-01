@@ -35,7 +35,8 @@ import ToastMessage from "../../../../plugins/toast-msg/ToastMessage";
 import { clearRatingsError } from "../../../../../redux/slices/ratingsSlice";
 import Loader from "react-js-loader";
 import ProductDeliveryBanner from "./ProductDeliveryBanner";
-import RecentLooks from "./RecentLooks";
+import SliderProducts from "./SliderProducts";
+import ProductReviews from "./ProductReviews";
 const ProductDetails = () => {
   const productType = getQueryParam("type");
   const dispatch = useDispatch();
@@ -45,6 +46,7 @@ const ProductDetails = () => {
     products_group,
     loading: productLoading,
   } = useSelector((state) => state.productState);
+  const { products } = useSelector((state) => state.productsState);
   const { cartItems, loading: cartLoading } = useSelector(
     (state) => state.cartState
   );
@@ -74,6 +76,10 @@ const ProductDetails = () => {
   const [productReview, setProductReview] = useState("");
   const [termsConditionsAccepted, setTermsConditionsAccepted] = useState(false);
   const [productRecommend, setProductRecommend] = useState(null);
+
+  const [localStorageRecentProducts, setLocalStorageRecentProducts] = useState(
+    []
+  );
 
   const getRatingsStat = () => {
     if (rating === 1) {
@@ -156,6 +162,7 @@ const ProductDetails = () => {
         targetProductQuantity === "Custom"
           ? targetProductCustomQuantity
           : targetProductQuantity,
+      is_from: "default",
     };
     if (isAuthenticated) {
       dispatch(addCart(payload));
@@ -206,6 +213,10 @@ const ProductDetails = () => {
       behavior: "smooth",
     });
   };
+  useEffect(() => {
+    const localProducts = JSON.parse(localStorage.getItem("lookups")) || [];
+    setLocalStorageRecentProducts(localProducts);
+  }, [products, product]);
   useEffect(() => {
     dispatch(getProducts([], [], []));
   }, [dispatch]);
@@ -615,8 +626,13 @@ const ProductDetails = () => {
             <div className="product-info-ratings">
               <ProductInfo product={product} />
               <ProductDeliveryBanner />
+              <SliderProducts
+                title={"Recently Viewed"}
+                products={localStorageRecentProducts}
+              />
+              <SliderProducts title={"Top Products"} products={products} />
               <ProductRatings ratings={ratings} />
-              <RecentLooks />
+              <ProductReviews ratings={ratings} />
             </div>
           </div>
         </div>
@@ -625,7 +641,10 @@ const ProductDetails = () => {
 
       {/* Ratings Modal */}
       <CustomModal
-        isOpen={ratingsModalOpen}
+        isOpen={
+          // ratingsModalOpen
+          false
+        }
         onClose={() => setRatingsModalOpen(false)}
         size="L"
       >
