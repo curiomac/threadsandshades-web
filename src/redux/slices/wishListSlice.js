@@ -5,7 +5,9 @@ const wishListSlice = createSlice({
   initialState: {
     loading: false,
     wishListItems: [],
-    wishListCount: 0
+    wishListCount: 0,
+    message: null,
+    toast: false
   },
   reducers: {
     wishListRequest(state, action) {
@@ -20,6 +22,9 @@ const wishListSlice = createSlice({
         loading: false,
         wishListItems: action.payload.wish_list_items,
         wishListCount: action.payload.wish_list_count,
+        message: action.payload.message,
+        addedProduct: action.payload.added_product,
+        toast: action.payload.toast
       };
     },
     wishListFail(state, action) {
@@ -41,6 +46,9 @@ const wishListSlice = createSlice({
         loading: false,
         wishListItems: action.payload.wish_list_items,
         wishListCount: action.payload.wish_list_count,
+        message: action.payload.message,
+        addedProduct: action.payload.added_product,
+        toast: action.payload.toast
       };
     },
     wishListAddFail(state, action) {
@@ -75,6 +83,8 @@ const wishListSlice = createSlice({
       return {
         ...state,
         error: null,
+        message: null,
+        toast: false
       };
     },
   },

@@ -8,7 +8,7 @@ import { getProducts } from "../../../../../redux/actions/productsAction";
 import { getQueryParam } from "../../../../../helpers/search-query-params/getQueryParams";
 import { getScreenResolution } from "../../../../../helpers/screen-resolution/getScreenResolution";
 
-const FilterBar = ({ toggleDrawer }) => {
+const FilterBar = ({ toggle, resBar }) => {
   const type = getQueryParam("type");
   const search_input = getQueryParam("input");
   const [filterGender, setFilterGender] = useState(true);
@@ -90,7 +90,7 @@ const FilterBar = ({ toggleDrawer }) => {
     });
   };
   const handleApplyFilter = () => {
-    toggleDrawer(false);
+    toggle(false);
     dispatch(getProducts([], filterSizes, filterColors));
   };
   const handleClearFilter = () => {
@@ -111,37 +111,56 @@ const FilterBar = ({ toggleDrawer }) => {
           return "";
         }
       };
-      console.log("DFDFDF", getType())
+      console.log("DFDFDF", getType());
       setFilterGenders([...filterGenders, getType()]);
     }
   }, [type]);
   useEffect(() => {
     if (filters_applied) {
-      const formated_filter_size_array =
-        filters_applied.available_sizes?.split(",") || [];
-      console.log("formated_filter_size_array: ", formated_filter_size_array);
-      setFilterSizes(formated_filter_size_array);
+      if (resBar) {
+        const formated_filter_size_array =
+          filters_applied.available_sizes?.split(",") || [];
+        console.log("formated_filter_size_array: ", formated_filter_size_array);
+        setFilterSizes(formated_filter_size_array);
 
-      const formated_filter_color_array =
-        filters_applied.target_color?.split(",") || [];
-      console.log("formated_filter_color_array: ", formated_filter_color_array);
-      setFilterColors(formated_filter_color_array);
-      if (search_input) {
-        dispatch(
-          getProducts(
-            search_input.split(" "),
-            formated_filter_size_array,
-            formated_filter_color_array
-          )
+        const formated_filter_color_array =
+          filters_applied.target_color?.split(",") || [];
+        console.log(
+          "formated_filter_color_array: ",
+          formated_filter_color_array
         );
+        setFilterColors(formated_filter_color_array);
       } else {
-        dispatch(
-          getProducts(
-            [],
-            formated_filter_size_array,
-            formated_filter_color_array
-          )
+        const formated_filter_size_array =
+          filters_applied.available_sizes?.split(",") || [];
+        console.log("formated_filter_size_array: ", formated_filter_size_array);
+        setFilterSizes(formated_filter_size_array);
+
+        const formated_filter_color_array =
+          filters_applied.target_color?.split(",") || [];
+        console.log(
+          "formated_filter_color_array: ",
+          formated_filter_color_array
         );
+        setFilterColors(formated_filter_color_array);
+
+        if (search_input) {
+          dispatch(
+            getProducts(
+              search_input.split(" "),
+              formated_filter_size_array,
+              formated_filter_color_array
+            )
+          );
+        } else {
+          dispatch(
+            getProducts(
+              [],
+              formated_filter_size_array,
+              formated_filter_color_array
+            )
+          );
+        }
       }
     } else {
       dispatch(getProducts([], [], []));
@@ -308,7 +327,7 @@ const FilterBar = ({ toggleDrawer }) => {
                     // </CustomCheckbox>
                     <div
                       onClick={() => handleColorFilter(available_color)}
-                      className="color-value"
+                      className="color-value cursor-pointer"
                       style={{
                         background: available_color,
                         border: "2px solid #fff",

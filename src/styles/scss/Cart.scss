@@ -895,6 +895,9 @@
     }
   }
   .cart {
+    .res-price {
+      display: flex !important;
+    }
     .outlet {
       .place-order-container {
         padding: 15px;

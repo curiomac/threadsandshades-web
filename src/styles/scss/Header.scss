@@ -425,6 +425,14 @@ $items-card-width: 300px;
     .title {
       font-size: 13px;
       font-weight: 600;
+      letter-spacing: 1px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: 0.3s;
+      color: #000000;
     }
     .price {
       font-size: 18px;
@@ -454,21 +462,45 @@ $items-card-width: 300px;
       background-color: #bcbcbc;
       transform: translateY(-50%) rotate(-0deg);
     }
+    .discount-value {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 20px;
+      width: 80px;
+      font-size: 10px;
+      color: #fff;
+      background: $primary-color;
+      border-radius: 50px;
+      box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.121);
+      font-weight: 600;
+      margin-left: 3px;
+    }
     .actions-container {
       display: flex;
       align-items: center;
-      gap: 30px;
+      gap: 20px;
       .add-to-cart-btn {
         color: #fff;
         background-color: var(--ternary-color);
-        height: 38px;
+        height: 35px;
         padding: 0px 10px;
-        border-radius: 50px;
+        border-radius: 2px;
         border: 2px solid transparent;
-        font-size: 12px;
+        font-size: 11px;
         transition: 0.5s;
+        &.disabled {
+          opacity: 0.5;
+          background-color: rgba(0, 0, 0, 0.369);
+        }
+        .sl-spinner1 {
+          height: 0;
+          width: 0;
+          margin-left: 10px;
+          margin-right: 10px;
+        }
       }
-      .add-to-cart-btn:hover {
+      .add-to-cart-btn:not(.disabled):hover {
         color: $ternary-color;
         background-color: transparent;
         border: 2px solid $ternary-color;

@@ -96,7 +96,8 @@ export const updateWishList = (payload) => async (dispatch) => {
         },
       }
     );
-    dispatch(wishListUpdateSuccess(response?.data?.cart));
+    dispatch(wishListUpdateSuccess(response?.data?.wish_list));
+    console.log("[logger] [100] Copy That!")
     localStorage.removeItem("wish-list-items");
   } catch (error) {
     dispatch(wishListUpdateFail(error?.response?.data?.message));

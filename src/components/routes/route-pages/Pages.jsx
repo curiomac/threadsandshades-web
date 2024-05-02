@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useNavigate,
+  Navigate,
+} from "react-router-dom";
 import {
   ABOUT_PAGE,
   CART_PAGE,
@@ -33,7 +39,7 @@ import Collections from "../../pages/default-pages/collections/Collections";
 import LockedCloth from "../../pages/default-pages/locked-cloth/LockedCloth";
 import BillingAddress from "../../pages/protected-pages/cart/layouts/BillingAddress";
 import Cart from "../../pages/protected-pages/cart/Cart";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Profile from "../../pages/protected-pages/profile/Profile";
 import ProfileInputs from "../../pages/protected-pages/profile/layouts/ProfileInputs";
 import ProtectedRoute from "../protected-routes/ProtectedRoute";
@@ -42,8 +48,26 @@ import OrderList from "../../pages/protected-pages/profile/layouts/OrderList";
 import TestCartPage from "../../pages/protected-pages/cart/layouts/NestedCartPage_T";
 import OrderAddress from "../../pages/protected-pages/profile/layouts/OrderAddress";
 import ProfileSettings from "../../pages/protected-pages/profile/layouts/ProfileSettings";
+import { clearCartMessage } from "../../../redux/slices/cartSlice";
+import { IoClose } from "react-icons/io5";
+import JumpToaster from "../../plugins/cmac-plugins/jump-toaster/JumpToaster";
+import { clearError } from "../../../redux/slices/wishListSlice";
 
 const Pages = () => {
+  const dispatch = useDispatch();
+  const {
+    success,
+    addedProduct,
+    message: cartMessage,
+    cartItems,
+    loading: cartLoading,
+  } = useSelector((state) => state.cartState);
+  const {
+    addedProduct: wishListAddedProduct, 
+    toast,
+    message: wishListMessage,
+    loading: wishListLoading,
+  } = useSelector((state) => state.wishListState);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAuthenticatedVal, setIsAuthenticated] = useState(false);
   const { isAuthenticated } = useSelector((state) => state.authState);
@@ -74,24 +98,31 @@ const Pages = () => {
         {/* Protected Pages */}
         <Route path={CART_PAGE} element={<Cart />}>
           {/* <Route path={CART_ITEMS_PAGE} element={<CartItems />} /> */}
-          <Route path={CART_ITEMS_PAGE} element={<ProtectedRoute isMaxScreen><TestCartPage /></ProtectedRoute>} />
+          <Route
+            path={CART_ITEMS_PAGE}
+            element={
+              <ProtectedRoute isMaxScreen>
+                <TestCartPage />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path={BILLING_ADDRESS_PAGE}
             element={
               // <ProtectedRoute>
-                <BillingAddress />
+              <BillingAddress />
               // </ProtectedRoute>
             }
           />
         </Route>
         <Route
-            path={ORDER_STATUS_PAGE}
-            element={
-              // <ProtectedRoute>
-                <Order />
-              // </ProtectedRoute>
-            }
-          />
+          path={ORDER_STATUS_PAGE}
+          element={
+            // <ProtectedRoute>
+            <Order />
+            // </ProtectedRoute>
+          }
+        />
         <Route
           path={USER_ACCOUNT_PAGE}
           element={
@@ -133,7 +164,6 @@ const Pages = () => {
             }
           />
         </Route>
-          
 
         {/* Auth Pages */}
         <Route path={LOGIN_PAGE} element={<Login />} />
@@ -144,6 +174,85 @@ const Pages = () => {
       </Routes>
       <Footer />
       <DialogModal isOpen={isModalOpen} onClose={closeModal} />
+      {success && (
+        <JumpToaster
+          duration={5000}
+          open={success}
+          onClose={() => dispatch(clearCartMessage())}
+          theme={"light"}
+          renderMessage={() => {
+            return (
+              <a
+              href={CART_ITEMS_PAGE}
+                // onClick={() => {
+                //   return <Navigate to={CART_ITEMS_PAGE} />;
+                // }}
+                className="cursor-pointer"
+              >
+                <div
+                  style={{
+                    height: 0,
+                    display: "flex",
+                    justifyContent: "flex-end",
+                  }}
+                >
+                  <div onClick={(e) => {dispatch(clearCartMessage()); e.stopPropagation() }}>
+                    <IoClose />
+                  </div>
+                </div>
+                <div className="toast-product-container font-family-lato">
+                  <div className="toast-product-img">
+                    <img
+                      src={addedProduct?.product_images[0]}
+                      alt={addedProduct?._id}
+                    />
+                  </div>
+                  <div className="toast-product-msg">{cartMessage}</div>
+                </div>
+              </a>
+            );
+          }}
+        />
+      )}
+      {toast && (
+        <JumpToaster
+          duration={5000}
+          open={toast}
+          onClose={() => dispatch(clearError())}
+          theme={"light"}
+          renderMessage={() => {
+            return (
+              <a
+                // onClick={() => {
+                //   return <Navigate to={CART_ITEMS_PAGE} />;
+                // }}
+                className="cursor-pointer"
+              >
+                <div
+                  style={{
+                    height: 0,
+                    display: "flex",
+                    justifyContent: "flex-end",
+                  }}
+                >
+                  <div onClick={(e) => {dispatch(clearCartMessage()); e.stopPropagation()}}>
+                    <IoClose />
+                  </div>
+                </div>
+                <div className="toast-product-container font-family-lato">
+                  <div className="toast-product-img">
+                    <img
+                      src={wishListAddedProduct?.product_images[0]}
+                      alt={wishListAddedProduct?._id}
+                    />
+                  </div>
+                  <div className="toast-product-msg">{wishListMessage}</div>
+                </div>
+              </a>
+            );
+          }}
+        />
+      )}
     </Router>
   );
 };

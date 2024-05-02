@@ -123,7 +123,7 @@ const SideDragger = ({
             ? overlayBackground
             : "rgba(0, 0, 0, 0.5)",
         }}
-        onClick={() => onClose && onClose()}
+        onClick={(e) => {onClose && onClose(); e.stopPropagation()}}
       >
         <div
           style={getDragPosition()}

@@ -515,6 +515,7 @@
         }
       }
       .product-price-details {
+        display: unset !important;
         font-size: 10px !important;
         margin-top: 6px !important;
         .product-price-qty {

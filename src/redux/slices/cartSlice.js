@@ -23,6 +23,9 @@ const cartSlice = createSlice({
         loading: false,
         cartItems: action.payload.cart_items,
         cartCount: action.payload.cart_count,
+        message: action.payload.message,
+        addedProduct: action.payload.added_product,
+        success: action.payload.toast
       };
     },
     cartFail(state, action) {
@@ -46,7 +49,7 @@ const cartSlice = createSlice({
         cartCount: action.payload.cart.cart_count,
         message: action.payload.message,
         addedProduct: action.payload.added_product,
-        success: true
+        success: action.payload.toast
       };
     },
     cartAddFail(state, action) {

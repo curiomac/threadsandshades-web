@@ -107,7 +107,7 @@ const TestCartPage = () => {
       selected_size: product.available_sizes[0],
       selected_quantity: 1,
       ...(action === "reduce" && { qty: "negative" }),
-      is_from: "default",
+      is_from: "qty",
     };
 
     if (isAuthenticated) {
@@ -224,7 +224,7 @@ const TestCartPage = () => {
                               </div>
                               <div className="d-flex align-items-center gap-3 mt-1 price">
                                 {/* res-vis */}
-                                <div className="product-price-details price-details-res-unset d-flex align-items-center gap-3">
+                                <div className="product-price-details price-details-res-unset res-price d-flex align-items-center gap-3">
                                   <div className="qty-container gap-3">
                                     <div
                                       className="event-ic cursor-pointer"

@@ -38,13 +38,7 @@ const CollectionsList = () => {
   const searching = getQueryParam("searching");
   const { products, loading } = useSelector((state) => state.productsState);
   const { isAuthenticated, user } = useSelector((state) => state.authState);
-  const {
-    success,
-    addedProduct,
-    message: cartMessage,
-    cartItems,
-    loading: cartLoading,
-  } = useSelector((state) => state.cartState);
+  const { loading: cartLoading } = useSelector((state) => state.cartState);
   const { wishListItems, loading: wishListLoading } = useSelector(
     (state) => state.wishListState
   );
@@ -98,7 +92,13 @@ const CollectionsList = () => {
       : [localStoragePayload, ...local_cart_items];
 
     localStorage.setItem("cart-items", JSON.stringify(updatedCartItems));
-    dispatch(getTemporaryCart({ cart_details: updatedCartItems }));
+    dispatch(
+      getTemporaryCart({
+        cart_details: updatedCartItems,
+        isSingle: true,
+        targetProduct: product,
+      })
+    );
   };
 
   const handleMoveToWishList = (product) => {
@@ -124,10 +124,9 @@ const CollectionsList = () => {
           JSON.stringify([...local_wish_list_items, localStoragePayload])
         );
         const payload = {
-          wish_list_details: [
-            ...local_wish_list_items,
-            localStoragePayload,
-          ],
+          wish_list_details: [...local_wish_list_items, localStoragePayload],
+          isSingle: true,
+          targetProduct: product,
         };
         dispatch(getTemporaryWishList(payload));
       } else {
@@ -239,6 +238,33 @@ const CollectionsList = () => {
                         <img src={product?.product_images[0]} alt="image_1" />
                       </div>
                       <div className="container-fluid-padding base-container p-none">
+                        {product?.is_discounted_product && (
+                          <div className="discount-container">
+                            <div className="discount">
+                              <div
+                                style={{
+                                  height: "5px",
+                                  width: "5px",
+                                  background: "#fff",
+                                  border: "1px solid gray",
+                                  borderRadius: "100%",
+                                }}
+                              />
+                              <div className="value">
+                                {product?.discount_percentage}% Offer
+                              </div>
+                              <div
+                                style={{
+                                  height: "5px",
+                                  width: "5px",
+                                  background: "#fff",
+                                  border: "1px solid gray",
+                                  borderRadius: "100%",
+                                }}
+                              />
+                            </div>
+                          </div>
+                        )}
                         <div className="add-to-fav-icon-container">
                           <div
                             className="add-to-fav-icon"
@@ -317,7 +343,7 @@ const CollectionsList = () => {
                             </div>
                           </button> */}
                           <AddCartBtn
-                          borderRadius={'0px'}
+                            borderRadius={"0px"}
                             width="230px"
                             loading={
                               cartLoading && selectedProductId === product._id
@@ -389,7 +415,6 @@ const CollectionsList = () => {
                           )} */}
                           </div>
                           <AddCartBtnMobile
-                          
                             loading={
                               cartLoading && selectedProductId === product._id
                                 ? true
@@ -422,44 +447,6 @@ const CollectionsList = () => {
             </div>
           </div>
         </div>
-        {console.log("[logger] [400] addedProduct: ", addedProduct)}
-        {success && (
-          <JumpToaster
-            duration={5000}
-            open={success}
-            onClose={() => dispatch(clearCartMessage())}
-            theme={"light"}
-            renderMessage={() => {
-              return (
-                <div
-                  onClick={() => navigate(CART_ITEMS_PAGE)}
-                  className="cursor-pointer"
-                >
-                  <div
-                    style={{
-                      height: 0,
-                      display: "flex",
-                      justifyContent: "flex-end",
-                    }}
-                  >
-                    <div onClick={() => dispatch(clearCartMessage())}>
-                      <IoClose />
-                    </div>
-                  </div>
-                  <div className="toast-product-container font-family-lato">
-                    <div className="toast-product-img">
-                      <img
-                        src={addedProduct?.product_images[0]}
-                        alt={addedProduct?._id}
-                      />
-                    </div>
-                    <div className="toast-product-msg">{cartMessage}</div>
-                  </div>
-                </div>
-              );
-            }}
-          />
-        )}
       </div>
     );
   } else {

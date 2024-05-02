@@ -3,6 +3,7 @@ import Logo from "../../../plugins/logo/Logo";
 import { FaFacebookF, FaMinus, FaPlus, FaRegHeart } from "react-icons/fa";
 import { IoLogoXbox, IoPersonOutline } from "react-icons/io5";
 import { RiSearch2Line } from "react-icons/ri";
+import Loader from "react-js-loader";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   HOME_PAGE,
@@ -37,6 +38,8 @@ import { getCurrencyFormat } from "../../../../helpers/currency-formatter/getCur
 import { PiCurrencyInrBold } from "react-icons/pi";
 import { CiTrash } from "react-icons/ci";
 import AddCartBtn from "../../../utils/AddCartBtn";
+import SpinnerLoader from "../../../plugins/loaders/spinner-loader/SpinnerLoader";
+import { TiShoppingCart } from "react-icons/ti";
 
 const NavBar = () => {
   const { theme } = useSelector((state) => state.themeState);
@@ -177,7 +180,6 @@ const NavBar = () => {
     dispatch(moveWishList(payload));
   };
   const handleRemoveCart = (cartItem) => {
-    console.log("[logger] cartItem: ", cartItem);
     if (isAuthenticated) {
       const payload = {
         product_id: cartItem?.product?._id,
@@ -221,7 +223,6 @@ const NavBar = () => {
           action === "add" ? selected_quantity + 1 : selected_quantity - 1;
 
         if (updated_quantity > 0) {
-          console.log("[logger] updated_quantity: [85]", updated_quantity);
           const updatedProduct = {
             ...product_found,
             selected_product_details: {
@@ -235,7 +236,6 @@ const NavBar = () => {
           localStorage.setItem("cart-items", JSON.stringify(updatedCartItems));
           dispatch(getTemporaryCart({ cart_details: updatedCartItems }));
         } else {
-          console.log("[logger] updated_quantity: [99]", updated_quantity);
           handleRemoveCart({ product });
         }
       }
@@ -407,7 +407,8 @@ const NavBar = () => {
                 className="links-decoration-unset"
                 onClick={() => {
                   if (documentDimensions() < 849) {
-                    setCartDraggerOpen(true);
+                    navigate(CART_ITEMS_PAGE);
+                    // setCartDraggerOpen(true);
                   } else {
                     navigate(CART_ITEMS_PAGE);
                     setCartDraggerOpen(false);
@@ -720,7 +721,10 @@ const NavBar = () => {
                   <div>
                     <img
                       className="wish-list-image"
-                      src={wishList?.product_images[0]}
+                      src={
+                        wishList?.product_images?.length > 0 &&
+                        wishList?.product_images[0]
+                      }
                       alt={wishList._id}
                     />
                   </div>
@@ -753,11 +757,11 @@ const NavBar = () => {
                         </div>
                         <div>{getCurrencyFormat(wishList.sale_price)}</div>
                       </div>{" "}
-                      {/* {product?.is_discounted_product && (
-                            <span className="discount price">
-                              ({product.discount_percentage}% offer)
-                            </span>
-                          )} */}
+                      {wishList?.is_discounted_product && (
+                        <div className="discount-value">
+                          {wishList?.discount_percentage}% offer
+                        </div>
+                      )}
                     </div>
                     <div className="d-flex align-items-center gap-3 mt-1 features">
                       <div className="font-14 font-weight-1">
@@ -774,7 +778,7 @@ const NavBar = () => {
                       ></div>
                     </div>
                     <div className="actions-container">
-                      <div>
+                      {/* <div>
                         <AddCartBtn
                           backgroundColor={"#fe2d5a"}
                           loading={
@@ -791,8 +795,43 @@ const NavBar = () => {
                             }
                           }}
                         />
-                      </div>
+                      </div> */}
                       {/* <button
+                        className={`add-to-cart-btn d-flex align-items-center justify-content-center gap-3 cursor-pointer ${
+                          true && "disabled"
+                        }`}
+                        onClick={() => {
+                          if (cartLoading) {
+                            return;
+                          } else {
+                            handleAddToCart(wishList, "wishlist");
+                          }
+                        }}
+                      >
+                        {true ? (
+                          <div>
+                            <Loader
+                              type="spinner-cub"
+                              bgColor={"#000"}
+                              color={"#000"}
+                              size={25}
+                            />
+                          </div>
+                        ) : (
+                          <div>
+                            <TiShoppingCart
+                              size={22}
+                              className="d-flex align-items-center"
+                            />
+                          </div>
+                        )}
+                        <div>
+                          {true
+                            ? "Please Wait..."
+                            : "Add To Cart"}
+                        </div>
+                      </button> */}
+                      <button
                         className={`add-to-cart-btn d-flex align-items-center justify-content-center gap-3 cursor-pointer ${
                           cartLoading && "disabled"
                         }`}
@@ -800,19 +839,24 @@ const NavBar = () => {
                           if (cartLoading) {
                             return;
                           } else {
-                            handleAddToCart(wishList);
+                            handleAddToCart(wishList, "wishlist");
                           }
                         }}
                       >
                         {cartLoading &&
                         selectedWishListProductId === wishList._id ? (
                           <div>
-                            <SpinnerLoader />
+                            <Loader
+                              type="spinner-cub"
+                              bgColor={"#000"}
+                              color={"#000"}
+                              size={25}
+                            />
                           </div>
                         ) : (
                           <div>
                             <TiShoppingCart
-                              size={25}
+                              size={22}
                               className="d-flex align-items-center"
                             />
                           </div>
@@ -820,10 +864,10 @@ const NavBar = () => {
                         <div>
                           {cartLoading &&
                           selectedWishListProductId === wishList._id
-                            ? "Adding to Cart"
+                            ? "Please Wait..."
                             : "Add To Cart"}
                         </div>
-                      </button> */}
+                      </button>
                       <div className="trash-ic cursor-pointer">
                         <CiTrash size={28} />
                       </div>

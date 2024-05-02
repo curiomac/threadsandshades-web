@@ -15,9 +15,9 @@ const ProtectedRoute = ({ isMaxScreen, isAuth, role, children }) => {
 
   window.addEventListener("resize", documentDimensions);
 
-  if (isMaxScreen && documentDimensions() < 849) {
-    return <NotFound404 />;
-  }
+  // if (isMaxScreen && documentDimensions() < 849) {
+  //   return <NotFound404 />;
+  // }
   if (isAuth && !isAuthenticated) {
     console.log("isAuthenticated: ", isAuthenticated);
     return <Navigate to={`${HOME_PAGE}?isAuth=false`} />;
