@@ -376,7 +376,7 @@ const CollectionsList = () => {
                               />
                             </div>
                             <div className="font-12 font-weight-1 rate">
-                              4.5
+                              {product?.ratings}
                             </div>
                           </div>
                           <div className="d-flex align-items-center dot-ic">
