@@ -3,6 +3,9 @@
 /* Add Cart Btn */
 
 .add-cart-btn-loading {
+  &.mobile-res {
+    display: none;
+  }
   button {
     position: relative;
     padding: 10px 0;
@@ -242,6 +245,11 @@
 }
 
 @media screen and (max-width: 849px) {
+  .add-cart-btn-loading {
+    &.mobile-res {
+      display: block !important;
+    }
+  }
   .add-cart-btn-mobile {
     display: block !important;
   }

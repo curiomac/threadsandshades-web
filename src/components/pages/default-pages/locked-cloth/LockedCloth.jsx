@@ -50,7 +50,7 @@ const LockedCloth = () => {
           </div>
         ) : (
           <>
-            <ProductDetails />
+            <ProductDetails productId={productId}/>
             {/* <TopSellingBanner /> */}
           </>
         )}

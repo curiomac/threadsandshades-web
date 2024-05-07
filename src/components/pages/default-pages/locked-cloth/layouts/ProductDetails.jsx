@@ -4,6 +4,7 @@ import { RxSlash } from "react-icons/rx";
 import { useDispatch, useSelector } from "react-redux";
 import { getProduct } from "../../../../../redux/actions/productAction";
 import {
+  CART_ITEMS_PAGE,
   COLLECTIONS_PAGE,
   LOCKED_CLOTH_PAGE,
 } from "../../../../../helpers/route-paths/paths";
@@ -37,7 +38,8 @@ import Loader from "react-js-loader";
 import ProductDeliveryBanner from "./ProductDeliveryBanner";
 import SliderProducts from "./SliderProducts";
 import ProductReviews from "./ProductReviews";
-const ProductDetails = () => {
+import DomRender from "../../../../plugins/cmac-plugins/dom-render/DomRender";
+const ProductDetails = ({ productId }) => {
   const productType = getQueryParam("type");
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -394,18 +396,32 @@ const ProductDetails = () => {
                 }}
               >
                 <div className="d-flex align-items-center gap-1">
-                  <div className="d-flex align-items-center">
-                    <IoIosStar
-                      color="#feaa02"
-                      className="d-flex align-items-center"
-                    />
+                  {Number(ratings?.total_ratings) !== 0 && (
+                    <div className="d-flex align-items-center gap-1">
+                      <div className="d-flex align-items-center">
+                        <IoIosStar
+                          color="#feaa02"
+                          className="d-flex align-items-center"
+                        />
+                      </div>
+                      <div className="font-12 font-weight-1 rate">
+                        {ratings?.total_ratings}
+                      </div>
+                    </div>
+                  )}
+                  {console.log("ratings?.total_ratings: ", ratings)}
+                  {Number(ratings?.total_ratings) !== 0 && (
+                    <div className="font-12 reviews">
+                      ({ratings?.ratings_count} Reviews)
+                    </div>
+                  )}
+                </div>
+
+                {Number(ratings?.total_ratings) !== 0 && (
+                  <div className="d-flex align-items-center dot-ic">
+                    <GoDotFill size={10} />
                   </div>
-                  <div className="font-12 font-weight-1 rate">4.5</div>
-                  <div className="font-12 reviews">(41 Reviews)</div>
-                </div>
-                <div className="d-flex align-items-center dot-ic">
-                  <GoDotFill size={10} />
-                </div>
+                )}
                 <div className="font-12 sold">125 Items Sold</div>
               </div>
               <div className="d-flex align-items-center font-weight-1">
@@ -618,7 +634,16 @@ const ProductDetails = () => {
                       : "Add To Cart"}
                   </div>
                 </button>
-                <button className="buy-now-btn">Buy now</button>
+                <button
+                  className="buy-now-btn"
+                  onClick={() => {
+                    navigate(
+                      `${CART_ITEMS_PAGE}?product_id=${productId}&target_qty=1&target_size=L`
+                    );
+                  }}
+                >
+                  Buy now
+                </button>
               </div>
             </div>
           </div>
@@ -631,8 +656,16 @@ const ProductDetails = () => {
                 products={localStorageRecentProducts}
               />
               <SliderProducts title={"Top Products"} products={products} />
-              <ProductRatings ratings={ratings} />
-              <ProductReviews ratings={ratings} />
+              {console.log(
+                "ratingsratings: ",
+                Object.keys(ratings).length === 0
+              )}
+              {Object.keys(ratings).length !== 0 && (
+                <ProductRatings ratings={ratings} />
+              )}
+              {Object.keys(ratings).length !== 0 && (
+                <ProductReviews ratings={ratings} />
+              )}
             </div>
           </div>
         </div>
@@ -640,165 +673,168 @@ const ProductDetails = () => {
       {/* Product Info and Ratings */}
 
       {/* Ratings Modal */}
-      <CustomModal
-        isOpen={
-          // ratingsModalOpen
-          false
-        }
-        onClose={() => setRatingsModalOpen(false)}
-        size="L"
-      >
-        <div className="ratings-modal container">
-          <div className="close-ic-container">
-            <div className="d-flex align-items-center justify-content-flex-end w-fill mt-2">
-              <div
-                className="close-ic-content"
-                onClick={() => {
-                  setRatingsModalOpen(false);
-                  dispatch(clearRatingsError());
-                  setToastMsg(false);
-                  setRating(0);
-                  setReviewTitle("");
-                  setProductReview("");
-                  setProductRecommend(null);
-                  setTermsConditionsAccepted(false);
-                  window.scrollTo({
-                    top: 0,
-                    behavior: "smooth",
-                  });
-                }}
-              >
-                <GrClose className="close-ic" />
+      <DomRender>
+        <CustomModal
+          isOpen={
+            ratingsModalOpen
+            // false
+          }
+          onClose={() => setRatingsModalOpen(false)}
+          size="L"
+        >
+          <div className="ratings-modal container">
+            <div className="close-ic-container">
+              <div className="d-flex align-items-center justify-content-flex-end w-fill mt-2">
+                <div
+                  className="close-ic-content"
+                  onClick={() => {
+                    setRatingsModalOpen(false);
+                    dispatch(clearRatingsError());
+                    setToastMsg(false);
+                    setRating(0);
+                    setReviewTitle("");
+                    setProductReview("");
+                    setProductRecommend(null);
+                    setTermsConditionsAccepted(false);
+                    window.scrollTo({
+                      top: 0,
+                      behavior: "smooth",
+                    });
+                  }}
+                >
+                  <GrClose className="close-ic" />
+                </div>
               </div>
             </div>
-          </div>
-          <div className="mt-1 mb-2">
-            <div>
-              <div className="font-size-3 font-weight-2 text-transorm-uc">
-                Overall Rating
+            <div className="mt-1 mb-2">
+              <div>
+                <div className="font-size-3 font-weight-2 text-transorm-uc">
+                  Overall Rating
+                </div>
               </div>
-            </div>
-            <div className="rating-star-container">
-              <div className="rating-star-content">
-                {filledStars.map((star, index) => {
-                  return (
-                    <div
-                      className="rating-star"
-                      onClick={() => setRating(index + 1)}
-                    >
-                      {star}
-                    </div>
-                  );
-                })}
-                {remainingStars.map((star, index) => {
-                  return (
-                    <div
-                      className="rating-star unfilled"
-                      onClick={() => {
-                        // if()
-                        setRating(filledStars.length + index + 1);
-                      }}
-                    >
-                      {star}
-                    </div>
-                  );
-                })}
-                <div className="product-review-result open-849px-gt">
+              <div className="rating-star-container">
+                <div className="rating-star-content">
+                  {filledStars.map((star, index) => {
+                    return (
+                      <div
+                        className="rating-star"
+                        onClick={() => setRating(index + 1)}
+                      >
+                        {star}
+                      </div>
+                    );
+                  })}
+                  {remainingStars.map((star, index) => {
+                    return (
+                      <div
+                        className="rating-star unfilled"
+                        onClick={() => {
+                          // if()
+                          setRating(filledStars.length + index + 1);
+                        }}
+                      >
+                        {star}
+                      </div>
+                    );
+                  })}
+                  <div className="product-review-result open-849px-gt">
+                    {getRatingsStat()}
+                  </div>
+                </div>
+                <div className="product-review-result open-849px-lt">
                   {getRatingsStat()}
                 </div>
               </div>
-              <div className="product-review-result open-849px-lt">
-                {getRatingsStat()}
-              </div>
-            </div>
-            <div className="review-title mt-3">
-              <div className="font-weight-1 font-14 review-title-heading">
-                Review title
-              </div>
-              <input
-                placeholder="Example: Comfort Fit"
-                value={reviewTitle}
-                onChange={(e) => setReviewTitle(e.target.value)}
-              />
-            </div>
-            <div className="recomend-product-res-container mt-2">
-              <div className="font-weight-1">
-                Would you recommend this product to a friend?
-              </div>
-              <div className="recomend-product-res w-fill">
-                <div className="d-flex align-items-center gap-1">
-                  <input
-                    type="radio"
-                    checked={productRecommend}
-                    onClick={() => setProductRecommend(true)}
-                  />
-                  <div className="res">Yes</div>
+              <div className="review-title mt-3">
+                <div className="font-weight-1 font-14 review-title-heading">
+                  Review title
                 </div>
-                <div className="d-flex align-items-center gap-1">
-                  <input
-                    type="radio"
-                    checked={productRecommend === false ? true : false}
-                    onClick={() => setProductRecommend(false)}
-                  />
-                  <div className="res">No</div>
-                </div>
-              </div>
-            </div>
-            <div className="product-review mt-3">
-              <div className="font-weight-1 font-14 product-review-heading">
-                Product review
-              </div>
-              <textarea
-                value={productReview}
-                rows={5}
-                placeholder="Example: The fabric is incredibly soft and breathable, making it a joy to wear all day long. What really sets this dress apart is the attention to detail in the fit."
-                onChange={(e) => setProductReview(e.target.value)}
-              />
-            </div>
-            <div>
-              <div className="terms d-flex align-items-center gap-1">
                 <input
-                  type="radio"
-                  checked={termsConditionsAccepted}
-                  onChange={() => setTermsConditionsAccepted(true)}
+                  placeholder="Example: Comfort Fit"
+                  value={reviewTitle}
+                  onChange={(e) => setReviewTitle(e.target.value)}
                 />
-                <div className="res">I accept terms and conditions</div>
               </div>
-            </div>
-            <div className="terms-sentence">
-              You agree to allow us to send you periodic communications related
-              to product reviews, promotions, and other relevant information.
-              You also consent to our privacy policy, which outlines how your
-              personal information will be collected, used, and protected.
-            </div>
-            <div className="submit-btn">
-              <button
-                className={`${ratingLoading ? "current-loading" : ""}`}
-                disabled={
-                  termsConditionsAccepted && !toastMsg && !ratingLoading
-                    ? false
-                    : true
-                }
-                onClick={handleSubmitReview}
-              >
-                {ratingLoading ? (
-                  <div className={"item ratings-loader"}>
-                    <Loader
-                      type="spinner-cub"
-                      bgColor={"#fff"}
-                      color={"#fff"}
-                      size={35}
+              <div className="recomend-product-res-container mt-2">
+                <div className="font-weight-1">
+                  Would you recommend this product to a friend?
+                </div>
+                <div className="recomend-product-res w-fill">
+                  <div className="d-flex align-items-center gap-1">
+                    <input
+                      type="radio"
+                      checked={productRecommend}
+                      onClick={() => setProductRecommend(true)}
                     />
-                    <div>Please wait...</div>
+                    <div className="res">Yes</div>
                   </div>
-                ) : (
-                  "Submit product review"
-                )}{" "}
-              </button>
+                  <div className="d-flex align-items-center gap-1">
+                    <input
+                      type="radio"
+                      checked={productRecommend === false ? true : false}
+                      onClick={() => setProductRecommend(false)}
+                    />
+                    <div className="res">No</div>
+                  </div>
+                </div>
+              </div>
+              <div className="product-review mt-3">
+                <div className="font-weight-1 font-14 product-review-heading">
+                  Product review
+                </div>
+                <textarea
+                  value={productReview}
+                  rows={5}
+                  placeholder="Example: The fabric is incredibly soft and breathable, making it a joy to wear all day long. What really sets this dress apart is the attention to detail in the fit."
+                  onChange={(e) => setProductReview(e.target.value)}
+                />
+              </div>
+              <div>
+                <div className="terms d-flex align-items-center gap-1">
+                  <input
+                    type="radio"
+                    checked={termsConditionsAccepted}
+                    onChange={() => setTermsConditionsAccepted(true)}
+                  />
+                  <div className="res">I accept terms and conditions</div>
+                </div>
+              </div>
+              <div className="terms-sentence">
+                You agree to allow us to send you periodic communications
+                related to product reviews, promotions, and other relevant
+                information. You also consent to our privacy policy, which
+                outlines how your personal information will be collected, used,
+                and protected.
+              </div>
+              <div className="submit-btn">
+                <button
+                  className={`${ratingLoading ? "current-loading" : ""}`}
+                  disabled={
+                    termsConditionsAccepted && !toastMsg && !ratingLoading
+                      ? false
+                      : true
+                  }
+                  onClick={handleSubmitReview}
+                >
+                  {ratingLoading ? (
+                    <div className={"item ratings-loader"}>
+                      <Loader
+                        type="spinner-cub"
+                        bgColor={"#fff"}
+                        color={"#fff"}
+                        size={35}
+                      />
+                      <div>Please wait...</div>
+                    </div>
+                  ) : (
+                    "Submit product review"
+                  )}{" "}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      </CustomModal>
+        </CustomModal>
+      </DomRender>
       {toastMsg && <ToastMessage message={toastMessageValue} status={status} />}
     </div>
   );

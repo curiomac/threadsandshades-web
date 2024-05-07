@@ -324,7 +324,7 @@
         max-width: 450px;
         overflow: auto;
         margin-top: 20px;
-        background-color: #fff;     
+        background-color: #fff;
         // background-image: url(../../assets/imgs/store-room/cart-items-bg.jpg);
         // background-size: cover;
         // background-position: center;
@@ -470,6 +470,21 @@
             padding: 10px;
             font-size: 12px;
             font-weight: 600;
+            transition: padding 0.5 ease;
+            textarea {
+              outline: none;
+              border: none;
+              width: 100%;
+              resize: none;
+            }
+            textarea::-webkit-scrollbar {
+              width: 5px;
+            }
+            textarea::-webkit-scrollbar-thumb {
+              width: 5px;
+              background-color: rgb(63, 63, 63);
+              border-radius: 50px;
+            }
             .plus-ic {
               border: 1px solid rgb(63, 63, 63);
               border-radius: 100%;
@@ -513,7 +528,7 @@
             }
           }
           .checkout-button {
-            margin-top: 40px;
+            margin-top: 20px;
             button {
               height: 45px;
               width: 100%;

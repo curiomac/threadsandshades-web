@@ -136,7 +136,7 @@ const NavBar = () => {
     console.log("product-data: ", product);
     const payload = {
       product_id: product._id,
-      user_id: "65a7eef1a7e2b0eda9f545e8",
+      user_id: user?._id,
       is_from: "default",
     };
     dispatch(moveWishList(payload));
@@ -711,7 +711,13 @@ const NavBar = () => {
               />
             </div>
           </div>
-          <div>
+          <div
+            className="wishlist-item-scroll"
+            style={{
+              height: "calc(var(--doc-height) - 50px)",
+              overflow: "auto",
+            }}
+          >
             {wishListItems?.map((wishList) => {
               return (
                 <div
@@ -833,7 +839,9 @@ const NavBar = () => {
                       </button> */}
                       <button
                         className={`add-to-cart-btn d-flex align-items-center justify-content-center gap-3 cursor-pointer ${
-                          cartLoading && "disabled"
+                          cartLoading &&
+                          selectedWishListProductId === wishList._id &&
+                          "disabled"
                         }`}
                         onClick={() => {
                           if (cartLoading) {
@@ -869,7 +877,10 @@ const NavBar = () => {
                         </div>
                       </button>
                       <div className="trash-ic cursor-pointer">
-                        <CiTrash size={28} />
+                        <CiTrash
+                          size={28}
+                          onClick={() => handleReMoveFromWishList(wishList)}
+                        />
                       </div>
                     </div>
                   </div>

@@ -9,9 +9,15 @@ import { IoIosArrowDown } from "react-icons/io";
 const ProductRatings = ({ ratings }) => {
   const [height, setHeight] = useState(200);
   const [loadComments, setLoadComments] = useState(false);
-  const ratingsValue = [27, 5, 3, 0, 5];
-  const percentages = ratingsValue.map((count) => `${(count / 41) * 100}%`);
-  const percentagesValue = ratingsValue.map((count) => (count / 41) * 100);
+  const ratingsValue = [
+    ratings?.ratings_counts_by_star?.star_5,
+    ratings?.ratings_counts_by_star?.star_4,
+    ratings?.ratings_counts_by_star?.star_3,
+    ratings?.ratings_counts_by_star?.star_2,
+    ratings?.ratings_counts_by_star?.star_1,
+  ];
+  const percentages = ratingsValue.map((count) => `${(count / ratings?.ratings_count) * 100}%`);
+  const percentagesValue = ratingsValue.map((count) => (count / ratings?.ratings_count) * 100);
   useEffect(() => {
     if (height > 800) {
       setHeight(800);
@@ -27,13 +33,13 @@ const ProductRatings = ({ ratings }) => {
         <div className="product-ratings-container">
           <div className="reviews-calc">
             <div className="reviews-calc-content">
-              <div className="current">4.9</div>
+              <div className="current">{ratings?.total_ratings}</div>
               <div className="ic-slash">
                 <RxSlash />
               </div>
               <div className="target">5</div>
             </div>
-            <div className="reviews-count">(41 Reviews)</div>
+            <div className="reviews-count">({ratings?.ratings_count} Reviews)</div>
           </div>
           <div className="product-rating-bar-container">
             <div className="rating-bar">
@@ -55,11 +61,12 @@ const ProductRatings = ({ ratings }) => {
                         }`}
                         style={{ width: percentages[index] || "0%" }}
                       ></div>
-                      
                     </div>
                     <div className="bar-dummy">
                       <div className="dummy" />
-                      <div>0+</div>
+                      <div style={{width: '0'}}>
+                        <div>0+</div>
+                      </div>
                     </div>
                   </div>
                 );

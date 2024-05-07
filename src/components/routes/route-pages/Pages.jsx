@@ -109,18 +109,18 @@ const Pages = () => {
           <Route
             path={BILLING_ADDRESS_PAGE}
             element={
-              // <ProtectedRoute>
+              <ProtectedRoute isAuth>
               <BillingAddress />
-              // </ProtectedRoute>
+              </ProtectedRoute>
             }
           />
         </Route>
         <Route
           path={ORDER_STATUS_PAGE}
           element={
-            // <ProtectedRoute>
+            <ProtectedRoute isAuth>
             <Order />
-            // </ProtectedRoute>
+            </ProtectedRoute>
           }
         />
         <Route

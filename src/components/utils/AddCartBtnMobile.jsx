@@ -29,7 +29,7 @@ const AddCartBtnMobile = ({
 
   if (loading) {
     return (
-      <div className="add-cart-btn-loading">
+      <div className="add-cart-btn-loading mobile-res">
         <button
           className="d-flex align-items-center"
           disabled={true}

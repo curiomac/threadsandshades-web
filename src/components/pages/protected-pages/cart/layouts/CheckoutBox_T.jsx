@@ -31,10 +31,11 @@ const TestCheckoutBox = ({ triggerPlaceOrder }) => {
   const [textCopied, setTextCopied] = useState(false);
   const [couponTriggered, setCouponTriggered] = useState(false);
   const [checkoutDetailsValue, setCheckoutDetailsValue] = useState({});
+  const [deliveryNotesInput, setDeliveryNotesInput] = useState(false);
   const trigger = getQueryParam("proceed");
   const location = useLocation();
   const { proceed } = useSelector((state) => state.resCartState);
-  const { isAuthenticated } = useSelector((state) => state.authState);
+  const { isAuthenticated, user } = useSelector((state) => state.authState);
   const { cartItems, loading: cartItemsLoading } = useSelector(
     (state) => state.cartState
   );
@@ -59,7 +60,7 @@ const TestCheckoutBox = ({ triggerPlaceOrder }) => {
   const handleApplyCoupon = () => {
     dispatch(clearError());
     const payload = {
-      user_id: "65a7eef1a7e2b0eda9f545e8",
+      user_id: user?._id,
       coupon_code: couponValue,
     };
     setCouponTriggered(true);
@@ -152,7 +153,9 @@ const TestCheckoutBox = ({ triggerPlaceOrder }) => {
                     <div className="d-flex align-items-center">
                       <PiCurrencyInrBold />
                     </div>
-                    <div>{getCurrencyFormat(cartItem?.product?.fixed_price)}</div>
+                    <div>
+                      {getCurrencyFormat(cartItem?.product?.fixed_price)}
+                    </div>
                   </div>
                 </div>
               );
@@ -183,7 +186,11 @@ const TestCheckoutBox = ({ triggerPlaceOrder }) => {
               <div className="d-flex align-items-center">
                 <PiCurrencyInrBold />
               </div>
-              <div>{getCurrencyFormat(checkoutDetailsValue?.discounted_delivery_charge)}</div>
+              <div>
+                {getCurrencyFormat(
+                  checkoutDetailsValue?.discounted_delivery_charge
+                )}
+              </div>
             </div>
           </div>
           <div className="d-flex align-items-center justify-content-space-between mt-1">
@@ -193,7 +200,23 @@ const TestCheckoutBox = ({ triggerPlaceOrder }) => {
                 <PiCurrencyInrBold />
               </div>
               <div>
-                {getCurrencyFormat((18 / 100) * checkoutDetailsValue?.cart_total)}
+                {getCurrencyFormat(
+                  (18 / 100) * checkoutDetailsValue?.cart_total
+                )}
+              </div>
+            </div>
+          </div>
+          <div className="d-flex align-items-center justify-content-space-between mt-1">
+            <div className="key">
+              Coupon Applied(
+              {getCurrencyFormat(checkoutDetailsValue?.coupon_discount)})
+            </div>
+            <div className="value d-flex align-items-center">
+              <div className="d-flex align-items-center">
+                - <PiCurrencyInrBold />
+              </div>
+              <div>
+                {getCurrencyFormat(checkoutDetailsValue?.coupon_discount)}
               </div>
             </div>
           </div>
@@ -217,20 +240,33 @@ const TestCheckoutBox = ({ triggerPlaceOrder }) => {
                 <PiCurrencyInrBold />
               </div>
               {/* <div>{checkoutDetailsValue?.total_mrp}.00</div> */}
-              <div>{getCurrencyFormat(checkoutDetailsValue?.cart_total +
-                  (18 / 100) * checkoutDetailsValue?.cart_total)}</div>
+              <div>
+                {getCurrencyFormat(
+                  checkoutDetailsValue?.cart_total +
+                    (18 / 100) * checkoutDetailsValue?.cart_total
+                )}
+              </div>
             </div>
           </div>
         </div>
         {location.pathname === CART_ITEMS_PAGE && (
           <div>
             <div className="delivery-notes">
-              <div className="d-flex align-items-center gap-2">
-                <div className="d-flex align-items-center plus-ic">
-                  <FaPlus />
+              {deliveryNotesInput ? (
+                <div>
+                  <textarea />
                 </div>
-                <div>Click here to add delivery notes</div>
-              </div>
+              ) : (
+                <div
+                  className="d-flex align-items-center gap-2"
+                  onClick={() => setDeliveryNotesInput(true)}
+                >
+                  <div className="d-flex align-items-center plus-ic">
+                    <FaPlus />
+                  </div>
+                  <div>Click here to add delivery notes</div>
+                </div>
+              )}
             </div>
             <div className="apply-coupon">
               <div className="d-flex align-items-center gap-1">
@@ -251,13 +287,23 @@ const TestCheckoutBox = ({ triggerPlaceOrder }) => {
                 </div>
                 <div className="btn">
                   <button
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
                     className="cursor-pointer font-family-poppins"
                     onClick={() => {
                       if (couponValue) {
                         handleApplyCoupon();
                       }
                     }}
-                    disabled={couponValue ? false : true}
+                    disabled={
+                      !couponValue ||
+                      (checkoutDetailsLoading && couponTriggered)
+                        ? true
+                        : false
+                    }
                   >
                     {checkoutDetailsLoading && couponTriggered ? (
                       <SpinnerLoader />

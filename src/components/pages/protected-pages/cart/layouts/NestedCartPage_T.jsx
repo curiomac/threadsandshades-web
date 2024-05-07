@@ -3,7 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { getQueryParam } from "../../../../../helpers/search-query-params/getQueryParams";
 import { useLocation, useNavigate } from "react-router-dom";
 import { proceedTrigger } from "../../../../../redux/slices/resCartSlice";
-import { getTemporaryWishList, moveWishList } from "../../../../../redux/actions/wishListAction";
+import {
+  getTemporaryWishList,
+  moveWishList,
+} from "../../../../../redux/actions/wishListAction";
 import {
   addCart,
   getTemporaryCart,
@@ -16,8 +19,13 @@ import { FaMinus, FaPlus } from "react-icons/fa6";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { PiCurrencyInrBold } from "react-icons/pi";
 import { getCurrencyFormat } from "../../../../../helpers/currency-formatter/getCurrencyFormat";
+import { getProduct } from "../../../../../redux/actions/productAction";
 
 const TestCartPage = () => {
+  const productId = getQueryParam("product_id");
+  const targetQty = getQueryParam("target_qty");
+  const targetSize = getQueryParam("target_size");
+  const { product } = useSelector((state) => state.productState);
   const { cartItems, loading: cartItemsLoading } = useSelector(
     (state) => state.cartState
   );
@@ -31,14 +39,9 @@ const TestCartPage = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const trigger = getQueryParam("proceed");
-  const wishlist_params = getQueryParam("wishlist");
   const { proceed } = useSelector((state) => state.resCartState);
   const dispatch = useDispatch();
   const [cartItemsValue, setCartItemsValue] = useState([]);
-  const [cartItemsSelectedId, setCartItemSelectedId] = useState("");
-  const [localStorageCartItems, setLocalStorageCartItems] = useState(() => {
-    return JSON.parse(localStorage.getItem("cart-items")) || [];
-  });
   const handleMoveToWishList = (cartItem) => {
     const payload = {
       product_id: cartItem?.product?._id,
@@ -150,8 +153,24 @@ const TestCartPage = () => {
     dispatch(proceedTrigger(trigger));
   }, [trigger]);
   useEffect(() => {
-    setCartItemsValue(cartItems);
-  }, [cartItems]);
+    dispatch(getProduct({ product_id: productId }));
+  }, [productId]);
+  useEffect(() => {
+    if (productId) {
+      const payload = {
+        product,
+        selected_product_details: {
+          selected_color: product?.target_color,
+          selected_color_code: product?.target_color_code,
+          selected_quantity: targetQty,
+          selected_size: targetSize,
+        },
+      };
+      setCartItemsValue([payload]);
+    } else {
+      setCartItemsValue(cartItems);
+    }
+  }, [cartItems, productId, product]);
   return (
     <div
       className={`cart-items ${

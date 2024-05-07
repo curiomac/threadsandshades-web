@@ -396,6 +396,15 @@ $items-card-width: 300px;
 
 .wish-list-dragger {
   letter-spacing: 1px;
+  .wishlist-item-scroll::-webkit-scrollbar {
+    width: 5px;
+    background-color: rgba(0, 0, 0, 0);
+  }
+  .wishlist-item-scroll::-webkit-scrollbar-thumb {
+    width: 5px;
+    background-color: rgb(66, 66, 72);
+    border-radius: 50px;
+  }
   .wish-list {
     width: -webkit-fill-available;
     display: flex;

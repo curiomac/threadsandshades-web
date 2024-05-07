@@ -41,7 +41,6 @@ const ratingsSlice = createSlice({
       return {
         ...state,
         loading: false,
-        ratings: action.payload.ratings,
         message: action.payload.message,
         status: 'success'
       };

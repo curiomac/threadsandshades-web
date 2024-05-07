@@ -368,21 +368,30 @@ const CollectionsList = () => {
                           {product.product_title}
                         </div>
                         <div className="product-ratings d-flex align-items-center gap-2 mt-1">
-                          <div className="d-flex align-items-center gap-1">
-                            <div className="d-flex align-items-center">
-                              <IoIosStar
-                                color="#feaa02"
-                                className="d-flex align-items-center"
-                              />
+                          {console.log(
+                            "sasaasasasass",
+                            Number(product?.ratings)
+                          )}
+                          {Number(product?.ratings) !== 0 && (
+                            <div className="d-flex align-items-center gap-1">
+                              <div className="d-flex align-items-center">
+                                <IoIosStar
+                                  color="#feaa02"
+                                  className="d-flex align-items-center"
+                                />
+                              </div>
+                              <div className="font-12 font-weight-1 rate">
+                                {product?.ratings}
+                              </div>
                             </div>
-                            <div className="font-12 font-weight-1 rate">
-                              {product?.ratings}
+                          )}
+                          {Number(product?.ratings) !== 0 && (
+                            <div className="d-flex align-items-center dot-ic">
+                              <GoDotFill size={10} />
                             </div>
-                          </div>
-                          <div className="d-flex align-items-center dot-ic">
-                            <GoDotFill size={10} />
-                          </div>
-                          <div className="font-12 sold">125 Items Sold</div>
+                          )}
+                          {}
+                          <div className="font-12 sold">{product.verified_purchase_users?.length} Items Sold</div>
                         </div>
                         <div className="d-flex align-items-center font-weight-1 justify-content-space-between">
                           <div className="d-flex gap-1 mt-1 mb-1 price-container">

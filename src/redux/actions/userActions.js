@@ -103,6 +103,13 @@ export const register = (payload) => async (dispatch) => {
       payload
     );
     dispatch(registerSuccess(response?.data));
+    const items_payload = {
+      user_id: response?.data?.user?._id,
+    };
+    dispatch(getWishList(items_payload));
+    dispatch(getCart(items_payload));
+    const parse_res = JSON.parse(response?.request?.response) || {};
+    localStorage.setItem("token", parse_res?.token);
   } catch (error) {
     dispatch(registerFail(error.response.data.message));
   }
@@ -156,7 +163,13 @@ export const updateProfile = (user_id, payload) => async (dispatch) => {
     dispatch(updateProfileRequest());
     const response = await axios.put(
       `${BASE_URL}/${endpoints.profile.update}/${user_id}`,
-      payload
+      payload,
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: `${getToken()}`,
+        },
+      }
     );
     dispatch(updateProfileSuccess(response?.data));
   } catch (error) {
@@ -168,7 +181,13 @@ export const updateProfileImage = (user_id, payload) => async (dispatch) => {
     dispatch(updateProfileImageRequest());
     const response = await axios.put(
       `${BASE_URL}/${endpoints.profile.update_image}/${user_id}`,
-      payload
+      payload,
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: `${getToken()}`,
+        },
+      }
     );
     dispatch(updateProfileImageSuccess(response?.data));
   } catch (error) {

@@ -9,6 +9,7 @@ import {
   ratingsRequest,
   ratingsSuccess,
 } from "../slices/ratingsSlice";
+import { getAuthToken } from "../../helpers/auth-token/getAuthToken";
 
 export const getRatings = (payload) => async (dispatch) => {
   try {
@@ -27,9 +28,18 @@ export const createRating = (payload) => async (dispatch) => {
   try {
     dispatch(ratingCreateRequest());
     const response = await axios.post(
-      `${BASE_URL}/${endpoints.rating.create}`, payload
+      `${BASE_URL}/${endpoints.rating.create}`, payload,      {
+        withCredentials: true,
+        headers: {
+          Authorization: `${getAuthToken()}`,
+        },
+      }
     );
     dispatch(ratingCreateSuccess(response?.data));
+    const getRatingsPayload = {
+      product_id: payload?.product_id
+    }
+    dispatch(getRatings(getRatingsPayload))
   } catch (err) {
     console.log("errerr", err)
     dispatch(ratingCreateFail(err?.response?.data));
