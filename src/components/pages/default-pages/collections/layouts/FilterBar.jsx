@@ -124,7 +124,7 @@ const FilterBar = ({ toggle, resBar }) => {
         setFilterSizes(formated_filter_size_array);
 
         const formated_filter_color_array =
-          filters_applied.target_color?.split(",") || [];
+          filters_applied.target_color_code?.split(",") || [];
         console.log(
           "formated_filter_color_array: ",
           formated_filter_color_array
@@ -137,7 +137,7 @@ const FilterBar = ({ toggle, resBar }) => {
         setFilterSizes(formated_filter_size_array);
 
         const formated_filter_color_array =
-          filters_applied.target_color?.split(",") || [];
+          filters_applied.target_color_code?.split(",") || [];
         console.log(
           "formated_filter_color_array: ",
           formated_filter_color_array
@@ -169,7 +169,7 @@ const FilterBar = ({ toggle, resBar }) => {
   useEffect(() => {
     if (filters_available) {
       const formated_array = filters_available?.map((data) => {
-        return data.target_color;
+        return data.target_color_code;
       });
 
       formated_array.sort((a, b) => a.localeCompare(b));

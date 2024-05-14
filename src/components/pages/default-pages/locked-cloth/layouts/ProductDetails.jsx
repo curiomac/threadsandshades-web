@@ -231,16 +231,16 @@ const ProductDetails = ({ productId }) => {
       }
       setTargetProductQuantity(1);
     }
-    console.log(
-      "Datat: ",
-      product?.verified_purchase_users?.some(
-        (verified_user) => verified_user.user_id === user._id
-      )
-    );
+    console.log("dddlogger", ratings?.reviews?.some(
+      (review_user) => review_user.user_id !== user._id
+    ));
     if (
       isAuthenticated &&
       product?.verified_purchase_users?.some(
         (verified_user) => verified_user.user_id === user._id
+      ) &&
+      !ratings?.reviews?.some(
+        (review_user) => review_user.user_id === user._id
       )
     ) {
       setRatingsModalOpen(true);

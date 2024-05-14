@@ -8,8 +8,11 @@ import {
   HOME_PAGE,
 } from "../../../helpers/route-paths/paths";
 import NotFound404 from "../../pages/error-pages/404NotFound";
+import { getQueryParam } from "../../../helpers/search-query-params/getQueryParams";
 
 const ProtectedRoute = ({ isMaxScreen, isAuth, role, children }) => {
+  
+  const cart_proceed = getQueryParam("proceed");
   const { isAuthenticated } = useSelector((state) => state.authState);
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -26,7 +29,10 @@ const ProtectedRoute = ({ isMaxScreen, isAuth, role, children }) => {
   if (isAuth && !isAuthenticated) {
     console.log("isAuthenticated: ", isAuthenticated);
     console.log("pathname: ", pathname);
-    if (
+    if(documentDimensions() < 849) {
+      return <Navigate to={`${CART_ITEMS_PAGE}?proceed=true&isAuth=false`} />;
+    }
+    else if (
       pathname === CART_ITEMS_PAGE ||
       pathname === CART_PAGE ||
       pathname === BILLING_ADDRESS_PAGE

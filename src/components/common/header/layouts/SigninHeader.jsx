@@ -14,6 +14,7 @@ import DialogModalAuth from "../../../plugins/dialog-modal-auth/DialogModalAuth"
 import { getQueryParam } from "../../../../helpers/search-query-params/getQueryParams";
 
 const SigninHeader = () => {
+  const {pathname} = useLocation()
   const isAuth = getQueryParam("isAuth");
   const location = useLocation();
   const navigate = useNavigate();
@@ -22,9 +23,18 @@ const SigninHeader = () => {
   const protectedPages = [USER_ACCOUNT_PAGE, USER_ACCOUNT_DETAILS_PAGE];
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [auth, setAuth] = useState("");
+  const documentDimensions = () => {
+    if (
+      window.innerWidth < 849
+    ) {
+      console.log("pathnamepathname: ", pathname);
+    }
+    return window.innerWidth;
+  };
+
+  window.addEventListener("resize", documentDimensions);
   const closeModal = () => {
-    console.log("Woking: ss");
-    navigate(`${location.pathname}?isAuth=null`);
+    navigate(`${location.pathname}?proceed=true&isAuth=null`);
     setIsModalOpen(false);
   };
   const isNotRestrictedPage = () => {

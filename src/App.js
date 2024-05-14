@@ -45,21 +45,9 @@ function App() {
     doc.style.setProperty("--doc-height", `${window.innerHeight}px`);
     doc.style.setProperty("--doc-width", `${window.innerWidth}px`);
   };
-  
+
   window.addEventListener("resize", documentDimensions);
   documentDimensions();
-
-  useEffect(() => {
-    const handleDevTools = (e) => {
-      if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
-        alert('Developer tools are not allowed!');
-      }
-    };
-    window.addEventListener('keydown', handleDevTools);
-    return () => {
-      window.removeEventListener('keydown', handleDevTools);
-    };
-  }, []);
 
   useEffect(() => {
     getThemeId();

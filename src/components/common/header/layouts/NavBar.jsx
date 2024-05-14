@@ -12,6 +12,8 @@ import {
   LOCKED_CLOTH_PAGE,
   CART_ITEMS_PAGE,
   USER_ACCOUNT_DETAILS_PAGE,
+  CART_PAGE,
+  BILLING_ADDRESS_PAGE,
 } from "../../../../helpers/route-paths/paths";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -26,7 +28,7 @@ import {
 import { getProducts } from "../../../../redux/actions/productsAction";
 import { BsCart, BsTwitterX } from "react-icons/bs";
 import SideDragger from "../../../plugins/cmac-plugins/side-dragger/SideDragger";
-import { IoCloseOutline } from "react-icons/io5";
+import { IoCloseOutline, IoClose } from "react-icons/io5";
 import { GrInstagram } from "react-icons/gr";
 import men_res_nav_img from "../../../../assets/imgs/store-room/men-res-nav-img.jpg";
 import women_res_nav_img from "../../../../assets/imgs/store-room/women-res-nav-img.jpg";
@@ -40,11 +42,18 @@ import { CiTrash } from "react-icons/ci";
 import AddCartBtn from "../../../utils/AddCartBtn";
 import SpinnerLoader from "../../../plugins/loaders/spinner-loader/SpinnerLoader";
 import { TiShoppingCart } from "react-icons/ti";
+import { getQueryParam } from "../../../../helpers/search-query-params/getQueryParams";
 
 const NavBar = () => {
+  const cart_active = getQueryParam("cart-active");
   const { theme } = useSelector((state) => state.themeState);
   const { pathname } = useLocation();
   const { cartCount } = useSelector((state) => state.cartState);
+  const {
+    checkoutDetails,
+    loading: checkoutDetailsLoading,
+    error: checkoutDetailsError,
+  } = useSelector((state) => state.checkoutDetailsState);
   const { isAuthenticated, user } = useSelector((state) => state.authState);
   const { wishListCount } = useSelector((state) => state.wishListState);
   const navigate = useNavigate();
@@ -67,6 +76,8 @@ const NavBar = () => {
     (state) => state.cartState
   );
   const [selectedWishListProductId, setSelectedWishListProductId] =
+    useState("");
+  const [selectedWishListRemoveProductId, setSelectedWishListRemoveProductId] =
     useState("");
   const [localStorageItems, setLocalStorageItems] = useState(() => {
     return JSON.parse(localStorage.getItem("cart-items")) || [];
@@ -132,14 +143,51 @@ const NavBar = () => {
       dispatch(getTemporaryWishList(payload));
     }
   };
-  const handleReMoveFromWishList = (product) => {
+  const handleReMoveFromWishList = (product, e) => {
+    e.stopPropagation();
+    setSelectedWishListRemoveProductId(product._id);
     console.log("product-data: ", product);
     const payload = {
       product_id: product._id,
       user_id: user?._id,
       is_from: "default",
     };
-    dispatch(moveWishList(payload));
+    if (isAuthenticated) {
+      dispatch(moveWishList(payload));
+    } else {
+      const local_wish_list_items =
+        JSON.parse(localStorage.getItem("wish-list-items")) || [];
+      const localStoragePayload = {
+        product_id: product?._id,
+      };
+      const product_found = local_wish_list_items.find(
+        (data) => data?.product_id === product?._id
+      );
+      if (!product_found) {
+        localStorage.setItem(
+          "wish-list-items",
+          JSON.stringify([...local_wish_list_items, localStoragePayload])
+        );
+        const payload = {
+          wish_list_details: [...local_wish_list_items, localStoragePayload],
+          isSingle: true,
+          targetProduct: product,
+        };
+        dispatch(getTemporaryWishList(payload));
+      } else {
+        const update_wishlist_products = local_wish_list_items.filter(
+          (data) => data?.product_id !== product?._id
+        );
+        localStorage.setItem(
+          "wish-list-items",
+          JSON.stringify([...update_wishlist_products])
+        );
+        const payload = {
+          wish_list_details: [...update_wishlist_products],
+        };
+        dispatch(getTemporaryWishList(payload));
+      }
+    }
   };
   const isCurrentPath = (path) => {
     if (path === pathname) {
@@ -166,6 +214,12 @@ const NavBar = () => {
     dispatch(getTemporaryWishList(payload));
   };
   const documentDimensions = () => {
+    if (
+      window.innerWidth < 849 &&
+      (pathname === CART_PAGE || pathname === CART_ITEMS_PAGE)
+    ) {
+      window.location.replace(`${HOME_PAGE}?cart-active=true`);
+    }
     return window.innerWidth;
   };
 
@@ -177,7 +231,9 @@ const NavBar = () => {
       user_id: user?._id,
       is_from: "cart",
     };
-    dispatch(moveWishList(payload));
+    if (isAuthenticated) {
+      dispatch(moveWishList(payload));
+    }
   };
   const handleRemoveCart = (cartItem) => {
     if (isAuthenticated) {
@@ -265,6 +321,13 @@ const NavBar = () => {
       }, 1000);
     }
   }, [inputText]);
+  useEffect(() => {
+    if (cart_active) {
+      setTimeout(() => {
+        setCartDraggerOpen(true);
+      }, 2000);
+    }
+  }, [cart_active]);
   return (
     <>
       <div
@@ -407,8 +470,8 @@ const NavBar = () => {
                 className="links-decoration-unset"
                 onClick={() => {
                   if (documentDimensions() < 849) {
-                    navigate(CART_ITEMS_PAGE);
-                    // setCartDraggerOpen(true);
+                    // navigate(CART_ITEMS_PAGE);
+                    setCartDraggerOpen(true);
                   } else {
                     navigate(CART_ITEMS_PAGE);
                     setCartDraggerOpen(false);
@@ -477,6 +540,27 @@ const NavBar = () => {
         className={"p-2 res-nav-dragger"}
       >
         <div className="res-navbar">
+          <div style={{ height: "10px" }}>
+            <div className="w-fill d-flex align-items-center justify-content-flex-end">
+              <div
+                onClick={() => setDraggerOpen(false)}
+                className="d-flex align-items-center justify-content-center"
+                style={{
+                  height: "30px",
+                  width: "30px",
+                  background: "#1c1c1c17",
+                  // border: "1px solid #fe2d5a2b",
+                  borderRadius: "50%",
+                  position: "relative",
+                  bottom: "8px",
+                  left: "8px",
+                  boxShadow: "0 0 5px 1px #00000030",
+                }}
+              >
+                <IoClose size={20} color="#565656" />
+              </div>
+            </div>
+          </div>
           <div className="nav-links">
             <div
               className="link-container"
@@ -877,9 +961,35 @@ const NavBar = () => {
                         </div>
                       </button>
                       <div className="trash-ic cursor-pointer">
+                        {wishListLoading &&
+                          selectedWishListRemoveProductId === wishList._id && (
+                            <div
+                              style={{
+                                width: "0",
+                                position: "relative",
+                                left: "14px",
+                              }}
+                            >
+                              <div className="_da56es" style={{ height: "0" }}>
+                                <Loader
+                                  type="spinner-cub"
+                                  bgColor={"#000"}
+                                  color={"#000"}
+                                  size={18}
+                                />
+                              </div>
+                            </div>
+                          )}
                         <CiTrash
                           size={28}
-                          onClick={() => handleReMoveFromWishList(wishList)}
+                          onClick={(e) => handleReMoveFromWishList(wishList, e)}
+                          style={{
+                            opacity:
+                              wishListLoading &&
+                              selectedWishListRemoveProductId === wishList._id
+                                ? "0.2"
+                                : "1",
+                          }}
                         />
                       </div>
                     </div>
@@ -892,7 +1002,12 @@ const NavBar = () => {
       </SideDragger>
       <SideDragger
         open={cartDraggerOpen}
-        onClose={() => setCartDraggerOpen(false)}
+        onClose={() => {
+          setCartDraggerOpen(false);
+          if (pathname === HOME_PAGE) {
+            navigate(HOME_PAGE);
+          }
+        }}
         dragPosition={"right"}
         className={"cart-dragger"}
         width={"500px"}
@@ -905,7 +1020,12 @@ const NavBar = () => {
             </div>
             <div>
               <IoCloseOutline
-                onClick={() => setCartDraggerOpen(false)}
+                onClick={() => {
+                  setCartDraggerOpen(false);
+                  if (pathname === HOME_PAGE) {
+                    navigate(HOME_PAGE);
+                  }
+                }}
                 size={30}
               />
             </div>
@@ -920,7 +1040,7 @@ const NavBar = () => {
                       index < cartItemsValue?.length - 1 ? "end" : ""
                     }`}
                   >
-                    <div className="d-flex align-items-center gap-4">
+                    <div className="d-flex align-items-center gap-4 w-fill">
                       <div
                         className="product-img cursor-pointer"
                         onClick={() =>
@@ -949,27 +1069,13 @@ const NavBar = () => {
                           {cartItem?.product?.product_title}
                         </div>
                         <div className="selected-product-features">
-                          <div className="d-flex align-items-center justify-content-space-between selected-product-features-res">
-                            <div className="d-flex align-items-center gap-3 mt-1 features">
-                              <div className="font-14 font-weight-1">
-                                {
-                                  cartItem?.selected_product_details
-                                    ?.selected_size
-                                }
-                              </div>
-                              <div className="custom-vr"></div>
-                              <div
-                                className="target-color"
-                                style={{
-                                  backgroundColor:
-                                    cartItem?.selected_product_details
-                                      ?.selected_color_code,
-                                }}
-                              ></div>
-                            </div>
+                          <div
+                            className="d-flex selected-product-features-res"
+                            style={{ gap: "30px" }}
+                          >
                             <div className="d-flex align-items-center gap-3 mt-1 price">
                               {/* res-vis */}
-                              <div className="product-price-details price-details-res-unset d-flex align-items-center gap-3">
+                              <div className="product-price-details">
                                 <div className="qty-container gap-3">
                                   <div
                                     className="event-ic cursor-pointer"
@@ -994,7 +1100,10 @@ const NavBar = () => {
                                     <FaPlus />
                                   </div>
                                 </div>
-                                <div className="d-flex align-items-center">
+                                <div
+                                  className="d-flex align-items-center"
+                                  style={{ marginTop: "5px" }}
+                                >
                                   <PiCurrencyInrBold />
                                   <div>
                                     {getCurrencyFormat(
@@ -1005,6 +1114,23 @@ const NavBar = () => {
                                   </div>
                                 </div>
                               </div>
+                            </div>
+                            <div className="d-flex gap-3 mt-1 features">
+                              <div className="font-14 font-weight-1">
+                                {
+                                  cartItem?.selected_product_details
+                                    ?.selected_size
+                                }
+                              </div>
+                              <div className="custom-vr"></div>
+                              <div
+                                className="target-color"
+                                style={{
+                                  backgroundColor:
+                                    cartItem?.selected_product_details
+                                      ?.selected_color_code,
+                                }}
+                              ></div>
                             </div>
                           </div>
                         </div>
@@ -1027,49 +1153,49 @@ const NavBar = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="product-price-details price-details-res-none">
-                      <div className="qty-container gap-3">
-                        <div
-                          className="event-ic cursor-pointer"
-                          onClick={() => {
-                            if (!cartLoading) {
-                              handleQty(cartItem?.product, "reduce");
-                            }
-                          }}
-                        >
-                          <FaMinus />
-                        </div>
-                        <div className="qty">
-                          {
-                            cartItem?.selected_product_details
-                              ?.selected_quantity
-                          }
-                        </div>
-                        <div
-                          className="event-ic cursor-pointer"
-                          onClick={() => {
-                            if (!cartLoading) {
-                              handleQty(cartItem?.product, "add");
-                            }
-                          }}
-                        >
-                          <FaPlus />
-                        </div>
-                      </div>
-                      <div className="d-flex align-items-center mt-3">
-                        <PiCurrencyInrBold />
-                        <div>
-                          {getCurrencyFormat(
-                            cartItem?.selected_product_details
-                              ?.selected_quantity *
-                              cartItem?.product?.fixed_price
-                          )}
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 );
               })}
+            </div>
+          </div>
+          <div style={{ padding: "20px" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <div className="font-weight-1">Subtotal</div>
+              <div
+                className="d-flex align-items-center font-weight-1"
+                style={{ marginTop: "5px" }}
+              >
+                <PiCurrencyInrBold fontWeight={600} />
+                <div>{getCurrencyFormat(checkoutDetails.cart_total)}</div>
+              </div>
+            </div>
+            <div>
+              <button
+                onClick={() => {
+                  setCartDraggerOpen(false);
+                  navigate(`${CART_ITEMS_PAGE}?proceed=true`);
+                }}
+                style={{
+                  background: "var(--primary-color)",
+                  height: "45px",
+                  width: "100%",
+                  outline: "none",
+                  border: "none",
+                  color: "#fff",
+                  borderRadius: "5px",
+                  marginTop: "10px",
+                  textTransform: "uppercase",
+                  fontWeight: "600",
+                }}
+              >
+                Proceed to checkout
+              </button>
             </div>
           </div>
         </div>

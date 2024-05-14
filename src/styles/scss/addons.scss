@@ -5,7 +5,8 @@
   .products-container {
     background-color: #99999915;
     border: 1px solid rgba(183, 183, 183, 0.125);
-    max-height: calc($height-cover - 300px);
+    max-height: calc($height-cover - 192px);
+    min-height: calc($height-cover - 192px);
     overflow: auto;
     .products {
       background-color: #fff;
@@ -40,8 +41,6 @@
           }
         }
         .product-info {
-          max-width: 250px;
-          min-width: 250px;
           .product-title {
             font-size: 12px;
             font-weight: 600;
@@ -76,7 +75,7 @@
             }
           }
           .cart-events {
-            margin-top: 20px;
+            margin-top: 10px;
             display: flex;
             align-items: center;
             font-size: 12px;

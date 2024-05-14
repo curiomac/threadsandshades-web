@@ -518,6 +518,11 @@ $items-card-width: 300px;
       .trash-ic {
         display: flex;
         align-items: center;
+        ._da56es {
+          .sl-spinner1 {
+            height: 0 !important;
+          }
+        }
       }
     }
   }

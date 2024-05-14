@@ -267,9 +267,9 @@ const DialogModalAuth = ({ isOpen, onClose, isAuth }) => {
                 <div className="w-fill d-flex align-items-center justify-content-center">
                   <div>
                     <div className="d-flex align-items-center justify-content-center">
-                      <MdEmail className="d-flex align-items-center justify-content-center font-size-4 default-color" />
+                      <MdEmail className="d-flex align-items-center justify-content-center font-size-4 primary-color" />
                     </div>
-                    <div className="otp-heading default-color">
+                    <div className="otp-heading ">
                       OTP sent to your mail
                     </div>
                   </div>
@@ -367,7 +367,7 @@ const DialogModalAuth = ({ isOpen, onClose, isAuth }) => {
                 </div>
                 <div className="external-link-sub-heading">
                   <div className="external-link-hr default-bg"></div>
-                  <div className="default-color">
+                  <div className="">
                     Or {isAuth} with Mobile no
                   </div>
                   <div className="external-link-hr default-bg"></div>

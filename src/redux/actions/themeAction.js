@@ -11,14 +11,7 @@ export const getTheme = () => async (dispatch) => {
   );
   try {
     const getThemeId = () => {
-      if (
-        localStorage.getItem("theme-id") !== undefined ||
-        localStorage.getItem("theme-id") !== "undefined"
-      ) {
-        return localStorage.getItem("theme-id");
-      } else {
-        return process.env.REACT_APP_DEFAULT_THEME_ID;
-      }
+      return process.env.REACT_APP_DEFAULT_THEME_ID;
     };
     dispatch(themeRequest());
     const response = await axios.get(
