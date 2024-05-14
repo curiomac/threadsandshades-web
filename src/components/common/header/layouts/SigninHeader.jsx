@@ -12,6 +12,7 @@ import {
 } from "../../../../helpers/route-paths/paths";
 import DialogModalAuth from "../../../plugins/dialog-modal-auth/DialogModalAuth";
 import { getQueryParam } from "../../../../helpers/search-query-params/getQueryParams";
+import CmacModal from "../../../plugins/cmac-plugins-ts/CmacModal";
 
 const SigninHeader = () => {
   const {pathname} = useLocation()
@@ -90,6 +91,9 @@ const SigninHeader = () => {
           onClose={closeModal}
           isAuth={auth}
         />
+        <CmacModal portalUsage={true} blurStrength="max">
+          Hello
+        </CmacModal>
       </div>
     );
   }

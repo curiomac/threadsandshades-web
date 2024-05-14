@@ -4,7 +4,6 @@ import { getQueryParam } from "../../../../../helpers/search-query-params/getQue
 import { proceedTrigger } from "../../../../../redux/slices/resCartSlice";
 import { getPostalAddress } from "../../../../../redux/actions/addressAction";
 import CustomDropdown from "../../../../plugins/custom-dropdown/CustomDropdown";
-import { postalAddressClear } from "../../../../../redux/slices/addressSlice";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { createOrder } from "../../../../../redux/actions/orderAction";
 import { ORDER_STATUS_PAGE } from "../../../../../helpers/route-paths/paths";

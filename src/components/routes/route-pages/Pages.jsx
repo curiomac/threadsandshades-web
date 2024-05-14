@@ -45,7 +45,7 @@ import ProfileInputs from "../../pages/protected-pages/profile/layouts/ProfileIn
 import ProtectedRoute from "../protected-routes/ProtectedRoute";
 import Order from "../../pages/protected-pages/order/Order";
 import OrderList from "../../pages/protected-pages/profile/layouts/OrderList";
-import TestCartPage from "../../pages/protected-pages/cart/layouts/NestedCartPage_T";
+import CartPage from "../../pages/protected-pages/cart/layouts/CartPage";
 import OrderAddress from "../../pages/protected-pages/profile/layouts/OrderAddress";
 import ProfileSettings from "../../pages/protected-pages/profile/layouts/ProfileSettings";
 import { clearCartMessage } from "../../../redux/slices/cartSlice";
@@ -97,12 +97,11 @@ const Pages = () => {
 
         {/* Protected Pages */}
         <Route path={CART_PAGE} element={<Cart />}>
-          {/* <Route path={CART_ITEMS_PAGE} element={<CartItems />} /> */}
           <Route
             path={CART_ITEMS_PAGE}
             element={
               <ProtectedRoute isMaxScreen>
-                <TestCartPage />
+                <CartPage />
               </ProtectedRoute>
             }
           />

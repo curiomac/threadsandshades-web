@@ -21,7 +21,7 @@ import { PiCurrencyInrBold } from "react-icons/pi";
 import { getCurrencyFormat } from "../../../../../helpers/currency-formatter/getCurrencyFormat";
 import { getProduct } from "../../../../../redux/actions/productAction";
 
-const TestCartPage = () => {
+const CartPage = () => {
   const productId = getQueryParam("product_id");
   const targetQty = getQueryParam("target_qty");
   const targetSize = getQueryParam("target_size");
@@ -395,4 +395,4 @@ const TestCartPage = () => {
   );
 };
 
-export default TestCartPage;
+export default CartPage;

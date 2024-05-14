@@ -17,15 +17,25 @@ import {
 } from "../../../../../helpers/route-paths/paths";
 import { BsBoxSeamFill } from "react-icons/bs";
 import { postalAddressClear } from "../../../../../redux/slices/addressSlice";
+import { FaPlus } from "react-icons/fa6";
+import { BsShieldLock } from "react-icons/bs";
+import { PhonePeIc } from "../../../../../assets/icons/PhonePeIc";
+import { PayPalIc } from "../../../../../assets/icons/PayPalIc";
+import SupportBanner from "../../../default-pages/home/layouts/SupportBanner";
+import { PiCurrencyInrBold } from "react-icons/pi";
+import { getCurrencyFormat } from "../../../../../helpers/currency-formatter/getCurrencyFormat";
+
 const CheckoutBox = ({ triggerPlaceOrder }) => {
   const navigate = useNavigate();
   const [couponValue, setCouponValue] = useState("");
   const [textCopied, setTextCopied] = useState(false);
   const [couponTriggered, setCouponTriggered] = useState(false);
+  const [checkoutDetailsValue, setCheckoutDetailsValue] = useState({});
+  const [deliveryNotesInput, setDeliveryNotesInput] = useState(false);
   const trigger = getQueryParam("proceed");
   const location = useLocation();
   const { proceed } = useSelector((state) => state.resCartState);
-  const { isAuthenticated } = useSelector((state) => state.authState);
+  const { isAuthenticated, user } = useSelector((state) => state.authState);
   const { cartItems, loading: cartItemsLoading } = useSelector(
     (state) => state.cartState
   );
@@ -50,7 +60,7 @@ const CheckoutBox = ({ triggerPlaceOrder }) => {
   const handleApplyCoupon = () => {
     dispatch(clearError());
     const payload = {
-      user_id: "65a7eef1a7e2b0eda9f545e8",
+      user_id: user?._id,
       coupon_code: couponValue,
     };
     setCouponTriggered(true);
@@ -65,6 +75,12 @@ const CheckoutBox = ({ triggerPlaceOrder }) => {
     dispatch(getCheckoutDetails(payload));
   };
   useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+  useEffect(() => {
     setCouponTriggered(false);
     const payload = {
       user_id: "65a7eef1a7e2b0eda9f545e8",
@@ -72,6 +88,10 @@ const CheckoutBox = ({ triggerPlaceOrder }) => {
     dispatch(proceedTrigger(trigger));
     dispatch(getCheckoutDetails(payload));
   }, [trigger]);
+  useEffect(() => {
+    setCheckoutDetailsValue(checkoutDetails);
+  }, [checkoutDetails]);
+  console.log("checkoutDetailsValue: ", checkoutDetailsValue);
   return (
     <div
       className={`checkout-box ${
@@ -80,198 +100,288 @@ const CheckoutBox = ({ triggerPlaceOrder }) => {
           : "hide-checkout-box"
       }`}
     >
-      {cartItems?.length > 0 ? (
-        <div>
-          <div className="offer-box">
-            <div className="offer-box-info">
-              <div className="offer-box-tab">
-                <div className="d-flex align-items-center justify-content-space-between mt-2 mb-2 cursor-pointer">
-                  <div className="d-flex align-items-center gap-2 coupons-heading">
-                    <div className="d-flex align-items-center">
-                      <BiSolidCoupon />
-                    </div>
-                    <div className="primary-font font-14">Apply Coupons</div>
-                  </div>
-                </div>
-                <div className="apply-coupons d-flex align-items-center justify-content-space-between">
-                  <div className="input w-fill">
-                    <input
-                      placeholder="Enter coupon code"
-                      value={couponValue}
-                      onChange={(e) =>
-                        setCouponValue(e.target.value.toLocaleUpperCase())
-                      }
-                    />
-                  </div>
-                  <div className="btn">
-                    <button
-                      className="cursor-pointer font-family-poppins"
-                      onClick={() => {
-                        if (couponValue) {
-                          handleApplyCoupon();
-                        }
-                      }}
-                      disabled={couponValue ? false : true}
-                    >
-                      {checkoutDetailsLoading && couponTriggered ? (
-                        <SpinnerLoader />
-                      ) : (
-                        "Apply"
-                      )}
-                    </button>
-                  </div>
-                </div>
-                {checkoutDetailsError && couponTriggered ? (
-                  <div className="h-0">
-                    <div
-                      className="font-10 font-eight-1"
-                      style={{ color: "red" }}
-                    >
-                      *{checkoutDetailsError}
-                    </div>
-                  </div>
-                ) : (
-                  ""
-                )}
-                <div className="custom-hr mt-2 mb-2"></div>
-                {checkoutDetails.coupon_applied === true ? (
-                  <div className="offer-container">
-                    <div className="offer-heading font-weight-1 primary-color">
-                      {checkoutDetails.coupon_code}{" "}
-                      <span
-                        className="font-10"
-                        style={{
-                          color: "gray",
-                        }}
-                      >
-                        applied!
-                      </span>
-                    </div>
-                    <div
-                      className="font-12 remove-btn"
-                      onClick={() => handleRemoveCoupon()}
-                    >
-                      {checkoutDetails.coupon_applied === true &&
-                      checkoutDetailsLoading &&
-                      !couponTriggered ? (
-                        <SpinnerLoader dark />
-                      ) : (
-                        "REMOVE"
-                      )}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="offer-container">
-                    <div className="offer-heading">
-                      Flat ₹500 off on orders above ₹1999 -
-                    </div>
-                    <CustomTooltip
-                      tip={textCopied ? "Code copied" : "Copy code"}
-                      width={"100px"}
-                    >
-                      <div
-                        className="coupon-code cursor-pointer"
-                        onClick={() => handleCopyToClipboard("SHADES500")}
-                      >
-                        SHADES500
+      <div className="checkout-box-container">
+        <div className="heading">
+          <div>Summary</div>
+          <div className="summary-custom-hr" />
+        </div>
+        {location.pathname === BILLING_ADDRESS_PAGE && (
+          <div className="checkout-cart-items">
+            {cartItems?.map((cartItem) => {
+              console.log("cartItem:", cartItem);
+              return (
+                <div className="checkout-cart-item">
+                  <div className="d-flex gap-3">
+                    <div className="img-box">
+                      <div className="item-qty-container">
+                        <div className="item-qty">
+                          {
+                            cartItem?.selected_product_details
+                              ?.selected_quantity
+                          }
+                        </div>
                       </div>
-                    </CustomTooltip>
-                  </div>
-                )}
-                <div className="custom-hr mt-2 mb-2"></div>
-                <div className="readme-quotes d-flex align-items-center gap-1">
-                  <div>Readme</div>
-                  <div className="d-flex align-items-center">
-                    <IoIosArrowForward />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="price-detail-box">
-            <div className="heading font-weight-1">PRICE DETAILS (1 items)</div>
-            <div className="custom-hr mt-2 mb-2"></div>
-            <div className="d-flex align-items-center justify-content-space-between mt-2 mb-2">
-              <div>Total MRP (Inc. of Taxes)</div>
-              <div>₹{checkoutDetails?.total_mrp}</div>
-            </div>
-            {checkoutDetails?.coupon_applied && (
-              <div className="d-flex align-items-center justify-content-space-between mt-2 mb-2">
-                <div>Coupon Applied</div>
-                <div>-₹{checkoutDetails?.coupon_discount}</div>
-              </div>
-            )}
-            <div className="d-flex align-items-center justify-content-space-between mt-2 mb-2">
-              <div className="d-flex align-items-center gap-2">
-                <div>Shipping</div>
-                {checkoutDetails?.discounted_delivery_charge === 0 && (
-                  <CustomTooltip
-                    tip={"Shipping is free for orders over ₹500!"}
-                    width={"160px"}
-                  >
-                    <div className="primary-color font-size-2-h d-flex align-items-center justify-content-center">
-                      <AiOutlineQuestionCircle />
+                      <img
+                        src={
+                          cartItem?.product?.product_images?.length > 0 &&
+                          cartItem?.product?.product_images[0]
+                        }
+                        alt={cartItem?.product?._id}
+                      />
                     </div>
-                  </CustomTooltip>
-                )}
-              </div>
-              <div className="d-flex align-items-center gap-1">
-                {checkoutDetails?.discounted_delivery_charge === 0 && (
-                  <div style={{ color: "#00d100" }}>(Free)</div>
-                )}
-                <div
-                  style={{
-                    textDecoration:
-                      checkoutDetails?.discounted_delivery_charge === 0
-                        ? "line-through"
-                        : "",
-                  }}
-                >
-                  ₹{checkoutDetails?.shipping_charge}
+                    <div className="item-info">
+                      <div className="item-title">
+                        {cartItem?.product?.product_title}
+                      </div>
+                      <div className="item-features">
+                        <div className="item-size">
+                          {cartItem?.selected_product_details?.selected_size}
+                        </div>
+                        <div className="custom-vr" />
+                        <div
+                          className="item-target-color"
+                          style={{
+                            background:
+                              cartItem?.selected_product_details
+                                ?.selected_color_code,
+                          }}
+                        ></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="d-flex align-items-center price">
+                    <div className="d-flex align-items-center">
+                      <PiCurrencyInrBold />
+                    </div>
+                    <div>
+                      {getCurrencyFormat(cartItem?.product?.fixed_price)}
+                    </div>
+                  </div>
                 </div>
+              );
+            })}
+            <div className="sec-custom-hr" />
+          </div>
+        )}
+        <div className="shipping-info">
+          <div className="d-flex align-items-center justify-content-space-between">
+            <div className="key">Product Total (2)</div>
+            <div className="value d-flex align-items-center">
+              <div className="d-flex align-items-center">
+                <PiCurrencyInrBold />
               </div>
-            </div>
-            <div className="d-flex align-items-center justify-content-space-between mt-2 mb-2">
-              <div>Cart Total</div>
-              <div>₹{checkoutDetails?.cart_total}</div>
+              <div>{getCurrencyFormat(checkoutDetailsValue?.total_mrp)}</div>
             </div>
           </div>
-          <div className="amount-box">
-            <div className="heading d-flex align-items-center justify-content-space-between">
-              <div>Total Amount</div>
-              <div>₹{checkoutDetails?.cart_total}</div>
-            </div>
-            <div className="custom-hr mt-2 mb-2"></div>
-            <button
-              className="checkout-button d-flex align-items-center gap-2 justify-content-center cursor-pointer"
-              onClick={() => {
-                  navigate(BILLING_ADDRESS_PAGE);
-                if (location.pathname === CART_ITEMS_PAGE) {
-                  dispatch(postalAddressClear());
-                }
-                if (location.pathname === BILLING_ADDRESS_PAGE) {
-                  triggerPlaceOrder(true);
-                }
-              }}
-            >
+          <div className="d-flex align-items-center justify-content-space-between mt-1">
+            <div className="key">Shipping To</div>
+            <div className="value">India</div>
+          </div>
+          <div className="sec-custom-hr" />
+        </div>
+        <div className="price-info">
+          <div className="d-flex align-items-center justify-content-space-between mt-1">
+            <div className="key">Delivery Charges</div>
+            <div className="value d-flex align-items-center">
+              <div className="d-flex align-items-center">
+                <PiCurrencyInrBold />
+              </div>
               <div>
-                {location.pathname === BILLING_ADDRESS_PAGE ? (
-                  <BsBoxSeamFill className="font-size-3 d-flex align-items-center" />
-                ) : (
-                  <MdShoppingCartCheckout className="font-size-3 d-flex align-items-center" />
+                {getCurrencyFormat(
+                  checkoutDetailsValue?.discounted_delivery_charge
                 )}
               </div>
-              <div>
-                {location.pathname === BILLING_ADDRESS_PAGE
-                  ? "PLACE ORDER"
-                  : "CHECKOUT"}
+            </div>
+          </div>
+          <div className="d-flex align-items-center justify-content-space-between mt-1">
+            <div className="key">GST 18%</div>
+            <div className="value d-flex align-items-center">
+              <div className="d-flex align-items-center">
+                <PiCurrencyInrBold />
               </div>
-            </button>
+              <div>
+                {getCurrencyFormat(
+                  (18 / 100) * checkoutDetailsValue?.cart_total
+                )}
+              </div>
+            </div>
+          </div>
+          <div className="d-flex align-items-center justify-content-space-between mt-1">
+            <div className="key">
+              Coupon Applied(
+              {getCurrencyFormat(checkoutDetailsValue?.coupon_discount)})
+            </div>
+            <div className="value d-flex align-items-center">
+              <div className="d-flex align-items-center">
+                - <PiCurrencyInrBold />
+              </div>
+              <div>
+                {getCurrencyFormat(checkoutDetailsValue?.coupon_discount)}
+              </div>
+            </div>
+          </div>
+          {/* <div className="d-flex align-items-center justify-content-space-between mt-1">
+            <div className="key">Total</div>
+            <div className="value d-flex align-items-center">
+              <div className="d-flex align-items-center">
+                <PiCurrencyInrBold />
+              </div>
+              <div>{checkoutDetailsValue?.cart_total +
+                  (18 / 100) * checkoutDetailsValue?.cart_total}.00</div>
+            </div>
+          </div> */}
+          <div className="sec-custom-hr" />
+        </div>
+        <div className="order-total">
+          <div className="d-flex align-items-center justify-content-space-between mt-1">
+            <div className="key">Order Total</div>
+            <div className="value d-flex align-items-center">
+              <div className="d-flex align-items-center">
+                <PiCurrencyInrBold />
+              </div>
+              {/* <div>{checkoutDetailsValue?.total_mrp}.00</div> */}
+              <div>
+                {getCurrencyFormat(
+                  checkoutDetailsValue?.cart_total +
+                    (18 / 100) * checkoutDetailsValue?.cart_total
+                )}
+              </div>
+            </div>
           </div>
         </div>
-      ) : (
-        <div className="checkout-empty"></div>
-      )}
+        {location.pathname === CART_ITEMS_PAGE && (
+          <div>
+            <div className="delivery-notes">
+              {deliveryNotesInput ? (
+                <div>
+                  <textarea />
+                </div>
+              ) : (
+                <div
+                  className="d-flex align-items-center gap-2"
+                  onClick={() => setDeliveryNotesInput(true)}
+                >
+                  <div className="d-flex align-items-center plus-ic">
+                    <FaPlus />
+                  </div>
+                  <div>Click here to add delivery notes</div>
+                </div>
+              )}
+            </div>
+            <div className="apply-coupon">
+              <div className="d-flex align-items-center gap-1">
+                <div className="d-flex align-items-center">
+                  <BiSolidCoupon className="coupon-ic" />
+                </div>
+                <div>Apply Coupon</div>
+              </div>
+              <div className="d-flex align-items-center justify-content-space-between gap-2 mt-1">
+                <div className="input-container w-fill">
+                  <input
+                    placeholder="Enter coupon code"
+                    value={couponValue}
+                    onChange={(e) =>
+                      setCouponValue(e.target.value.toLocaleUpperCase())
+                    }
+                  />
+                </div>
+                <div className="btn">
+                  <button
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                    className="cursor-pointer font-family-poppins"
+                    onClick={() => {
+                      if (couponValue) {
+                        handleApplyCoupon();
+                      }
+                    }}
+                    disabled={
+                      !couponValue ||
+                      (checkoutDetailsLoading && couponTriggered)
+                        ? true
+                        : false
+                    }
+                  >
+                    {checkoutDetailsLoading && couponTriggered ? (
+                      <SpinnerLoader />
+                    ) : (
+                      "Apply"
+                    )}
+                  </button>
+                </div>
+              </div>
+              {checkoutDetailsError && couponTriggered ? (
+                <div className="h-0">
+                  <div
+                    className="font-10 font-eight-1"
+                    style={{ color: "red" }}
+                  >
+                    *{checkoutDetailsError}
+                  </div>
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
+          </div>
+        )}
+        <div className="checkout-button">
+          <button
+            className="d-flex align-items-center gap-2 justify-content-center cursor-pointer"
+            onClick={() => {
+              navigate(BILLING_ADDRESS_PAGE);
+              if (location.pathname === CART_ITEMS_PAGE) {
+                dispatch(postalAddressClear());
+              }
+              if (location.pathname === BILLING_ADDRESS_PAGE) {
+                triggerPlaceOrder(true);
+              }
+            }}
+          >
+            <div>
+              {location.pathname === BILLING_ADDRESS_PAGE ? (
+                <BsBoxSeamFill className="font-size-3 d-flex align-items-center" />
+              ) : (
+                <MdShoppingCartCheckout className="font-size-3 d-flex align-items-center" />
+              )}
+            </div>
+            <div>
+              {location.pathname === BILLING_ADDRESS_PAGE
+                ? "PLACE ORDER"
+                : "CHECKOUT"}
+            </div>
+          </button>
+          <div className="payment-secure">
+            <div className="d-flex align-items-center gap-2">
+              <div className="d-flex align-items-center">
+                <BsShieldLock className="lock-ic" />
+              </div>
+              <div>Payment are processed securely</div>
+            </div>
+          </div>
+          <div className="sec-end-custom-hr" />
+        </div>
+        <div className="pay-using">
+          <div>Pay Using</div>
+          <div className="d-flex align-items-center gap-4">
+            <div className="method">
+              <PhonePeIc height={40} width={60} />
+            </div>
+            <div className="method">
+              <PayPalIc height={40} width={60} />
+            </div>
+          </div>
+        </div>
+        <div className="support-banner-container">
+          <div className="bg">
+            <div className="heading">Efficient shipping made easy</div>
+            <SupportBanner />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
