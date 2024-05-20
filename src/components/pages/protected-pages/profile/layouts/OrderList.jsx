@@ -8,6 +8,7 @@ import {
   LOCKED_CLOTH_PAGE,
   ORDER_STATUS_PAGE,
 } from "../../../../../helpers/route-paths/paths";
+import { getCurrencyFormat } from "../../../../../helpers/currency-formatter/getCurrencyFormat";
 
 const OrderList = () => {
   const dispatch = useDispatch();
@@ -35,9 +36,9 @@ const OrderList = () => {
   const { orders } = useSelector((state) => state.orderState);
   const { user } = useSelector((state) => state.authState);
   useEffect(() => {
-    const payload= {
-      user_id: user?._id
-    }
+    const payload = {
+      user_id: user?._id,
+    };
     dispatch(getOrders(payload));
   }, []);
   useEffect(() => {
@@ -95,8 +96,12 @@ const OrderList = () => {
                     {order?.order_items?.map((order_item, index) => {
                       console.log("order_item", order_item);
                       return (
-                        <div className={`order-item ${index < order?.order_items?.length - 1 ? '' : 'end'}`}>
-                          <div className="d-flex gap-3">
+                        <div
+                          className={`order-item ${
+                            index < order?.order_items?.length - 1 ? "" : "end"
+                          }`}
+                        >
+                          <div className="d-flex gap-3 w-fill">
                             <div
                               className="product-img cursor-pointer"
                               onClick={() =>
@@ -113,7 +118,13 @@ const OrderList = () => {
                                 alt="image_1"
                               />
                             </div>
-                            <div className="product-info cursor-pointer">
+                            <div className="product-info cursor-pointer w-fill">
+                              <div
+                                className="font-size-1-h font-weight-1"
+                                style={{ color: "gray" }}
+                              >
+                                {order_item?.product_type}Hoody {order_item?.product_type}Men
+                              </div>
                               <div
                                 className="product-title"
                                 onClick={() =>
@@ -123,6 +134,29 @@ const OrderList = () => {
                                 }
                               >
                                 {order_item?.product_title}
+                              </div>
+                              <div className="d-flex justify-content-flex-end w-fill gap-3 product-price-details mt-2 mb-2">
+                                <div className="d-flex align-items-center gap-2 product-price-qty">
+                                  <div>{order_item?.selected_quantity}</div>
+                                  <RxCross2 />
+                                  <div className="d-flex align-items-center">
+                                    <PiCurrencyInrBold />
+                                    <div>
+                                      {getCurrencyFormat(
+                                        order_item?.fixed_price
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="d-flex align-items-center price">
+                                  <PiCurrencyInrBold />
+                                  <div>
+                                    {getCurrencyFormat(
+                                      order_item?.selected_quantity *
+                                        order_item?.fixed_price
+                                    )}
+                                  </div>
+                                </div>
                               </div>
                               <div className="selected-product-features">
                                 <div className="d-flex align-items-center gap-3">
@@ -138,40 +172,6 @@ const OrderList = () => {
                                     }}
                                   ></div>
                                 </div>
-                              </div>
-                              <div className="d-flex gap-3 product-price-details res-849px-d-flex mt-2">
-                                <div className="d-flex align-items-center gap-2 product-price-qty">
-                                  <div>{order_item?.selected_quantity}</div>
-                                  <RxCross2 />
-                                  <div className="d-flex align-items-center">
-                                    <PiCurrencyInrBold />
-                                    <div>{order_item?.fixed_price}</div>
-                                  </div>
-                                </div>
-                                <div className="d-flex align-items-center price">
-                                  <PiCurrencyInrBold />
-                                  <div>
-                                    {order_item?.selected_quantity *
-                                      order_item?.fixed_price}
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="d-flex gap-3 product-price-details res-849px-d-none">
-                            <div className="d-flex align-items-center gap-2 product-price-qty">
-                              <div>{order_item?.selected_quantity}</div>
-                              <RxCross2 />
-                              <div className="d-flex align-items-center">
-                                <PiCurrencyInrBold />
-                                <div>{order_item?.fixed_price}</div>
-                              </div>
-                            </div>
-                            <div className="d-flex align-items-center">
-                              <PiCurrencyInrBold />
-                              <div>
-                                {order_item?.selected_quantity *
-                                  order_item?.fixed_price}
                               </div>
                             </div>
                           </div>

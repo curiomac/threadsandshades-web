@@ -1,7 +1,7 @@
 @import "_values";
 
 .cart-dragger {
-    letter-spacing: 1px;
+  letter-spacing: 1px;
   .products-container {
     background-color: #99999915;
     border: 1px solid rgba(183, 183, 183, 0.125);
@@ -110,6 +110,53 @@
           }
         }
       }
+    }
+  }
+}
+
+/* Authentication */
+
+.auth-modal {
+  height: 380px !important;
+  width: 550px !important;
+  background-color: #ffffffc2 !important;
+  background: linear-gradient(to left, #fe2d5a65, #feb6017f);
+  border-radius: 10px !important;
+  overflow: hidden;
+  box-shadow: 0 0 25px 1px #fe2d5a24 !important;
+  .modal-overlay {
+    height: 380px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: margin-top ease 0.5s;
+  }
+}
+
+.number-input {
+  input {
+    width: 90% !important;
+  }
+}
+.auth-btn {
+  height: 45px;
+  width: 90% !important;
+}
+@media screen and (max-width: 568px) {
+  .auth-modal {
+    width: calc(100% - 20px ) !important;
+    margin: 10px;
+    .otp-input {
+      height: 30px !important;
+      width: 30px !important;
+    }
+  }
+}
+@media screen and (min-width: 568px) {
+  .auth-modal {
+    .otp-input {
+      height: 40px !important;
+      width: 40px !important;
     }
   }
 }

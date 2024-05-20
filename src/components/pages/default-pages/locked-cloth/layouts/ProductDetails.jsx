@@ -48,6 +48,9 @@ const ProductDetails = ({ productId }) => {
     products_group,
     loading: productLoading,
   } = useSelector((state) => state.productState);
+  const {
+    similar_products,
+  } = useSelector((state) => state.similarProductsState);
   const { products } = useSelector((state) => state.productsState);
   const { cartItems, loading: cartLoading } = useSelector(
     (state) => state.cartState
@@ -654,6 +657,10 @@ const ProductDetails = ({ productId }) => {
               <SliderProducts
                 title={"Recently Viewed"}
                 products={localStorageRecentProducts}
+              />
+              <SliderProducts
+                title={"Similar Products"}
+                products={similar_products}
               />
               <SliderProducts title={"Top Products"} products={products} />
               {console.log(

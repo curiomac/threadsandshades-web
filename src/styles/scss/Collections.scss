@@ -312,7 +312,8 @@
   background: #fff;
   border-radius: 5px;
   width: 450px;
-  box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.349);
+  box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.099);
+  border: 1px solid #00000029;
   .auth-btn {
     height: 35px;
     width: 71%;
@@ -328,8 +329,9 @@
     width: 100%;
     letter-spacing: 1px;
     .auth-heading {
-      text-transform: uppercase;
+      // text-transform: uppercase;
       color: #545454;
+      margin-top: 15px;
     }
     .number-input {
       height: 30px;
@@ -337,7 +339,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-top: 20px;
+      margin-top: 15px;
       input {
         height: 35px;
         width: 70%;
@@ -382,7 +384,7 @@
     .external-link-sub-heading {
       font-size: 14px;
       text-align: center;
-      text-transform: uppercase;
+      // text-transform: uppercase;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -408,7 +410,7 @@
         font-size: 14px;
         font-weight: 1px;
         background-color: transparent;
-        text-transform: uppercase;
+        // text-transform: uppercase;
         letter-spacing: 1px;
         color: #000000;
       }
@@ -417,27 +419,23 @@
       font-size: 16px;
       text-transform: uppercase;
       font-weight: 600;
-      margin-top: 10px;
-      margin-bottom: 30px;
     }
     .otp-input {
-      height: 40px;
-      width: 40px !important;
-      border: 1px solid #00000047;
+      border: 1px solid #0000002c;
       outline: none;
-      box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.286);
+      box-shadow: 0 0 10px 1px #00000017;
       font-weight: 600;
     }
     .resend-otp-button {
       font-size: 12px;
-      color: #fff;
+      color: $primary-color;
       display: flex;
       justify-content: flex-start;
     }
     .otp-expiry-time {
       width: 112px;
       font-size: 12px;
-      color: $default-color;
+      color: $primary-color;
     }
     .close-icon-container {
       height: 0;

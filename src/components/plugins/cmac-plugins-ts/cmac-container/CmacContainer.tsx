@@ -1,10 +1,13 @@
-import { ReactNode, useEffect } from "react";
+import { MouseEventHandler, ReactNode, useEffect } from "react";
 import "../cmac.plugins.epsilon.styles.css";
 import { BlurProperties } from "../interfaces/types";
 interface CommonProps {
+  active?: boolean;
   blurStrength?: BlurProperties;
   portalUsage?: boolean;
   children?: ReactNode;
+  onClickOutsider?: MouseEventHandler<HTMLDivElement>;
+  onClickInsider?: MouseEventHandler<HTMLDivElement>;
 }
 const blurValues = [
   {
@@ -32,8 +35,10 @@ const CmacContainer = ({
   blurStrength,
   portalUsage,
   children,
+  onClickOutsider,
+  active,
 }: CommonProps) => {
-  console.log("blurStrength: ", blurStrength);
+  console.log("blurStrength: ", active);
 
   const getBlurValue = () => {
     const doc = document.documentElement;
@@ -58,7 +63,7 @@ const CmacContainer = ({
   const updateRootClass = () => {
     const overlayElement = document.querySelector("._e5cb1322");
     let root = document.querySelector("#root");
-    if (overlayElement) {
+    if (overlayElement && active) {
       root?.classList.add("_70ae9520");
     } else {
       root?.classList.remove("_70ae9520");
@@ -70,12 +75,16 @@ const CmacContainer = ({
   useEffect(() => {
     updateRootClass();
     getBlurValue();
-  }, [portalUsage]);
-  return (
-    <div className={`_e69aca0a ${portalUsage ? "_e5cb1322" : "__"}`}>
-      {children}
-    </div>
-  );
+  }, [portalUsage, active]);
+  if (active)
+    return (
+      <div
+        className={`_e69aca0a ${portalUsage && active ? "_e5cb1322" : "__"}`}
+        onClick={onClickOutsider}
+      >
+        {children}
+      </div>
+    );
 };
 
 export default CmacContainer;

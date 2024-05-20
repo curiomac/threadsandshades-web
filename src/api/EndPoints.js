@@ -27,6 +27,9 @@ export const endpoints = {
   product: {
     get: "product",
   },
+  similar_products: {
+    get: "similar/products",
+  },
   cart: {
     get: "cart",
     temp_get: "temp/cart",

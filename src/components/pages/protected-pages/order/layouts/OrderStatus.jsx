@@ -12,6 +12,7 @@ import { RxCross2 } from "react-icons/rx";
 import { PiCurrencyInrBold } from "react-icons/pi";
 import { useNavigate } from "react-router-dom";
 import { LOCKED_CLOTH_PAGE } from "../../../../../helpers/route-paths/paths";
+import { getCurrencyFormat } from "../../../../../helpers/currency-formatter/getCurrencyFormat";
 
 const OrderStatus = () => {
   const dispatch = useDispatch();
@@ -161,9 +162,7 @@ const OrderStatus = () => {
               </div>
             </div>
             <div
-              className={`status-bar ${getOrderStatus(
-                "i-t"
-              )} in-progress 
+              className={`status-bar ${getOrderStatus("i-t")} in-progress 
               `}
             ></div>
             <div className="status ">
@@ -178,9 +177,7 @@ const OrderStatus = () => {
               <div className="font-12 mt-1 text-align-center">N/A</div>
             </div>
             <div
-              className={`status-bar ${getOrderStatus(
-                "o-f-d"
-              )} in-progress 
+              className={`status-bar ${getOrderStatus("o-f-d")} in-progress 
               `}
             ></div>
             <div className="status ">
@@ -209,18 +206,24 @@ const OrderStatus = () => {
               <div className="p-3 d-flex align-items-center justify-content-space-between res-682px-d-block">
                 <div>
                   <div className="d-flex align-items-center gap-2">
-                    <div className="font-14 res-font font-weight-1">Date Orderd:</div>
+                    <div className="font-14 res-font font-weight-1">
+                      Date Orderd:
+                    </div>
                     <div className="font-14 res-font">
                       {moment(orderResponse?.createdAt).format("MMM DD, YYYY")}
                     </div>
                   </div>
                   <div className="d-flex align-items-center gap-2">
-                    <div className="font-14 res-font font-weight-1">Order Id:</div>
+                    <div className="font-14 res-font font-weight-1">
+                      Order Id:
+                    </div>
                     <div className="font-14 res-font">{orderResponse?._id}</div>
                   </div>
                 </div>
                 <div>
-                  <button className="print-inv-btn res-font">Print Invoice</button>
+                  <button className="print-inv-btn res-font">
+                    Print Invoice
+                  </button>
                 </div>
               </div>
             </div>
@@ -241,17 +244,15 @@ const OrderStatus = () => {
                     </div>
                   </div>
                 </div>
-                <div className="mt-4 order-details-container">
+                <div className="mt-4 order-items-content">
                   {orderResponse?.order_items?.map((order_item, index) => {
                     return (
                       <div
                         className={`order-item ${
-                          index < orderResponse?.order_items?.length - 1
-                            ? "end"
-                            : ""
+                          index < order?.order_items?.length - 1 ? "" : "end"
                         }`}
                       >
-                        <div className="d-flex gap-3">
+                        <div className="d-flex gap-3 w-fill">
                           <div
                             className="product-img cursor-pointer"
                             onClick={() =>
@@ -268,9 +269,16 @@ const OrderStatus = () => {
                               alt="image_1"
                             />
                           </div>
-                          <div className="product-info">
+                          <div className="product-info cursor-pointer w-fill">
                             <div
-                              className="product-title cursor-pointer"
+                              className="font-size-1-h font-weight-1"
+                              style={{ color: "gray" }}
+                            >
+                              {order_item?.product_type}Hoody{" "}
+                              {order_item?.product_type}Men
+                            </div>
+                            <div
+                              className="product-title"
                               onClick={() =>
                                 navigate(
                                   `${LOCKED_CLOTH_PAGE}?type=men&product_id=${order_item?.product_id}`
@@ -278,6 +286,27 @@ const OrderStatus = () => {
                               }
                             >
                               {order_item?.product_title}
+                            </div>
+                            <div className="d-flex justify-content-flex-end w-fill gap-3 product-price-details mt-2 mb-2">
+                              <div className="d-flex align-items-center gap-2 product-price-qty">
+                                <div>{order_item?.selected_quantity}</div>
+                                <RxCross2 />
+                                <div className="d-flex align-items-center">
+                                  <PiCurrencyInrBold />
+                                  <div>
+                                    {getCurrencyFormat(order_item?.fixed_price)}
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="d-flex align-items-center price">
+                                <PiCurrencyInrBold />
+                                <div>
+                                  {getCurrencyFormat(
+                                    order_item?.selected_quantity *
+                                      order_item?.fixed_price
+                                  )}
+                                </div>
+                              </div>
                             </div>
                             <div className="selected-product-features">
                               <div className="d-flex align-items-center gap-3">
@@ -293,40 +322,6 @@ const OrderStatus = () => {
                                   }}
                                 ></div>
                               </div>
-                            </div>
-                            <div className="d-flex gap-3 product-price-details res-849px-d-flex mt-2">
-                                <div className="d-flex align-items-center gap-2 product-price-qty">
-                                  <div>{order_item?.selected_quantity}</div>
-                                  <RxCross2 />
-                                  <div className="d-flex align-items-center">
-                                    <PiCurrencyInrBold />
-                                    <div>{order_item?.fixed_price}</div>
-                                  </div>
-                                </div>
-                                <div className="d-flex align-items-center price">
-                                  <PiCurrencyInrBold />
-                                  <div>
-                                    {order_item?.selected_quantity *
-                                      order_item?.fixed_price}
-                                  </div>
-                                </div>
-                              </div>
-                          </div>
-                        </div>
-                        <div className="d-flex gap-3 product-price-details res-849px-d-none">
-                          <div className="d-flex align-items-center gap-2 product-price-qty">
-                            <div>{order_item?.selected_quantity}</div>
-                            <RxCross2 />
-                            <div className="d-flex align-items-center">
-                              <PiCurrencyInrBold />
-                              <div>{order_item?.fixed_price}</div>
-                            </div>
-                          </div>
-                          <div className="d-flex align-items-center">
-                            <PiCurrencyInrBold />
-                            <div>
-                              {order_item?.selected_quantity *
-                                order_item?.fixed_price}
                             </div>
                           </div>
                         </div>
@@ -346,7 +341,11 @@ const OrderStatus = () => {
                     <div className="font-14">Subtotal</div>
                     <div className="d-flex align-items-center font-14">
                       <PiCurrencyInrBold />
-                      <div>{orderResponse?.order_summary?.total_mrp}</div>
+                      <div>
+                        {getCurrencyFormat(
+                          orderResponse?.order_summary?.total_mrp
+                        )}
+                      </div>
                     </div>
                   </div>
                   <div className="d-flex align-items-center justify-content-space-between mt-2">
@@ -355,14 +354,21 @@ const OrderStatus = () => {
                   </div>
                   <div className="d-flex align-items-center justify-content-space-between mt-2">
                     <div className="font-14">Sale Tax</div>
-                    <div className="font-14">₹0</div>
+                    <div className="d-flex align-items-center font-14">
+                      <PiCurrencyInrBold />
+                      <div>{getCurrencyFormat(0)}</div>
+                    </div>
                   </div>
                   <div className="custom-hr mt-2"></div>
                   <div className="d-flex align-items-center justify-content-space-between mt-2">
                     <div className="font-14 font-weight-1">Total</div>
                     <div className="d-flex align-items-center font-14">
                       <PiCurrencyInrBold />
-                      <div>{orderResponse?.order_summary?.cart_total}</div>
+                      <div>
+                        {getCurrencyFormat(
+                          orderResponse?.order_summary?.cart_total
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>

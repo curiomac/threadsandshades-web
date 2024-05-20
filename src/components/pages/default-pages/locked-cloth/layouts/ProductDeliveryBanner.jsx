@@ -52,7 +52,7 @@ const ProductDeliveryBanner = () => {
                 }}/>
               </div>
               <div className="card-content">
-                <div className="title">Delivery Time</div>
+                <div className="title">On Time Delivery</div>
                 <div className="quote">6 - 12 Working Days</div>
               </div>
             </div>

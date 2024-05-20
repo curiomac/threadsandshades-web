@@ -20,7 +20,7 @@ const productSlice = createSlice({
                 ...state,
                 loading: false,
                 product: action.payload.product,
-                products_group: action.payload.products_group
+                products_group: action.payload.products_group,
             }
         },
         productFail(state, action){

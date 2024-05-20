@@ -27,12 +27,17 @@ const CmacModal = (props: CommonProps) => {
     blurStrength,
     children,
   } = props;
+  // const getStyleProperties = () => {
+
+  // }
+  console.log("active: ", active);
+  
   return (
     <PortalContainer>
-      <CmacContainer portalUsage={portalUsage} blurStrength={blurStrength}>
+      <CmacContainer active={active} portalUsage={portalUsage} blurStrength={blurStrength} 
+          onClickOutsider={(e) => onClickOutsider && onClickOutsider(e)}>
         <div
           className={`${active ? "_8a797022" : "_a542512b"}`}
-          onClick={(e) => onClickOutsider && onClickOutsider(e)}
         >
           <div
             style={{ ...style }}

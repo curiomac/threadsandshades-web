@@ -6,6 +6,7 @@ import otpReducer from "../slices/otpSlice";
 import themeReducer from "../slices/themeSlice";
 import ratingsReducer from "../slices/ratingsSlice";
 import productsReducer from "../slices/productsSlice";
+import similarProductsReducer from "../slices/similarProductsSlice";
 import productReducer from "../slices/productSlice";
 import cartReducer from "../slices/cartSlice";
 import checkoutDetailsReducer from "../slices/checkoutDetailsSlice";
@@ -21,6 +22,7 @@ const reducer = combineReducers({
   themeState: themeReducer,
   ratingsState: ratingsReducer,
   productsState: productsReducer,
+  similarProductsState: similarProductsReducer,
   productState: productReducer,
   cartState: cartReducer,
   checkoutDetailsState: checkoutDetailsReducer,
