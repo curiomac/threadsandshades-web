@@ -83,7 +83,6 @@ const ProductReviews = ({ ratings }) => {
           </div>
         );
       })}
-      {console.log("ratings?.reviews?.length: ", ratings?.reviews?.length)}
       {(ratings?.reviews?.length === undefined ||
         ratings?.reviews?.length === 0) && (
         <div

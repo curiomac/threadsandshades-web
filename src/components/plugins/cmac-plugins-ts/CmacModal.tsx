@@ -30,7 +30,6 @@ const CmacModal = (props: CommonProps) => {
   // const getStyleProperties = () => {
 
   // }
-  console.log("active: ", active);
   
   return (
     <PortalContainer>

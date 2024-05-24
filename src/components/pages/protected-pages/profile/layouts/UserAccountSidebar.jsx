@@ -43,7 +43,6 @@ const UserAccountSidebar = ({ handleSidebarOpenParams, sidebarOpenParams }) => {
   useEffect(() => {
     if (user_image) {
       setProfileImage(user_image);
-      console.log("user_image:: ", user_image);
     }
   }, [user_image]);
   useEffect(() => {

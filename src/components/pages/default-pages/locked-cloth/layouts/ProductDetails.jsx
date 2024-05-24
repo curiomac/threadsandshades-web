@@ -39,6 +39,7 @@ import ProductDeliveryBanner from "./ProductDeliveryBanner";
 import SliderProducts from "./SliderProducts";
 import ProductReviews from "./ProductReviews";
 import DomRender from "../../../../plugins/cmac-plugins/dom-render/DomRender";
+import ReactImageMagnify from "react-image-magnify";
 const ProductDetails = ({ productId }) => {
   const productType = getQueryParam("type");
   const dispatch = useDispatch();
@@ -48,9 +49,9 @@ const ProductDetails = ({ productId }) => {
     products_group,
     loading: productLoading,
   } = useSelector((state) => state.productState);
-  const {
-    similar_products,
-  } = useSelector((state) => state.similarProductsState);
+  const { similar_products } = useSelector(
+    (state) => state.similarProductsState
+  );
   const { products } = useSelector((state) => state.productsState);
   const { cartItems, loading: cartLoading } = useSelector(
     (state) => state.cartState
@@ -58,6 +59,7 @@ const ProductDetails = ({ productId }) => {
   const { isAuthenticated, user } = useSelector((state) => state.authState);
   const {
     ratings,
+    ratingsLoading,
     status,
     message,
     loading: ratingLoading,
@@ -209,7 +211,6 @@ const ProductDetails = ({ productId }) => {
       product_recommend: productRecommend ? "YES" : "NO",
     };
     setToastMsg(true);
-    console.log("payload,ds", payload);
     if (!toastMsg) {
       dispatch(createRating(payload));
     }
@@ -234,21 +235,28 @@ const ProductDetails = ({ productId }) => {
       }
       setTargetProductQuantity(1);
     }
-    console.log("dddlogger", ratings?.reviews?.some(
-      (review_user) => review_user.user_id !== user._id
-    ));
+  }, [product, products_group]);
+  useEffect(() => {
+    console.log(
+      "[log--][241]: ",
+      !ratingsLoading,
+      isAuthenticated,
+      product?.verified_purchase_users?.some(
+        (verified_user) => verified_user.user_id === user._id
+      ),
+      !ratings?.reviews?.some((review_user) => review_user.user_id === user._id)
+    );
     if (
+      !ratingsLoading &&
       isAuthenticated &&
       product?.verified_purchase_users?.some(
         (verified_user) => verified_user.user_id === user._id
       ) &&
-      !ratings?.reviews?.some(
-        (review_user) => review_user.user_id === user._id
-      )
+      !ratings?.reviews?.some((review_user) => review_user.user_id === user._id)
     ) {
       setRatingsModalOpen(true);
     }
-  }, [product, products_group]);
+  }, [product, ratings]);
   useEffect(() => {
     switch (status) {
       case "success": {
@@ -280,8 +288,7 @@ const ProductDetails = ({ productId }) => {
       }
     }
   }, [status]);
-  console.log("product-value: ", product);
-  console.log("product-value: ", toastMessageValue);
+  console.log("[log--][277]: ", product);
   return (
     <div className="product-details">
       {Object.keys(productData).length !== 0 && (
@@ -330,7 +337,7 @@ const ProductDetails = ({ productId }) => {
               </div>
               <div className="target-image-container">
                 <div className="target-image">
-                  <div
+                  {/* <div
                     className="magnifier-container"
                     onMouseMove={handleMouseMove}
                     onMouseLeave={handleMouseLeave}
@@ -351,7 +358,34 @@ const ProductDetails = ({ productId }) => {
                       }
                       alt={product?.product_title}
                     />
-                  </div>
+                  </div> */}
+                  <ReactImageMagnify
+                    shouldUsePositiveSpaceLens={false}
+                    isEnlargedImagePortalEnabledForTouch={true}
+                    enlargedImageContainerStyle={{
+                      background: "#fff",
+                      zIndex: 4000,
+                    }}
+                    imageClassName="magnifier-img"
+                    enlargedImageContainerClassName="ssss"
+                    enlargedImageClassName="dddssss"
+                    {...{
+                      smallImage: {
+                        alt: product?.product_title,
+                        isFluidWidth: true,
+                        src:
+                          product?.product_images?.length >= 0 &&
+                          product?.product_images[productIndex],
+                      },
+                      largeImage: {
+                        src:
+                          product?.product_images?.length >= 0 &&
+                          product?.product_images[productIndex],
+                        width: 1000,
+                        height: 1300,
+                      },
+                    }}
+                  />
                 </div>
               </div>
               <div className="avail-images-container-res">
@@ -412,7 +446,6 @@ const ProductDetails = ({ productId }) => {
                       </div>
                     </div>
                   )}
-                  {console.log("ratings?.total_ratings: ", ratings)}
                   {Number(ratings?.total_ratings) !== 0 && (
                     <div className="font-12 reviews">
                       ({ratings?.ratings_count} Reviews)
@@ -425,14 +458,22 @@ const ProductDetails = ({ productId }) => {
                     <GoDotFill size={10} />
                   </div>
                 )}
-                <div className="font-12 sold">125 Items Sold</div>
+                <div className="font-12 sold">
+                  {product?.verified_purchase_users?.length} Items Sold
+                </div>
               </div>
               <div className="d-flex align-items-center font-weight-1">
                 <div>
-                  <div className="d-flex align-items-center gap-2">
+                  <div
+                    className={`${
+                      product?.is_discounted_product
+                        ? "d-flex align-items-center gap-2 mt-1"
+                        : "d-none"
+                    }`}
+                  >
                     <div
                       className={`${
-                        product?.discount_price && "offered"
+                        product?.is_discounted_product && "offered"
                       } price`}
                     >
                       <div className="d-flex align-items-center">
@@ -478,7 +519,6 @@ const ProductDetails = ({ productId }) => {
                 </div>
                 <div className="avail-colors-container">
                   {productGroupData?.group?.map((product_group) => {
-                    console.log("product: ", product);
                     return (
                       <div
                         className={`color cursor-pointer ${
@@ -663,10 +703,6 @@ const ProductDetails = ({ productId }) => {
                 products={similar_products}
               />
               <SliderProducts title={"Top Products"} products={products} />
-              {console.log(
-                "ratingsratings: ",
-                Object.keys(ratings).length === 0
-              )}
               {Object.keys(ratings).length !== 0 && (
                 <ProductRatings ratings={ratings} />
               )}

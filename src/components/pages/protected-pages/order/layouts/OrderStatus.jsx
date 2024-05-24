@@ -45,7 +45,6 @@ const OrderStatus = () => {
     },
   ];
   const getOrderStatus = (statusFor) => {
-    console.log("orderStatusValues: ", orderStatusValues);
     switch (statusFor) {
       case "o-p":
         if (orderStatusValues[0] === "1") {

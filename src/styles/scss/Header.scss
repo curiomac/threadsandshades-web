@@ -255,6 +255,10 @@ $items-card-width: 300px;
         font-weight: 600;
         .link {
           margin-top: 20px;
+          a {
+            text-decoration: none;
+            color: #000000;
+          }
         }
       }
     }
@@ -514,7 +518,7 @@ $items-card-width: 300px;
         background-color: transparent;
         border: 2px solid $ternary-color;
         transition: 0.5s;
-      } 
+      }
       .trash-ic {
         display: flex;
         align-items: center;

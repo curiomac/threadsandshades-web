@@ -77,27 +77,22 @@ const DialogModalAuth = ({ isOpen, onClose, isAuth }) => {
     }${remainingSeconds}`;
   };
   useEffect(() => {
-    console.log("code: ", otp_code, auth_code);
     if (otp_code && !auth_code) {
       setProceedOTP(true);
       setVerifySuccess(false);
       setRemainingTime(0);
-      console.log("Code: ", "exe - 1");
     } else if (otp_code && auth_code) {
       setProceedOTP(false);
       setVerifySuccess(true);
       setEmail("");
       setRemainingTime(0);
-      console.log("Code: ", "exe - 2");
     } else {
       setOTP("");
       setProceedOTP(false);
       setVerifySuccess(false);
-      console.log("Code: ", "exe - 3");
     }
   }, [otp_code, auth_code]);
   useEffect(() => {
-    console.log("otp_message: ", otp_message);
     switch (auth_status) {
       case "success": {
         setStatus(auth_status);
@@ -133,7 +128,6 @@ const DialogModalAuth = ({ isOpen, onClose, isAuth }) => {
     }
   }, [auth_status]);
   useEffect(() => {
-    console.log("otp_message: ", otp_message);
     switch (otp_status) {
       case "success": {
         setStatus(otp_status);
@@ -231,7 +225,6 @@ const DialogModalAuth = ({ isOpen, onClose, isAuth }) => {
     }
   }, [remainingTime, otp_loading]);
   useEffect(() => {
-    console.log("code: ", proceedOTP, verifySuccess);
   }, [proceedOTP, verifySuccess]);
   if (!isOpen) {
     return null;

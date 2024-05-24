@@ -31,6 +31,7 @@ import JumpToaster from "../../../../plugins/cmac-plugins/jump-toaster/JumpToast
 import { clearCartMessage } from "../../../../../redux/slices/cartSlice";
 import AddCartBtn from "../../../../utils/AddCartBtn";
 import AddCartBtnMobile from "../../../../utils/AddCartBtnMobile";
+import { useImageLoaded } from "../../../../utils/useImageLoaded";
 
 const CollectionsList = () => {
   const navigate = useNavigate();
@@ -42,11 +43,11 @@ const CollectionsList = () => {
   const { wishListItems, loading: wishListLoading } = useSelector(
     (state) => state.wishListState
   );
+  const [ref, loaded, onLoad] = useImageLoaded();
   const [selectedProductId, setSelectedProductId] = useState("");
   const [initialSearchInput, setInitialSearchInput] = useState("");
   const [addingCart, setAddingCart] = useState(false);
   const dispatch = useDispatch();
-  console.log("user: ", user);
   const handleAddToCart = (product) => {
     setAddingCart(true);
     const payload = {
@@ -146,10 +147,8 @@ const CollectionsList = () => {
   };
   const handleSetRecentProductsLocal = (product) => {
     const localItems = JSON.parse(localStorage.getItem("lookups")) || [];
-    console.log("localItems.length: ", localItems.length);
     if (localItems.length >= 1000) {
       if (localItems?.some((item) => item?._id === product?._id)) {
-        console.log("Triggered");
         const updateItems = localItems?.filter(
           (item) => item?._id !== product?._id
         );
@@ -159,7 +158,6 @@ const CollectionsList = () => {
           JSON.stringify([product, ...indexRemoved])
         );
       } else {
-        console.log("Triggerede");
         const updateItems = localItems?.filter((item, index) => index !== 10);
         localStorage.setItem(
           "lookups",
@@ -167,7 +165,6 @@ const CollectionsList = () => {
         );
       }
     } else if (localItems?.some((item) => item?._id === product?._id)) {
-      console.log("localItems", localItems);
       const updateItems = localItems?.filter(
         (item) => item?._id !== product?._id
       );
@@ -176,7 +173,6 @@ const CollectionsList = () => {
         JSON.stringify([product, ...updateItems])
       );
     } else {
-      console.log("localItems", localItems);
       localStorage.setItem("lookups", JSON.stringify([product, ...localItems]));
     }
   };
@@ -215,7 +211,6 @@ const CollectionsList = () => {
             </div>
             <div className="products-grid">
               {products?.map((product, index) => {
-                console.log("product: ", product);
                 // if (index <= 3) {
                 if (true) {
                   return (
@@ -234,8 +229,26 @@ const CollectionsList = () => {
                         });
                       }}
                     >
+                      
+                    {!loaded && (
+                        <div style={{height: '0'}}>
+                          <div className="product-img-container d-flex align-items-center justify-content-center">
+                            <Loader
+                              type="spinner-cub"
+                              bgColor={"#000"}
+                              color={"#000"}
+                              size={25}
+                            />
+                          </div>
+                        </div>
+                      )}
                       <div className="product-img-container">
-                        <img src={product?.product_images[0]} alt="image_1" />
+                        <img
+                          src={product?.product_images[0]}
+                          alt="image_1"
+                          ref={ref}
+                          onLoad={onLoad}
+                        />
                       </div>
                       <div className="container-fluid-padding base-container p-none">
                         {product?.is_discounted_product && (
@@ -368,10 +381,6 @@ const CollectionsList = () => {
                           {product.product_title}
                         </div>
                         <div className="product-ratings d-flex align-items-center gap-2 mt-1">
-                          {console.log(
-                            "sasaasasasass",
-                            Number(product?.ratings)
-                          )}
                           {Number(product?.ratings) !== 0 && (
                             <div className="d-flex align-items-center gap-1">
                               <div className="d-flex align-items-center">
@@ -391,7 +400,9 @@ const CollectionsList = () => {
                             </div>
                           )}
                           {}
-                          <div className="font-12 sold">{product.verified_purchase_users?.length} Items Sold</div>
+                          <div className="font-12 sold">
+                            {product.verified_purchase_users?.length} Items Sold
+                          </div>
                         </div>
                         <div className="d-flex align-items-center font-weight-1 justify-content-space-between">
                           <div className="d-flex gap-1 mt-1 mb-1 price-container">

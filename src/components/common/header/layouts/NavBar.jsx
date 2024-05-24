@@ -146,7 +146,6 @@ const NavBar = () => {
   const handleReMoveFromWishList = (product, e) => {
     e.stopPropagation();
     setSelectedWishListRemoveProductId(product._id);
-    console.log("product-data: ", product);
     const payload = {
       product_id: product._id,
       user_id: user?._id,
@@ -207,19 +206,23 @@ const NavBar = () => {
   const handleGetTemporaryWishListItems = () => {
     const wishlistLocalStorageItem =
       JSON.parse(localStorage.getItem("wish-list-items")) || [];
-    console.log("wishlistLocalStorageItem");
     const payload = {
       wish_list_details: wishlistLocalStorageItem,
     };
     dispatch(getTemporaryWishList(payload));
   };
-  const documentDimensions = () => {
+  const documentCartDimensions = () => {
     if (
       window.innerWidth < 849 &&
       (pathname === CART_PAGE || pathname === CART_ITEMS_PAGE)
     ) {
       window.location.replace(`${HOME_PAGE}?cart-active=true`);
     }
+    return window.innerWidth;
+  };
+  
+  window.addEventListener("resize", documentCartDimensions);
+  const documentDimensions = () => {
     return window.innerWidth;
   };
 
@@ -338,20 +341,20 @@ const NavBar = () => {
         }`}
       >
         <div className="nav-bar-links container-fluid">
-          <div className="res-nav-btn">
-            <div
-              onClick={() => setDraggerOpen(true)}
-              style={{ marginLeft: "-20px" }}
-            >
-              <HambugerMenu
-                checked={draggerOpen}
-                scaleWidth={"50px"}
-                scaleGapHeight={"10px"}
-              />
-            </div>
-          </div>
           <div className="nav-links">
             <div className="nav-bar-logo">
+              <div className="res-nav-btn">
+                <div
+                  onClick={() => setDraggerOpen(true)}
+                  style={{ marginLeft: "-20px" }}
+                >
+                  <HambugerMenu
+                    checked={draggerOpen}
+                    scaleWidth={"50px"}
+                    scaleGapHeight={"10px"}
+                  />
+                </div>
+              </div>
               <Logo height={50} onClick={() => navigate(HOME_PAGE)} />
             </div>
             <div className="default-links res-849px-d-none">
@@ -383,7 +386,7 @@ const NavBar = () => {
                 >
                   <div className="links">WOMEN</div>
                 </Link>
-                <Link to={CONTACT_PAGE} className="links-decoration-unset">
+                <Link to={`${COLLECTIONS_PAGE}?type=women`} className="links-decoration-unset">
                   <div className="links">NEW ARRIVALS</div>
                 </Link>
               </div>
@@ -434,7 +437,7 @@ const NavBar = () => {
                 <FaYoutube />
               </div>
             </Link> */}
-              {isAuthenticated && (
+              {isAuthenticated && documentDimensions() >= 849  && (
                 <Link
                   to={USER_ACCOUNT_DETAILS_PAGE}
                   className="links-decoration-unset"
@@ -469,7 +472,7 @@ const NavBar = () => {
               <div
                 className="links-decoration-unset"
                 onClick={() => {
-                  if (documentDimensions() < 849) {
+                  if (documentCartDimensions() < 849) {
                     // navigate(CART_ITEMS_PAGE);
                     setCartDraggerOpen(true);
                   } else {
@@ -632,6 +635,9 @@ const NavBar = () => {
             </div>
             <div className="quick-links">
               <div className="link">Shop</div>
+              <div className="link">
+                <Link to={USER_ACCOUNT_DETAILS_PAGE} onClick={() => setDraggerOpen(false)}>Account</Link>
+              </div>
               <div className="link">Customer Support</div>
               <div className="link">Subscribe News Letter</div>
               <div className="link">Our Updates</div>
@@ -1033,7 +1039,6 @@ const NavBar = () => {
           <div className="products-container">
             <div className="products">
               {cartItemsValue?.map((cartItem, index) => {
-                console.log("cartItem: ", cartItem);
                 return (
                   <div
                     className={`order-item ${

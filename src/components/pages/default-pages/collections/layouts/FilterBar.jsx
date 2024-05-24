@@ -111,7 +111,6 @@ const FilterBar = ({ toggle, resBar }) => {
           return "";
         }
       };
-      console.log("DFDFDF", getType());
       setFilterGenders([...filterGenders, getType()]);
     }
   }, [type]);
@@ -120,28 +119,18 @@ const FilterBar = ({ toggle, resBar }) => {
       if (resBar) {
         const formated_filter_size_array =
           filters_applied.available_sizes?.split(",") || [];
-        console.log("formated_filter_size_array: ", formated_filter_size_array);
         setFilterSizes(formated_filter_size_array);
 
         const formated_filter_color_array =
           filters_applied.target_color_code?.split(",") || [];
-        console.log(
-          "formated_filter_color_array: ",
-          formated_filter_color_array
-        );
         setFilterColors(formated_filter_color_array);
       } else {
         const formated_filter_size_array =
           filters_applied.available_sizes?.split(",") || [];
-        console.log("formated_filter_size_array: ", formated_filter_size_array);
         setFilterSizes(formated_filter_size_array);
 
         const formated_filter_color_array =
           filters_applied.target_color_code?.split(",") || [];
-        console.log(
-          "formated_filter_color_array: ",
-          formated_filter_color_array
-        );
         setFilterColors(formated_filter_color_array);
 
         if (search_input) {
@@ -175,7 +164,6 @@ const FilterBar = ({ toggle, resBar }) => {
       formated_array.sort((a, b) => a.localeCompare(b));
 
       setAvailableColors(formated_array);
-      console.log("formated_array: ", formated_array);
     }
   }, [filters_available]);
   return (

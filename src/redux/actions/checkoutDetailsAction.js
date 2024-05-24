@@ -26,7 +26,6 @@ export const getCheckoutDetails = (payload) => async (dispatch) => {
     );
     dispatch(checkoutDetailsSuccess(response?.data));
   } catch (error) {
-    console.log("error: ", error?.response?.data?.message);
     dispatch(checkoutDetailsFail(error?.response?.data?.message));
   }
 };
@@ -39,7 +38,6 @@ export const getTemporaryCheckoutDetails = (payload) => async (dispatch) => {
     );
     dispatch(checkoutDetailsSuccess(response?.data));
   } catch (error) {
-    console.log("error: ", error?.response?.data?.message);
     dispatch(checkoutDetailsFail(error?.response?.data?.message));
   }
 };

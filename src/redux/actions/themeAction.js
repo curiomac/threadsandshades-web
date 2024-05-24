@@ -5,10 +5,6 @@ import { themeFail, themeRequest, themeSuccess } from "../slices/themeSlice";
 import { getUserProfile, getUserProfileImage } from "./userActions";
 
 export const getTheme = () => async (dispatch) => {
-  console.log(
-    "process.env.REACT_APP_DEFAULT_THEME_ID",
-    process.env.REACT_APP_DEFAULT_THEME_ID
-  );
   try {
     const getThemeId = () => {
       return process.env.REACT_APP_DEFAULT_THEME_ID;

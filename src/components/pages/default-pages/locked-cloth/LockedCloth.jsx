@@ -8,6 +8,7 @@ import { getProduct } from "../../../../redux/actions/productAction";
 import { getRatings } from "../../../../redux/actions/ratingsAction";
 import { clearProduct } from "../../../../redux/slices/productSlice";
 import Loader from "react-js-loader";
+import { clearRatings } from "../../../../redux/slices/ratingsSlice";
 
 const LockedCloth = () => {
   const dispatch = useDispatch();
@@ -22,6 +23,7 @@ const LockedCloth = () => {
   }, []);
   useEffect(() => {
     dispatch(clearProduct());
+    dispatch(clearRatings())
   }, []);
   useEffect(() => {
     const payload = {
@@ -30,7 +32,6 @@ const LockedCloth = () => {
     dispatch(getProduct(payload));
     dispatch(getRatings(payload));
   }, [productId, dispatch]);
-  console.log("product: ::", product);
   return (
     <div className="locked-cloth">
       <div className="shrink-width">

@@ -108,9 +108,6 @@ const SigninHeader = () => {
   };
 
   const documentDimensions = () => {
-    if (window.innerWidth < 849) {
-      console.log("pathnamepathname: ", pathname);
-    }
     return window.innerWidth;
   };
 
@@ -118,7 +115,6 @@ const SigninHeader = () => {
   const closeModal = () => {
     navigate(`${location.pathname}?proceed=true&isAuth=null`);
     setIsModalOpen(false);
-    console.log("logging");
   };
   const isNotRestrictedPage = () => {
     if (authPages.find((page) => page === location.pathname)) {
@@ -138,34 +134,28 @@ const SigninHeader = () => {
     }
   }, [isAuth]);
   useEffect(() => {
-    console.log("code: ", otp_code, auth_code);
     if (otp_code && !auth_code) {
       setProceedOTP(true);
       setVerifySuccess(false);
       setRemainingTime(0);
-      console.log("Code: ", "exe - 1");
     } else if (otp_code && auth_code) {
       setProceedOTP(false);
       setVerifySuccess(true);
       setEmail("");
       setRemainingTime(0);
-      console.log("Code: ", "exe - 2");
     } else {
       setOTP("");
       setProceedOTP(false);
       setVerifySuccess(false);
-      console.log("Code: ", "exe - 3");
     }
   }, [otp_code, auth_code]);
   useEffect(() => {
-    console.log("otp_message: ", otp_message);
     switch (auth_status) {
       case "success": {
         setStatus(auth_status);
         setToastMessageValue(auth_message);
         setToastMsg(true);
         setTimeout(() => {
-          console.log("[logger-ee]")
           setIsModalOpen(false);
           dispatch(clearAuthMessage());
           dispatch(clearAuthStatus());
@@ -196,7 +186,6 @@ const SigninHeader = () => {
     }
   }, [auth_status]);
   useEffect(() => {
-    console.log("otp_message: ", otp_message);
     switch (otp_status) {
       case "success": {
         setStatus(otp_status);
@@ -290,9 +279,6 @@ const SigninHeader = () => {
       return () => clearInterval(interval);
     }
   }, [remainingTime, otp_loading]);
-  useEffect(() => {
-    console.log("code: ", proceedOTP, verifySuccess);
-  }, [proceedOTP, verifySuccess]);
   if (isNotRestrictedPage()) {
     return (
       <div className="signin-header" style={{ zIndex: isModalOpen ? 100 : 10 }}>
@@ -328,7 +314,6 @@ const SigninHeader = () => {
           onClose={closeModal}
           auth={auth}
         /> */}
-        {console.log("isModalOpen: ", isModalOpen)}
         <CmacModal
           active={isModalOpen}
           onClickOutsider={closeModal}

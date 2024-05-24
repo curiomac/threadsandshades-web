@@ -51,11 +51,7 @@ const CheckoutBox = ({ triggerPlaceOrder }) => {
       .writeText(textToCopy)
       .then(() => {
         setTextCopied(true);
-        console.log("Text copied to clipboard");
       })
-      .catch((err) => {
-        console.error("Error copying text: ", err);
-      });
   };
   const handleApplyCoupon = () => {
     dispatch(clearError());
@@ -91,7 +87,6 @@ const CheckoutBox = ({ triggerPlaceOrder }) => {
   useEffect(() => {
     setCheckoutDetailsValue(checkoutDetails);
   }, [checkoutDetails]);
-  console.log("checkoutDetailsValue: ", checkoutDetailsValue);
   return (
     <div
       className={`checkout-box ${
@@ -108,7 +103,6 @@ const CheckoutBox = ({ triggerPlaceOrder }) => {
         {location.pathname === BILLING_ADDRESS_PAGE && (
           <div className="checkout-cart-items">
             {cartItems?.map((cartItem) => {
-              console.log("cartItem:", cartItem);
               return (
                 <div className="checkout-cart-item">
                   <div className="d-flex gap-3">

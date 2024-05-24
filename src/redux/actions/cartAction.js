@@ -83,7 +83,6 @@ export const addCart = (payload) => async (dispatch) => {
     };
     dispatch(getCheckoutDetails(checkout_details_payload));
     dispatch(getWishList(checkout_details_payload))
-    console.log("[logger] response?.data: ", response?.data);
     dispatch(cartAddSuccess(response?.data));
   } catch (error) {
     dispatch(cartAddFail(error?.response?.data?.message));
@@ -116,7 +115,6 @@ export const removeCart = (payload) => async (dispatch) => {
   const formattedPayload = `${
     payload?.product_id ? `?product_id=${payload?.product_id}` : ""
   }${payload?.user_id ? `&user_id=${payload?.user_id}` : ""}`;
-  console.log("formattedPayload: ", formattedPayload);
   try {
     dispatch(cartRemoveRequest());
     const response = await axios.post(

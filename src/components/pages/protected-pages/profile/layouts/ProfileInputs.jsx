@@ -14,7 +14,6 @@ const ProfileInputs = () => {
   const [dateOfBirth, setDateOfBirth] = useState("");
   const handleProfileSave = (e) => {
     e.preventDefault();
-    console.log("firstName: ", firstName);
     const payload = {
       first_name: firstName,
       last_name: lastName,
@@ -29,7 +28,6 @@ const ProfileInputs = () => {
   };
   useEffect(() => {
     if (user) {
-      console.log("user: ", user);
       setFirstName(user?.first_name);
       setLastName(user?.last_name);
       setMobileNo(user?.mobile_number);

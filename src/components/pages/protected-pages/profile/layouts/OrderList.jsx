@@ -44,7 +44,6 @@ const OrderList = () => {
   useEffect(() => {
     setOrderList(orders);
   }, [orders]);
-  console.log("orderList: ", orderList);
   return (
     <div className="order-list">
       <div className="order-list-heading">Order List</div>
@@ -94,7 +93,6 @@ const OrderList = () => {
                   </div>
                   <div className="order-items-content">
                     {order?.order_items?.map((order_item, index) => {
-                      console.log("order_item", order_item);
                       return (
                         <div
                           className={`order-item ${

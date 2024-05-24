@@ -103,7 +103,6 @@ const SliderProducts = ({title, products}) => {
       </div>
       <CardSlider style={{marginTop: "20px"}} cardGap={20} dragStatus={setDragStatus}>
         {products?.map((product, index) => {
-          console.log("product: ", product);
           // if (index <= 1) {
             if (true) {
             return (

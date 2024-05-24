@@ -38,7 +38,6 @@ const CmacContainer = ({
   onClickOutsider,
   active,
 }: CommonProps) => {
-  console.log("blurStrength: ", active);
 
   const getBlurValue = () => {
     const doc = document.documentElement;

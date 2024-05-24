@@ -136,7 +136,6 @@ const BillingAddress = () => {
     if (isValid) {
       const getProductIds = () => {
         return cartItems.map((cart_item) => {
-          console.log("cart_sitem: ", cart_item)
           const product_id = cart_item?.product?._id;
           return {
             product_id,
@@ -179,7 +178,6 @@ const BillingAddress = () => {
       if (isValid) {
         const getProducts = () => {
           return cartItems.map((cart_item) => {
-            console.log("cart_sitem: ", cart_item)
             const product_id = cart_item?.product?._id;
             return {
               product_id,
@@ -475,7 +473,6 @@ const BillingAddress = () => {
           <div className={`total-cart-items ${showCartItems ? "show" : ""}`}>
             <div className="checkout-cart-items">
               {cartItems?.map((cartItem) => {
-                console.log("cartItem:", cartItem);
                 return (
                   <div className="checkout-cart-item">
                     <div className="d-flex gap-3">

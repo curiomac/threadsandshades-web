@@ -84,7 +84,6 @@ const CartPage = () => {
     }
   };
   const handleRemoveCart = (cartItem) => {
-    console.log("[logger] cartItem: ", cartItem);
     if (isAuthenticated) {
       const payload = {
         product_id: cartItem?.product?._id,
@@ -128,7 +127,6 @@ const CartPage = () => {
           action === "add" ? selected_quantity + 1 : selected_quantity - 1;
 
         if (updated_quantity > 0) {
-          console.log("[logger] updated_quantity: [85]", updated_quantity);
           const updatedProduct = {
             ...product_found,
             selected_product_details: {
@@ -142,7 +140,6 @@ const CartPage = () => {
           localStorage.setItem("cart-items", JSON.stringify(updatedCartItems));
           dispatch(getTemporaryCart({ cart_details: updatedCartItems }));
         } else {
-          console.log("[logger] updated_quantity: [99]", updated_quantity);
           handleRemoveCart({ product });
         }
       }
@@ -178,7 +175,7 @@ const CartPage = () => {
       }`}
     >
       <div className="cart-items-container">
-        {cartItems?.length > 0 ? (
+        {cartItemsValue?.length > 0 ? (
           <div>
             <div className="title">Review Order</div>
             <div className="warn-sign-in">
@@ -187,7 +184,6 @@ const CartPage = () => {
             <div className="products-container">
               <div className="products">
                 {cartItemsValue?.map((cartItem, index) => {
-                  console.log("cartItem: ", cartItem);
                   return (
                     <div
                       className={`order-item ${

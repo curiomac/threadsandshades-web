@@ -65,8 +65,6 @@ const CardSlider = ({ dragStatus, cardGap, style, children }) => {
     }
   }, []);
 
-  console.log("dd", hasVerticalOverflow);
-
   return (
     <div className="wrapper" style={{ ...style }}>
       {hasVerticalOverflow !== false && (

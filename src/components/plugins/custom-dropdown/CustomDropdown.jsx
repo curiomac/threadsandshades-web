@@ -18,7 +18,6 @@ const CustomDropdown = ({
   const [isOpen, setIsOpen] = useState(false);
   const [optionInput, setOptionInput] = useState("");
   const [filteredOptions, setFilteredOptions] = useState(options);
-  console.log("options", options);
   const dropdownRef = useRef(null);
   const handleToggle = () => {
     setIsOpen(!isOpen);
@@ -65,8 +64,6 @@ const CustomDropdown = ({
   };
   useEffect(() => {
     setOptionInput(value);
-    console.log(filteredOptions, "<<<<<<value");
-    console.log(value, "<<<<<<<<<<value");
     if (value) {
       const trimmedOption = value.trim();
       if (trimmedOption && !options.includes(trimmedOption) && addOptionValue) {
@@ -118,7 +115,6 @@ const CustomDropdown = ({
       />
       {isOpen && (
         <ul className="dropdown-menu">
-          {console.log("filteredOptions: ", filteredOptions)}
           {filteredOptions?.length > 0 ? (
             filteredOptions?.map((option) => {
               return (

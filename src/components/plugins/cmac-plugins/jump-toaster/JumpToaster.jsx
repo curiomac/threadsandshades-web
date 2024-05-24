@@ -107,7 +107,6 @@ const JumpToaster = ({
       setTimeout(() => {
         setShowContent(false);
         onClose && onClose();
-        console.log("[logger] [113] Working hear! Copy that!");
       }, 500);
     }
   }, [open]);
@@ -118,7 +117,6 @@ const JumpToaster = ({
         setTimeout(() => {
           setShowContent(false);
           onClose && onClose();
-          console.log("[logger] [113] Working hear! Copy that!");
         }, 500);
       },
       duration ? duration : 5000

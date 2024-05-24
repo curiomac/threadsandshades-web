@@ -27,8 +27,6 @@ const ProtectedRoute = ({ isMaxScreen, isAuth, role, children }) => {
   //   return <NotFound404 />;
   // }
   if (isAuth && !isAuthenticated) {
-    console.log("isAuthenticated: ", isAuthenticated);
-    console.log("pathname: ", pathname);
     if(documentDimensions() < 849) {
       return <Navigate to={`${CART_ITEMS_PAGE}?proceed=true&isAuth=false`} />;
     }
