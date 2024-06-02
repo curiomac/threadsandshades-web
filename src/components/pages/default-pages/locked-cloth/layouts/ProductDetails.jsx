@@ -578,7 +578,7 @@ const ProductDetails = ({ productId }) => {
               </div>
               <div className="custom-hr"></div>
               <div className="product-actions">
-                <div
+                {/* <div
                   className="qty-container"
                   style={{
                     gap: targetProductQuantity === "Custom" ? "5px" : "10px",
@@ -624,7 +624,7 @@ const ProductDetails = ({ productId }) => {
                       <option>Custom</option>
                     </select>
                   )}
-                </div>
+                </div> */}
                 <button
                   className={`add-to-cart-btn d-flex align-items-center justify-content-center gap-3 ${
                     (cartItems?.some(
@@ -703,10 +703,11 @@ const ProductDetails = ({ productId }) => {
                 products={similar_products}
               />
               <SliderProducts title={"Top Products"} products={products} />
-              {Object.keys(ratings).length !== 0 && (
+              {console.log("ratings: ", ratings)}
+              {ratings.total_ratings !== 0 && (
                 <ProductRatings ratings={ratings} />
               )}
-              {Object.keys(ratings).length !== 0 && (
+              {ratings.total_ratings !== 0 && (
                 <ProductReviews ratings={ratings} />
               )}
             </div>

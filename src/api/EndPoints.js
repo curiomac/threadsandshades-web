@@ -52,9 +52,10 @@ export const endpoints = {
   },
   order: {
     create: "order/create",
-    get: "order"
+    get: "order",
+    print_invoice: "print-invoice"
   },
   orders: {
-    get: "orders"
+    get: "orders",
   }
 };

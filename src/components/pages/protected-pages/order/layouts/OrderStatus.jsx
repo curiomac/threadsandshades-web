@@ -13,12 +13,16 @@ import { PiCurrencyInrBold } from "react-icons/pi";
 import { useNavigate } from "react-router-dom";
 import { LOCKED_CLOTH_PAGE } from "../../../../../helpers/route-paths/paths";
 import { getCurrencyFormat } from "../../../../../helpers/currency-formatter/getCurrencyFormat";
+import { IoPrint } from "react-icons/io5";
+import { printInvoice } from "../../../../../redux/actions/printInvoiceAction";
+import Loader from "react-js-loader";
 
 const OrderStatus = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const trigger = getQueryParam("proceed");
   const order_id = getQueryParam("order_id");
+  const { loading } = useSelector((state) => state.printInvoiceState);
   const { proceed } = useSelector((state) => state.resCartState);
   const { products } = useSelector((state) => state.productsState);
   const { order } = useSelector((state) => state.orderState);
@@ -116,10 +120,9 @@ const OrderStatus = () => {
           <div className="d-flex align-items-center gap-2 mt-2">
             <div className="font-14 font-weight-1">Estimated Delivery:</div>
             <div className="font-14">
-              {moment(
-                orderResponse?.expected_delivery_date,
-                "DD-MM-YYYY"
-              ).format("MMM DD, YYYY")}
+              {moment(orderResponse?.expected_delivery_date).format(
+                "MMM DD, YYYY"
+              )}
             </div>
           </div>
           <div className="d-flex align-items-center justify-content-space-between">
@@ -190,10 +193,9 @@ const OrderStatus = () => {
               </div>
               <div className="font-12 mt-1 text-align-center">
                 Estimated:{" "}
-                {moment(
-                  orderResponse?.expected_delivery_date,
-                  "DD-MM-YYYY"
-                ).format("MMM DD, YYYY")}
+                {moment(orderResponse?.expected_delivery_date).format(
+                  "MMM DD, YYYY"
+                )}
               </div>
             </div>
           </div>
@@ -220,8 +222,41 @@ const OrderStatus = () => {
                   </div>
                 </div>
                 <div>
-                  <button className="print-inv-btn res-font">
-                    Print Invoice
+                  <button
+                    style={{
+                      background: loading ? "var(--primary-color)" : "#fff",
+                      color: loading ? "#fff" : "#000",
+                      width: loading && "200px",
+                      transition: "width ease 0.5s",
+                      opacity: loading ? 0.5 : 1,
+                      overflow: "hidden",
+                      whiteSpace: "nowrap",
+                    }}
+                    className="print-inv-btn res-font d-flex align-items-center justify-content-center gap-2"
+                    disabled={loading}
+                    onClick={() => dispatch(printInvoice({ order_id }))}
+                  >
+                    {loading ? (
+                      <div className={"item ratings-loader"}>
+                        <Loader
+                          type="spinner-cub"
+                          bgColor={"#fff"}
+                          color={"#fff"}
+                          size={30}
+                        />
+                        <div>Please wait...</div>
+                      </div>
+                    ) : (
+                      <>
+                        <div
+                          className="d-flex align-items-center justify-content-center"
+                          style={{ marginTop: 2 }}
+                        >
+                          <IoPrint size={20} />
+                        </div>
+                        <div>Print Invoice</div>
+                      </>
+                    )}
                   </button>
                 </div>
               </div>

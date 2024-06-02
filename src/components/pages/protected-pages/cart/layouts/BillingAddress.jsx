@@ -187,7 +187,7 @@ const BillingAddress = () => {
         };
         const payload = {
           user_id: user?._id,
-          products: getProducts(),
+          product_ids: getProducts(),
           payment_method: "COD",
           billing_address: {
             first_name: firstName,
