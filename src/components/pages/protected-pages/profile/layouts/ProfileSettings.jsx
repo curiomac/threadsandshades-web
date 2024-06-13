@@ -4,7 +4,8 @@ import { useDispatch } from "react-redux";
 import { logout } from "../../../../../redux/actions/userActions";
 
 const ProfileSettings = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch()  
+  const fcmToken = localStorage.getItem('fcm-token');
   return (
     <div className="profile-settings">
       <div className="container">
@@ -14,6 +15,7 @@ const ProfileSettings = () => {
           </div>
           <div className="d-flex align-items-center text">Logout</div>
         </button>
+        <div>FCM TOKEN: {fcmToken}</div>
       </div>
     </div>
   );

@@ -16,7 +16,9 @@ const ShopForBanner = () => {
                 <div className="discover-btn">
                   <div
                     className="btn"
-                    onClick={() => navigate(`${COLLECTIONS_PAGE}?type=men`)}
+                    onClick={() => {
+                      navigate(`${COLLECTIONS_PAGE}?type=men`); 
+                    }}
                   >
                     DISCOVER NOW
                   </div>
