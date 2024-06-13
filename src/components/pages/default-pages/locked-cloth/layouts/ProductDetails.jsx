@@ -18,7 +18,7 @@ import {
 import SpinnerLoader from "../../../../plugins/loaders/spinner-loader/SpinnerLoader";
 import BackdropLoader from "../../../../plugins/loaders/backdrop-loader/BackdropLoader";
 import { clearProduct } from "../../../../../redux/slices/productSlice";
-import { IoIosClose } from "react-icons/io";
+import { IoIosArrowForward, IoIosClose } from "react-icons/io";
 import CustomModal from "../../../../plugins/custom-modal/CustomModal";
 import { GrClose } from "react-icons/gr";
 import { IoIosStar } from "react-icons/io";
@@ -40,6 +40,8 @@ import SliderProducts from "./SliderProducts";
 import ProductReviews from "./ProductReviews";
 import DomRender from "../../../../plugins/cmac-plugins/dom-render/DomRender";
 import ReactImageMagnify from "react-image-magnify";
+import { BsTruck } from "react-icons/bs";
+import { RiTruckLine } from "react-icons/ri";
 const ProductDetails = ({ productId }) => {
   const productType = getQueryParam("type");
   const dispatch = useDispatch();
@@ -293,22 +295,24 @@ const ProductDetails = ({ productId }) => {
     <div className="product-details">
       {Object.keys(productData).length !== 0 && (
         <div className="container-fluid">
-          {/* <div className="d-flex align-items-center gap-2 bread-crumbs">
+          <div className="d-flex align-items-center gap-5 bread-crumbs">
             <div
-              className="border-bottom brand"
+              className="brand"
               onClick={() =>
                 navigate(`${COLLECTIONS_PAGE}?type=${productType}`)
               }
             >
               Shop
             </div>
-            <div>
-              <RxSlash className="d-flex align-items-center" />
-            </div>
-            <div className="border-bottom product-title">
+            {/* <div className="d-flex align-items-center">
+              <IoIosArrowForward size={16} className="d-flex align-items-center" />
+            </div> */}
+            <div className="product-title">
+              <div className="title-con">
               {product?.product_title}
+              </div>
             </div>
-          </div> */}
+          </div>
           <div className="product-details-content">
             <div className="show-case-container">
               <div className="avail-images-container">
@@ -483,32 +487,36 @@ const ProductDetails = ({ productId }) => {
                         {getCurrencyFormat(product?.sale_price)}
                       </div>
                     </div>
-                    {product?.discount_percentage && (
+                    {product?.is_discounted_product && (
                       <div className="tag-ic">
                         <GoDotFill />
                       </div>
                     )}
-                    {product?.discount_percentage && (
+                    {product?.is_discounted_product && (
                       <div className="discount price">
                         {product?.discount_percentage}% offer
                       </div>
                     )}
                   </div>
-                  {product?.discount_price && (
-                    <div className="price">
-                      <div className="d-flex align-items-center">
-                        <PiCurrencyInrBold />
-                      </div>
-                      <div className="value">
-                        {getCurrencyFormat(
-                          product?.sale_price - product?.discount_price
-                        )}
-                      </div>
+                  <div className="price">
+                    <div className="d-flex align-items-center">
+                      <PiCurrencyInrBold />
                     </div>
-                  )}
+                    <div className="value">
+                      {getCurrencyFormat(product?.fixed_price)}
+                    </div>
+                  </div>
                 </div>
               </div>
               <div className="tax-inclusion">Inclusive of all taxes</div>
+              {product.fixed_price > 500 && (
+                <div className="d-flex align-items-center gap-2 mb-1" style={{color: 'var(--primary-color)', fontWeight: 600}}>
+                  <div className="d-flex align-items-center">
+                    <RiTruckLine size={20}/>
+                  </div>
+                  <div style={{fontSize: 12}}>This item ships for FREE!</div>
+                </div>
+              )}
               <div className="custom-hr"></div>
               <div className="color-container">
                 <div className="title d-flex align-items-center gap-1">

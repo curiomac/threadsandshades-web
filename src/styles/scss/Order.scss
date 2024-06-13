@@ -154,6 +154,7 @@
               }
               .product-info {
                 .product-title {
+                  width: fit-content;
                   font-size: 12px;
                   font-weight: 600;
                   letter-spacing: 1px;
@@ -343,6 +344,8 @@
                 -webkit-box-orient: vertical;
                 overflow: hidden;
                 text-overflow: ellipsis;
+                
+                width: fit-content;
               }
               .product-title:hover {
                 text-decoration: underline;

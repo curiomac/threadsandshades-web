@@ -77,6 +77,7 @@ const FilterBar = ({ toggle, resBar }) => {
       filter_colors = [...filterColors, e];
       setFilterColors(filter_colors);
     }
+    console.log(filter_colors, "filterColor");
     getScreenResolution().then((res) => {
       if (res.width >= 897) {
         if (search_input) {
@@ -205,7 +206,6 @@ const FilterBar = ({ toggle, resBar }) => {
                       toggleCheckbox={toggleCheckbox}
                       onClick={() => handleGenderFilter(gender)}
                     >
-                      {" "}
                       <div className="mt-1 mb-1 filter-value">{gender}</div>
                     </CustomCheckbox>
                   );
@@ -242,7 +242,6 @@ const FilterBar = ({ toggle, resBar }) => {
                       toggleCheckbox={toggleCheckbox}
                       onClick={() => handleSizeFilter(size)}
                     >
-                      {" "}
                       <div className="mt-1 mb-1 filter-value">{size}</div>
                     </CustomCheckbox>
                   );

@@ -18,6 +18,12 @@ import SpinnerLoader from "../../../../plugins/loaders/spinner-loader/SpinnerLoa
 import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { PiPercentBold } from "react-icons/pi";
+import AddCartBtnMobile from "../../../../utils/AddCartBtnMobile";
+import AddCartBtn from "../../../../utils/AddCartBtn";
+
+import Loader from "react-js-loader";
+import { useImageLoaded } from "../../../../utils/useImageLoaded";
+import { clearProduct } from "../../../../../redux/slices/productSlice";
 const NewCollectionsList = () => {
   const navigate = useNavigate();
   const { products } = useSelector((state) => state.productsState);
@@ -25,6 +31,8 @@ const NewCollectionsList = () => {
   const { cartItems, loading: cartLoading } = useSelector(
     (state) => state.cartState
   );
+  
+  const [ref, loaded, onLoad] = useImageLoaded();
   const { wishListItems, loading: wishListLoading } = useSelector(
     (state) => state.wishListState
   );
@@ -34,6 +42,37 @@ const NewCollectionsList = () => {
     return JSON.parse(localStorage.getItem("cart-items")) || [];
   });
   const dispatch = useDispatch();
+  const handleSetRecentProductsLocal = (product) => {
+    const localItems = JSON.parse(localStorage.getItem("lookups")) || [];
+    if (localItems.length >= 1000) {
+      if (localItems?.some((item) => item?._id === product?._id)) {
+        const updateItems = localItems?.filter(
+          (item) => item?._id !== product?._id
+        );
+        const indexRemoved = updateItems?.filter((item, index) => index !== 10);
+        localStorage.setItem(
+          "lookups",
+          JSON.stringify([product, ...indexRemoved])
+        );
+      } else {
+        const updateItems = localItems?.filter((item, index) => index !== 10);
+        localStorage.setItem(
+          "lookups",
+          JSON.stringify([product, ...updateItems])
+        );
+      }
+    } else if (localItems?.some((item) => item?._id === product?._id)) {
+      const updateItems = localItems?.filter(
+        (item) => item?._id !== product?._id
+      );
+      localStorage.setItem(
+        "lookups",
+        JSON.stringify([product, ...updateItems])
+      );
+    } else {
+      localStorage.setItem("lookups", JSON.stringify([product, ...localItems]));
+    }
+  };
   useEffect(() => {
     dispatch(getProducts([], [], []));
   }, [dispatch]);
@@ -101,27 +140,73 @@ const NewCollectionsList = () => {
             <div className="link text-transform-uc text-decoration-underline font-14">Shop all</div>
           </div>
           <div className="list-grid">
-            <div className="products">
+            <div className="products products-grid">
               {products?.map((product, index) => {
                 if (index === 0 || index === 1) {
                   return (
                     <div
-                      className="product"
+                      className="producta"
                       onClick={() => {
                         setSelectedProductId(product._id);
+                        dispatch(clearProduct());
                         navigate(
                           `${LOCKED_CLOTH_PAGE}?type=men&product_id=${product?._id}`
                         );
+                        handleSetRecentProductsLocal(product);
                         window.scrollTo({
                           top: 0,
                           behavior: "smooth",
                         });
                       }}
                     >
+                      {!loaded && (
+                        <div style={{ height: "0" }}>
+                          <div className="product-img-container d-flex align-items-center justify-content-center">
+                            <Loader
+                              type="spinner-cub"
+                              bgColor={"#000"}
+                              color={"#000"}
+                              size={25}
+                            />
+                          </div>
+                        </div>
+                      )}
                       <div className="product-img-container">
-                        <img src={product?.product_images[0]} alt="image_1" />
+                        <img
+                          src={product?.product_images[0]}
+                          alt="image_1"
+                          ref={ref}
+                          onLoad={onLoad}
+                        />
                       </div>
-                      <div className="container-fluid-padding base-container">
+                      <div className="container-fluid-padding base-container p-none">
+                        {product?.is_discounted_product && (
+                          <div className="discount-container">
+                            <div className="discount">
+                              <div
+                                style={{
+                                  height: "5px",
+                                  width: "5px",
+                                  background: "#fff",
+                                  border: "1px solid gray",
+                                  borderRadius: "100%",
+                                }}
+                              />
+                              <div className="value">
+                                {product?.discount_percentage}% Offer
+                              </div>
+                              <div
+                                style={{
+                                  height: "5px",
+                                  width: "5px",
+                                  background: "#fff",
+                                  border: "1px solid gray",
+                                  borderRadius: "100%",
+                                }}
+                              />
+                            </div>
+                          </div>
+                        )}
                         <div className="add-to-fav-icon-container">
                           <div
                             className="add-to-fav-icon"
@@ -152,7 +237,7 @@ const NewCollectionsList = () => {
                           </div>
                         </div>
                         <div className="add-to-cart-container">
-                          <button
+                          {/* <button
                             className={`add-to-cart-btn d-flex align-items-center justify-content-center gap-3 ${
                               ((cartItems?.some(
                                 (cartProduct) =>
@@ -198,7 +283,21 @@ const NewCollectionsList = () => {
                                 ? "Adding to Cart"
                                 : "Add To Cart"}
                             </div>
-                          </button>
+                          </button> */}
+                          <AddCartBtn
+                            borderRadius={"0px"}
+                            width="230px"
+                            loading={
+                              cartLoading && selectedProductId === product._id
+                                ? true
+                                : false
+                            }
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedProductId(product._id);
+                              handleAddToCart(product);
+                            }}
+                          />
                         </div>
                         <div
                           className="product-title"
@@ -211,21 +310,28 @@ const NewCollectionsList = () => {
                           {product.product_title}
                         </div>
                         <div className="product-ratings d-flex align-items-center gap-2 mt-1">
-                          <div className="d-flex align-items-center gap-1">
-                            <div className="d-flex align-items-center">
-                              <IoIosStar
-                                color="#feaa02"
-                                className="d-flex align-items-center"
-                              />
+                          {Number(product?.ratings) !== 0 && (
+                            <div className="d-flex align-items-center gap-1">
+                              <div className="d-flex align-items-center">
+                                <IoIosStar
+                                  color="#feaa02"
+                                  className="d-flex align-items-center"
+                                />
+                              </div>
+                              <div className="font-12 font-weight-1 rate">
+                                {product?.ratings}
+                              </div>
                             </div>
-                            <div className="font-12 font-weight-1 rate">
-                              4.5
+                          )}
+                          {Number(product?.ratings) !== 0 && (
+                            <div className="d-flex align-items-center dot-ic">
+                              <GoDotFill size={10} />
                             </div>
+                          )}
+                          {}
+                          <div className="font-12 sold">
+                            {product.verified_purchase_users?.length} Items Sold
                           </div>
-                          <div className="d-flex align-items-center dot-ic">
-                            <GoDotFill size={10} />
-                          </div>
-                          <div className="font-12 sold">125 Items Sold</div>
                         </div>
                         <div className="d-flex align-items-center font-weight-1 justify-content-space-between">
                           <div className="d-flex gap-1 mt-1 mb-1 price-container">
@@ -235,9 +341,7 @@ const NewCollectionsList = () => {
                                   <PiCurrencyInrBold />
                                 </div>
                                 <div>
-                                  {getCurrencyFormat(
-                                    product.sale_price - product.discount_price
-                                  )}
+                                  {getCurrencyFormat(product.fixed_price)}
                                 </div>
                               </div>
                             )}
@@ -250,37 +354,39 @@ const NewCollectionsList = () => {
                                 <PiCurrencyInrBold />
                               </div>
                               <div>{getCurrencyFormat(product.sale_price)}</div>
-                            </div>{" "}
+                            </div>
                             {/* {product?.is_discounted_product && (
-                                <span className="discount price">
-                                  ({product.discount_percentage}% offer)
-                                </span>
-                              )} */}
+                            <span className="discount price">
+                              ({product.discount_percentage}% offer)
+                            </span>
+                          )} */}
                           </div>
-                          <div
-                            className="bag-ic"
+                          <AddCartBtnMobile
+                            loading={
+                              cartLoading && selectedProductId === product._id
+                                ? true
+                                : false
+                            }
                             onClick={(e) => {
                               e.stopPropagation();
                               setSelectedProductId(product._id);
                               handleAddToCart(product);
                             }}
-                          >
-                            <FaShoppingBasket className="ic" />
-                          </div>
+                          />
                         </div>
                       </div>
                       {/* <div className="avail-colors-container">
-                          {product?.group?.map((product_group) => {
-                            return (
-                              <div
-                                className="avail-color"
-                                style={{
-                                  backgroundColor: product_group?.target_color_code,
-                                }}
-                              ></div>
-                            );
-                          })}
-                        </div> */}
+                      {product?.group?.map((product_group) => {
+                        return (
+                          <div
+                            className="avail-color"
+                            style={{
+                              backgroundColor: product_group?.target_color_code,
+                            }}
+                          ></div>
+                        );
+                      })}
+                    </div> */}
                     </div>
                   );
                 }
@@ -303,22 +409,68 @@ const NewCollectionsList = () => {
                 if (index === 2) {
                   return (
                     <div
-                      className="product"
+                      className="producta"
                       onClick={() => {
                         setSelectedProductId(product._id);
+                        dispatch(clearProduct());
                         navigate(
                           `${LOCKED_CLOTH_PAGE}?type=men&product_id=${product?._id}`
                         );
+                        handleSetRecentProductsLocal(product);
                         window.scrollTo({
                           top: 0,
                           behavior: "smooth",
                         });
                       }}
                     >
+                      {!loaded && (
+                        <div style={{ height: "0" }}>
+                          <div className="product-img-container d-flex align-items-center justify-content-center">
+                            <Loader
+                              type="spinner-cub"
+                              bgColor={"#000"}
+                              color={"#000"}
+                              size={25}
+                            />
+                          </div>
+                        </div>
+                      )}
                       <div className="product-img-container">
-                        <img src={product?.product_images[0]} alt="image_1" />
+                        <img
+                          src={product?.product_images[0]}
+                          alt="image_1"
+                          ref={ref}
+                          onLoad={onLoad}
+                        />
                       </div>
-                      <div className="container-fluid-padding base-container">
+                      <div className="container-fluid-padding base-container p-none">
+                        {product?.is_discounted_product && (
+                          <div className="discount-container">
+                            <div className="discount">
+                              <div
+                                style={{
+                                  height: "5px",
+                                  width: "5px",
+                                  background: "#fff",
+                                  border: "1px solid gray",
+                                  borderRadius: "100%",
+                                }}
+                              />
+                              <div className="value">
+                                {product?.discount_percentage}% Offer
+                              </div>
+                              <div
+                                style={{
+                                  height: "5px",
+                                  width: "5px",
+                                  background: "#fff",
+                                  border: "1px solid gray",
+                                  borderRadius: "100%",
+                                }}
+                              />
+                            </div>
+                          </div>
+                        )}
                         <div className="add-to-fav-icon-container">
                           <div
                             className="add-to-fav-icon"
@@ -349,7 +501,7 @@ const NewCollectionsList = () => {
                           </div>
                         </div>
                         <div className="add-to-cart-container">
-                          <button
+                          {/* <button
                             className={`add-to-cart-btn d-flex align-items-center justify-content-center gap-3 ${
                               ((cartItems?.some(
                                 (cartProduct) =>
@@ -395,7 +547,21 @@ const NewCollectionsList = () => {
                                 ? "Adding to Cart"
                                 : "Add To Cart"}
                             </div>
-                          </button>
+                          </button> */}
+                          <AddCartBtn
+                            borderRadius={"0px"}
+                            width="230px"
+                            loading={
+                              cartLoading && selectedProductId === product._id
+                                ? true
+                                : false
+                            }
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedProductId(product._id);
+                              handleAddToCart(product);
+                            }}
+                          />
                         </div>
                         <div
                           className="product-title"
@@ -408,21 +574,28 @@ const NewCollectionsList = () => {
                           {product.product_title}
                         </div>
                         <div className="product-ratings d-flex align-items-center gap-2 mt-1">
-                          <div className="d-flex align-items-center gap-1">
-                            <div className="d-flex align-items-center">
-                              <IoIosStar
-                                color="#feaa02"
-                                className="d-flex align-items-center"
-                              />
+                          {Number(product?.ratings) !== 0 && (
+                            <div className="d-flex align-items-center gap-1">
+                              <div className="d-flex align-items-center">
+                                <IoIosStar
+                                  color="#feaa02"
+                                  className="d-flex align-items-center"
+                                />
+                              </div>
+                              <div className="font-12 font-weight-1 rate">
+                                {product?.ratings}
+                              </div>
                             </div>
-                            <div className="font-12 font-weight-1 rate">
-                              4.5
+                          )}
+                          {Number(product?.ratings) !== 0 && (
+                            <div className="d-flex align-items-center dot-ic">
+                              <GoDotFill size={10} />
                             </div>
+                          )}
+                          {}
+                          <div className="font-12 sold">
+                            {product.verified_purchase_users?.length} Items Sold
                           </div>
-                          <div className="d-flex align-items-center dot-ic">
-                            <GoDotFill size={10} />
-                          </div>
-                          <div className="font-12 sold">125 Items Sold</div>
                         </div>
                         <div className="d-flex align-items-center font-weight-1 justify-content-space-between">
                           <div className="d-flex gap-1 mt-1 mb-1 price-container">
@@ -432,9 +605,7 @@ const NewCollectionsList = () => {
                                   <PiCurrencyInrBold />
                                 </div>
                                 <div>
-                                  {getCurrencyFormat(
-                                    product.sale_price - product.discount_price
-                                  )}
+                                  {getCurrencyFormat(product.fixed_price)}
                                 </div>
                               </div>
                             )}
@@ -447,23 +618,25 @@ const NewCollectionsList = () => {
                                 <PiCurrencyInrBold />
                               </div>
                               <div>{getCurrencyFormat(product.sale_price)}</div>
-                            </div>{" "}
+                            </div>
                             {/* {product?.is_discounted_product && (
                             <span className="discount price">
                               ({product.discount_percentage}% offer)
                             </span>
                           )} */}
                           </div>
-                          <div
-                            className="bag-ic"
+                          <AddCartBtnMobile
+                            loading={
+                              cartLoading && selectedProductId === product._id
+                                ? true
+                                : false
+                            }
                             onClick={(e) => {
                               e.stopPropagation();
                               setSelectedProductId(product._id);
                               handleAddToCart(product);
                             }}
-                          >
-                            <FaShoppingBasket className="ic" />
-                          </div>
+                          />
                         </div>
                       </div>
                       {/* <div className="avail-colors-container">
@@ -510,27 +683,73 @@ const NewCollectionsList = () => {
                 </div>
               </div>
             </div>
-            <div className="products">
+            <div className="products products-grid">
               {products?.map((product, index) => {
                 if (index === 3 || index === 4) {
                   return (
                     <div
-                      className="product"
+                      className="producta"
                       onClick={() => {
                         setSelectedProductId(product._id);
+                        dispatch(clearProduct());
                         navigate(
                           `${LOCKED_CLOTH_PAGE}?type=men&product_id=${product?._id}`
                         );
+                        handleSetRecentProductsLocal(product);
                         window.scrollTo({
                           top: 0,
                           behavior: "smooth",
                         });
                       }}
                     >
+                      {!loaded && (
+                        <div style={{ height: "0" }}>
+                          <div className="product-img-container d-flex align-items-center justify-content-center">
+                            <Loader
+                              type="spinner-cub"
+                              bgColor={"#000"}
+                              color={"#000"}
+                              size={25}
+                            />
+                          </div>
+                        </div>
+                      )}
                       <div className="product-img-container">
-                        <img src={product?.product_images[0]} alt="image_1" />
+                        <img
+                          src={product?.product_images[0]}
+                          alt="image_1"
+                          ref={ref}
+                          onLoad={onLoad}
+                        />
                       </div>
-                      <div className="container-fluid-padding base-container">
+                      <div className="container-fluid-padding base-container p-none">
+                        {product?.is_discounted_product && (
+                          <div className="discount-container">
+                            <div className="discount">
+                              <div
+                                style={{
+                                  height: "5px",
+                                  width: "5px",
+                                  background: "#fff",
+                                  border: "1px solid gray",
+                                  borderRadius: "100%",
+                                }}
+                              />
+                              <div className="value">
+                                {product?.discount_percentage}% Offer
+                              </div>
+                              <div
+                                style={{
+                                  height: "5px",
+                                  width: "5px",
+                                  background: "#fff",
+                                  border: "1px solid gray",
+                                  borderRadius: "100%",
+                                }}
+                              />
+                            </div>
+                          </div>
+                        )}
                         <div className="add-to-fav-icon-container">
                           <div
                             className="add-to-fav-icon"
@@ -561,7 +780,7 @@ const NewCollectionsList = () => {
                           </div>
                         </div>
                         <div className="add-to-cart-container">
-                          <button
+                          {/* <button
                             className={`add-to-cart-btn d-flex align-items-center justify-content-center gap-3 ${
                               ((cartItems?.some(
                                 (cartProduct) =>
@@ -607,7 +826,21 @@ const NewCollectionsList = () => {
                                 ? "Adding to Cart"
                                 : "Add To Cart"}
                             </div>
-                          </button>
+                          </button> */}
+                          <AddCartBtn
+                            borderRadius={"0px"}
+                            width="230px"
+                            loading={
+                              cartLoading && selectedProductId === product._id
+                                ? true
+                                : false
+                            }
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedProductId(product._id);
+                              handleAddToCart(product);
+                            }}
+                          />
                         </div>
                         <div
                           className="product-title"
@@ -620,21 +853,28 @@ const NewCollectionsList = () => {
                           {product.product_title}
                         </div>
                         <div className="product-ratings d-flex align-items-center gap-2 mt-1">
-                          <div className="d-flex align-items-center gap-1">
-                            <div className="d-flex align-items-center">
-                              <IoIosStar
-                                color="#feaa02"
-                                className="d-flex align-items-center"
-                              />
+                          {Number(product?.ratings) !== 0 && (
+                            <div className="d-flex align-items-center gap-1">
+                              <div className="d-flex align-items-center">
+                                <IoIosStar
+                                  color="#feaa02"
+                                  className="d-flex align-items-center"
+                                />
+                              </div>
+                              <div className="font-12 font-weight-1 rate">
+                                {product?.ratings}
+                              </div>
                             </div>
-                            <div className="font-12 font-weight-1 rate">
-                              4.5
+                          )}
+                          {Number(product?.ratings) !== 0 && (
+                            <div className="d-flex align-items-center dot-ic">
+                              <GoDotFill size={10} />
                             </div>
+                          )}
+                          {}
+                          <div className="font-12 sold">
+                            {product.verified_purchase_users?.length} Items Sold
                           </div>
-                          <div className="d-flex align-items-center dot-ic">
-                            <GoDotFill size={10} />
-                          </div>
-                          <div className="font-12 sold">125 Items Sold</div>
                         </div>
                         <div className="d-flex align-items-center font-weight-1 justify-content-space-between">
                           <div className="d-flex gap-1 mt-1 mb-1 price-container">
@@ -644,9 +884,7 @@ const NewCollectionsList = () => {
                                   <PiCurrencyInrBold />
                                 </div>
                                 <div>
-                                  {getCurrencyFormat(
-                                    product.sale_price - product.discount_price
-                                  )}
+                                  {getCurrencyFormat(product.fixed_price)}
                                 </div>
                               </div>
                             )}
@@ -659,23 +897,25 @@ const NewCollectionsList = () => {
                                 <PiCurrencyInrBold />
                               </div>
                               <div>{getCurrencyFormat(product.sale_price)}</div>
-                            </div>{" "}
+                            </div>
                             {/* {product?.is_discounted_product && (
                             <span className="discount price">
                               ({product.discount_percentage}% offer)
                             </span>
                           )} */}
                           </div>
-                          <div
-                            className="bag-ic"
+                          <AddCartBtnMobile
+                            loading={
+                              cartLoading && selectedProductId === product._id
+                                ? true
+                                : false
+                            }
                             onClick={(e) => {
                               e.stopPropagation();
                               setSelectedProductId(product._id);
                               handleAddToCart(product);
                             }}
-                          >
-                            <FaShoppingBasket className="ic" />
-                          </div>
+                          />
                         </div>
                       </div>
                       {/* <div className="avail-colors-container">

@@ -63,7 +63,7 @@ const Pages = () => {
     loading: cartLoading,
   } = useSelector((state) => state.cartState);
   const {
-    addedProduct: wishListAddedProduct, 
+    addedProduct: wishListAddedProduct,
     toast,
     message: wishListMessage,
     loading: wishListLoading,
@@ -109,7 +109,7 @@ const Pages = () => {
             path={BILLING_ADDRESS_PAGE}
             element={
               <ProtectedRoute isAuth>
-              <BillingAddress />
+                <BillingAddress />
               </ProtectedRoute>
             }
           />
@@ -118,7 +118,7 @@ const Pages = () => {
           path={ORDER_STATUS_PAGE}
           element={
             <ProtectedRoute isAuth>
-            <Order />
+              <Order />
             </ProtectedRoute>
           }
         />
@@ -182,7 +182,7 @@ const Pages = () => {
           renderMessage={() => {
             return (
               <a
-              href={CART_ITEMS_PAGE}
+                href={CART_ITEMS_PAGE}
                 // onClick={() => {
                 //   return <Navigate to={CART_ITEMS_PAGE} />;
                 // }}
@@ -195,7 +195,12 @@ const Pages = () => {
                     justifyContent: "flex-end",
                   }}
                 >
-                  <div onClick={(e) => {dispatch(clearCartMessage()); e.stopPropagation() }}>
+                  <div
+                    onClick={(e) => {
+                      dispatch(clearCartMessage());
+                      e.stopPropagation();
+                    }}
+                  >
                     <IoClose />
                   </div>
                 </div>
@@ -234,7 +239,12 @@ const Pages = () => {
                     justifyContent: "flex-end",
                   }}
                 >
-                  <div onClick={(e) => {dispatch(clearCartMessage()); e.stopPropagation()}}>
+                  <div
+                    onClick={(e) => {
+                      dispatch(clearCartMessage());
+                      e.stopPropagation();
+                    }}
+                  >
                     <IoClose />
                   </div>
                 </div>

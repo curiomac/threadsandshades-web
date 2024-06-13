@@ -798,6 +798,7 @@ const NavBar = () => {
               <IoCloseOutline
                 onClick={() => setWishListDragOpen(false)}
                 size={30}
+                style={{cursor: "pointer"}}
               />
             </div>
           </div>
@@ -874,59 +875,6 @@ const NavBar = () => {
                       ></div>
                     </div>
                     <div className="actions-container">
-                      {/* <div>
-                        <AddCartBtn
-                          backgroundColor={"#fe2d5a"}
-                          loading={
-                            cartLoading &&
-                            selectedWishListProductId === wishList._id
-                              ? true
-                              : false
-                          }
-                          onClick={() => {
-                            if (cartLoading) {
-                              return;
-                            } else {
-                              handleAddToCart(wishList, "wishlist");
-                            }
-                          }}
-                        />
-                      </div> */}
-                      {/* <button
-                        className={`add-to-cart-btn d-flex align-items-center justify-content-center gap-3 cursor-pointer ${
-                          true && "disabled"
-                        }`}
-                        onClick={() => {
-                          if (cartLoading) {
-                            return;
-                          } else {
-                            handleAddToCart(wishList, "wishlist");
-                          }
-                        }}
-                      >
-                        {true ? (
-                          <div>
-                            <Loader
-                              type="spinner-cub"
-                              bgColor={"#000"}
-                              color={"#000"}
-                              size={25}
-                            />
-                          </div>
-                        ) : (
-                          <div>
-                            <TiShoppingCart
-                              size={22}
-                              className="d-flex align-items-center"
-                            />
-                          </div>
-                        )}
-                        <div>
-                          {true
-                            ? "Please Wait..."
-                            : "Add To Cart"}
-                        </div>
-                      </button> */}
                       <button
                         className={`add-to-cart-btn d-flex align-items-center justify-content-center gap-3 cursor-pointer ${
                           cartLoading &&

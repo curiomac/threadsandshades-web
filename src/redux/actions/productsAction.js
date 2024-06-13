@@ -12,22 +12,30 @@ export const getProducts = (search_key, filter_sizes, filter_colors) => async (d
   try {
     dispatch(productsRequest());
     let link = `${BASE_URL}/${endpoints.products.get}`;
-    if(filter_sizes.length > 0 || filter_colors.length > 0 || search_key.length > 0) {
-      link += `?filter_applied=true`;
+    
+    const params = new URLSearchParams();
+    if (filter_sizes.length > 0 || filter_colors.length > 0 || search_key.length > 0) {
+      params.append('filter_applied', 'true');
     }
     if (search_key.length > 0) {
-      link += `&keyword=${search_key}`;
+      params.append('keyword', search_key);
     }
     if (filter_sizes.length > 0) {
-      link += `&available_sizes=${filter_sizes}`;
+      params.append('available_sizes', filter_sizes);
     }
     if (filter_colors.length > 0) {
-      link += `&target_color=${filter_colors}`;
+      params.append('target_color_code', filter_colors.join(','));
     }
+    
+    link += `?${params.toString()}`;
+    
+    console.log('Constructed URL: ', link);
+    
     const response = await axios.get(link);
     dispatch(productsSuccess(response?.data));
   } catch (error) {
-    dispatch(productsFail(error?.response?.data?.message));
+    console.error('Error fetching products: ', error);
+    dispatch(productsFail(error?.response?.data?.message || 'Error fetching products'));
   }
 };
 

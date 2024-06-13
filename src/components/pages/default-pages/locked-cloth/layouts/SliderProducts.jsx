@@ -20,6 +20,7 @@ import { getCurrencyFormat } from "../../../../../helpers/currency-formatter/get
 import { IoIosStar } from "react-icons/io";
 import { GoDotFill } from "react-icons/go";
 import { FaShoppingBasket } from "react-icons/fa";
+import { getProduct } from "../../../../../redux/actions/productAction";
 
 const SliderProducts = ({title, products}) => {
   const navigate = useNavigate();
@@ -114,6 +115,7 @@ const SliderProducts = ({title, products}) => {
                     navigate(
                       `${LOCKED_CLOTH_PAGE}?type=men&product_id=${product?._id}`
                     );
+                    dispatch(getProduct({product_id: product?._id}))
                     window.scrollTo({
                       top: 0,
                       behavior: "smooth",

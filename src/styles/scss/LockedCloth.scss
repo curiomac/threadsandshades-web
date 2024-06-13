@@ -12,17 +12,91 @@
   // padding-bottom: 30px;
   .bread-crumbs {
     font-size: 12px;
+    font-weight: 600;
     .brand {
       text-wrap: nowrap;
+      display: block;
+      width: fit-content;
+      text-transform: uppercase;
+      cursor: pointer;
+      padding: 10px 20px;
+      background-color: $primary-color;
+      color: #fff;
+      position: relative;
+      padding-left: 30px !important;
+      &:hover {
+        background-color: $ternary-color;
+      }
+      &:hover::before {
+        content: "";
+        position: absolute;
+        right: -20px;
+        bottom: 0;
+        width: 0;
+        height: 0;
+        border-left: 20px solid $ternary-color !important;
+        border-top: 17px solid transparent;
+        border-bottom: 18px solid transparent;
+      }
+      &:after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 0;
+        height: 0;
+        border-left: 20px solid white;
+        border-top: 17px solid transparent;
+        border-bottom: 18px solid transparent;
+      }
+      &:before {
+        content: "";
+        position: absolute;
+        right: -20px;
+        bottom: 0;
+        width: 0;
+        height: 0;
+        border-left: 20px solid $primary-color;
+        border-top: 17px solid transparent;
+        border-bottom: 18px solid transparent;
+      }
     }
     .product-title {
-      text-wrap: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .border-bottom {
-      border-bottom: 1px solid black;
-      cursor: pointer;
+      width: fit-content;
+      padding: 10px 20px;
+      background-color: $ternary-color;
+      color: #fff;
+      padding-left: 30px !important;
+      position: relative;
+      .title-con {
+        max-width: calc(var(--doc-width) - 213px);
+        text-wrap: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-transform: uppercase;
+      }
+      &:after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 0;
+        height: 0;
+        border-left: 20px solid white;
+        border-top: 17px solid transparent;
+        border-bottom: 18px solid transparent;
+      }
+      &:before {
+        content: "";
+        position: absolute;
+        right: -20px;
+        bottom: 0;
+        width: 0;
+        height: 0;
+        border-left: 20px solid $ternary-color;
+        border-top: 17px solid transparent;
+        border-bottom: 18px solid transparent;
+      }
     }
   }
   .product-details-content {
@@ -928,6 +1002,9 @@
       font-weight: 600;
       letter-spacing: 1px !important;
       margin-top: 10px;
+      &:hover {
+        text-decoration: underline;
+      }
     }
     .product-ratings {
       letter-spacing: 0.5px;
@@ -1159,7 +1236,7 @@
       z-index: 1;
       gap: unset !important;
       .add-to-cart-btn {
-        height:55px !important;
+        height: 55px !important;
         width: 50% !important;
         margin-top: 0rem !important;
         margin-bottom: 0rem !important;
@@ -1167,7 +1244,7 @@
         border-radius: 0px !important;
       }
       .buy-now-btn {
-        height:55px !important;
+        height: 55px !important;
         width: 50% !important;
         margin-bottom: 0rem !important;
         box-shadow: unset !important;

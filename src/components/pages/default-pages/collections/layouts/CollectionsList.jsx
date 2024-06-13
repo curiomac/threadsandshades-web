@@ -229,9 +229,8 @@ const CollectionsList = () => {
                         });
                       }}
                     >
-                      
-                    {!loaded && (
-                        <div style={{height: '0'}}>
+                      {!loaded && (
+                        <div style={{ height: "0" }}>
                           <div className="product-img-container d-flex align-items-center justify-content-center">
                             <Loader
                               type="spinner-cub"
@@ -412,9 +411,7 @@ const CollectionsList = () => {
                                   <PiCurrencyInrBold />
                                 </div>
                                 <div>
-                                  {getCurrencyFormat(
-                                    product.sale_price - product.discount_price
-                                  )}
+                                  {getCurrencyFormat(product.fixed_price)}
                                 </div>
                               </div>
                             )}
@@ -427,7 +424,7 @@ const CollectionsList = () => {
                                 <PiCurrencyInrBold />
                               </div>
                               <div>{getCurrencyFormat(product.sale_price)}</div>
-                            </div>{" "}
+                            </div>
                             {/* {product?.is_discounted_product && (
                             <span className="discount price">
                               ({product.discount_percentage}% offer)

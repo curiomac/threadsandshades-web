@@ -409,6 +409,10 @@
                   letter-spacing: 1px !important;
                   text-transform: uppercase;
                   font-weight: 600;
+                  cursor: pointer;
+                    &:hover {
+                      text-decoration: underline;
+                    }
                 }
                 .item-features {
                   display: flex;
@@ -825,6 +829,9 @@
             min-width: unset !important;
             .product-title {
               font-size: 10px !important;
+              &:hover {
+                text-decoration: underline;
+              }
             }
             .cart-events {
               margin-top: 10px !important;
@@ -996,6 +1003,10 @@
                     letter-spacing: 1px !important;
                     text-transform: uppercase;
                     font-weight: 600;
+                    cursor: pointer;
+                    &:hover {
+                      text-decoration: underline;
+                    }
                   }
                   .item-features {
                     display: flex;

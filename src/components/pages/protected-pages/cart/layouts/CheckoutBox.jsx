@@ -14,6 +14,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import {
   BILLING_ADDRESS_PAGE,
   CART_ITEMS_PAGE,
+  LOCKED_CLOTH_PAGE,
 } from "../../../../../helpers/route-paths/paths";
 import { BsBoxSeamFill } from "react-icons/bs";
 import { postalAddressClear } from "../../../../../redux/slices/addressSlice";
@@ -124,7 +125,7 @@ const CheckoutBox = ({ triggerPlaceOrder }) => {
                       />
                     </div>
                     <div className="item-info">
-                      <div className="item-title">
+                      <div className="item-title" onClick={() => navigate(`${LOCKED_CLOTH_PAGE}?type=men&product_id=${cartItem?.product?._id}`)}>
                         {cartItem?.product?.product_title}
                       </div>
                       <div className="item-features">
