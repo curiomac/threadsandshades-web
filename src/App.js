@@ -25,8 +25,6 @@ import "aos/dist/aos.css";
 import { useDispatch, useSelector } from "react-redux";
 import { getTheme } from "./redux/actions/themeAction";
 import OpeningLoadingPage from "./components/common/opening-loading-page/OpeningLoadingPage";
-import { generateToken, messaging } from "./api/firebase";
-import { onMessage } from "@firebase/messaging";
 
 function App() {
   const dispatch = useDispatch();
@@ -88,15 +86,7 @@ function App() {
         setLoadingPointB(!loadingPointB);
       }, 500);
     }
-    requestNotificationPermission()
   }, [themeLoading, loadingPointA, loadingPointB]);
-
-  const requestNotificationPermission = async () => {
-    await generateToken()
-    onMessage(messaging, (payload) => {
-      console.log("Payload: ", payload);
-    })
-  };
 
   return (
     <div>

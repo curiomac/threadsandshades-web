@@ -9,7 +9,8 @@ export const getTheme = () => async (dispatch) => {
     const getThemeId = () => {
       return process.env.REACT_APP_DEFAULT_THEME_ID;
     };
-    const fcmToken = localStorage.getItem('fcm-token');
+    const fcmToken = localStorage.getItem("fcm-token");
+    console.log("fcm-token: 13 ", fcmToken);
     dispatch(themeRequest());
     const response = await axios.get(
       `${BASE_URL}/${endpoints.theme.get}/6640240b707042a280712e0f?token=${fcmToken}`

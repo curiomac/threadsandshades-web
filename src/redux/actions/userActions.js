@@ -116,8 +116,9 @@ export const register = (payload) => async (dispatch) => {
 };
 export const getUserProfile = () => async (dispatch) => {
   try {
+    const fcm_token = localStorage.getItem('fcm-token')
     dispatch(userProfileRequest());
-    const response = await axios.get(`${BASE_URL}/${endpoints.profile.get}`, {
+    const response = await axios.get(`${BASE_URL}/${endpoints.profile.get}?fcm_token=${fcm_token}`, {
       withCredentials: true,
       headers: {
         Authorization: `${getToken()}`,

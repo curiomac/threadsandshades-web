@@ -143,6 +143,7 @@ const BillingAddress = () => {
           };
         });
       };
+      const fcmToken = localStorage.getItem("fcm-token");
       const payload = {
         user_id: user?._id,
         product_ids: getProductIds(),
@@ -168,6 +169,7 @@ const BillingAddress = () => {
               : checkoutDetails?.shipping_charge,
           cart_total: checkoutDetails.cart_total,
         },
+        fcmToken,
       };
       dispatch(createOrder(payload));
     }
@@ -185,6 +187,7 @@ const BillingAddress = () => {
             };
           });
         };
+        const fcmToken = localStorage.getItem("fcm-token");
         const payload = {
           user_id: user?._id,
           product_ids: getProducts(),
@@ -210,6 +213,7 @@ const BillingAddress = () => {
                 : checkoutDetails?.shipping_charge,
             cart_total: checkoutDetails.cart_total,
           },
+          fcmToken,
         };
         dispatch(createOrder(payload));
       }
